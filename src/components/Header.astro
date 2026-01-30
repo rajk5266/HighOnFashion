@@ -1,0 +1,164 @@
+---
+import { Image as AstroImage } from "astro:assets";
+import logoDark from "../assets/HighOnFashionlogodark.png";
+---
+
+<header
+  id="site-header"
+  class="fixed top-0 w-full z-50
+         py-4 px-6 md:px-12
+         flex justify-between items-center
+         bg-white md:bg-transparent transition-all duration-300"
+>
+  <a href="/" class="block w-[160px] md:w-[200px]">
+    <AstroImage
+      src={logoDark}
+      alt="High On Fashion"
+      class="w-full h-auto object-contain"
+      priority
+    />
+  </a>
+
+  <nav class="hidden md:flex gap-8 text-sm tracking-widest uppercase text-black">
+    <a href="#manifesto" class="hover:underline underline-offset-4">Manifesto</a>
+    <a href="#collection" class="hover:underline underline-offset-4">Collection</a>
+    <a href="#journal" class="hover:underline underline-offset-4">Journal</a>
+  </nav>
+
+  <a
+    href="#contact"
+    class="hidden md:block text-sm tracking-widest uppercase
+           border border-black px-4 py-2
+           hover:bg-black hover:text-white transition-colors"
+  >
+    Get in Touch
+  </a>
+
+  <button
+    id="menu-btn"
+    class="md:hidden text-black text-3xl focus:outline-none p-2"
+    aria-label="Open menu"
+  >
+    ☰
+  </button>
+</header>
+
+<div
+  id="mobile-menu"
+  class="fixed inset-0 z-[100]
+         bg-white
+         flex flex-col
+         px-8 pt-24 pb-10
+         gap-8
+         text-black uppercase tracking-widest
+         mobile-menu-hidden md:hidden"
+>
+  <button
+    id="close-menu"
+    class="absolute top-6 right-6 text-5xl p-2 leading-none cursor-pointer text-black"
+    aria-label="Close menu"
+  >
+    &times;
+  </button>
+
+  <nav class="flex flex-col gap-10">
+    <a href="#manifesto" class="text-3xl font-light mobile-link">Manifesto</a>
+    <a href="#collection" class="text-3xl font-light mobile-link">Collection</a>
+    <a href="#journal" class="text-3xl font-light mobile-link">Journal</a>
+  </nav>
+
+  <a
+    href="#contact"
+    class="mt-auto border border-black px-8 py-4 w-full text-center text-sm font-bold mobile-link"
+  >
+    Get in Touch
+  </a>
+</div>
+
+<script>
+  const setupMobileMenu = () => {
+    const header = document.getElementById("site-header");
+    const menuBtn = document.getElementById("menu-btn");
+    const mobileMenu = document.getElementById("mobile-menu");
+    const closeBtn = document.getElementById("close-menu");
+    const mobileLinks = document.querySelectorAll(".mobile-link");
+
+    if (!menuBtn || !mobileMenu || !closeBtn) return;
+
+    // Toggle Menu
+    const openMenu = () => {
+      mobileMenu.classList.remove("mobile-menu-hidden");
+      mobileMenu.classList.add("mobile-menu-visible");
+      document.body.style.overflow = "hidden"; // Stop background scroll
+    };
+
+    const closeMenu = () => {
+      mobileMenu.classList.remove("mobile-menu-visible");
+      mobileMenu.classList.add("mobile-menu-hidden");
+      document.body.style.overflow = ""; // Resume scroll
+    };
+
+    menuBtn.addEventListener("click", openMenu);
+    closeBtn.addEventListener("click", closeMenu);
+    
+    // Close when clicking any link
+    mobileLinks.forEach(link => link.addEventListener("click", closeMenu));
+
+    // Desktop-only Scroll Logic
+    const handleScroll = () => {
+      if (window.innerWidth >= 768) {
+        if (window.scrollY > 50) {
+          header?.classList.add("bg-white", "shadow-sm");
+          header?.classList.remove("md:bg-transparent");
+        } else {
+          header?.classList.remove("bg-white", "shadow-sm");
+          header?.classList.add("md:bg-transparent");
+        }
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    handleScroll(); // Initial run
+  };
+
+  // Support for standard loads and Astro View Transitions
+  document.addEventListener("DOMContentLoaded", setupMobileMenu);
+  document.addEventListener("astro:after-swap", setupMobileMenu);
+</script>
+
+<style>
+  /* Base Mobile States (Always Solid White) */
+  #site-header {
+    background-color: white;
+    border-bottom: 1px solid #f3f4f6;
+  }
+
+  /* Desktop Override: Start Transparent */
+  @media (min-width: 768px) {
+    #site-header {
+      background-color: transparent;
+      border-bottom: none;
+    }
+    
+    /* When scrolled on desktop */
+    #site-header.bg-white {
+      background-color: white !important;
+      border-bottom: 1px solid #eee;
+    }
+  }
+
+  /* Mobile Menu Transitions */
+  .mobile-menu-hidden {
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-20px);
+    transition: all 0.3s ease-in-out;
+  }
+
+  .mobile-menu-visible {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+    transition: all 0.3s ease-in-out;
+  }
+</style>
