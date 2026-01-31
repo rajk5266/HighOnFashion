@@ -1,0 +1,35 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import CollectionsGrid from "../../components/CollectionsGrid.astro";
+import { collections } from "../../data/collections";
+
+---
+
+<Layout
+  title="Collections"
+  description="Explore curated thrift collections"
+>
+
+  <!-- TABS -->
+  <section class="max-w-7xl mx-auto px-6 pt-16">
+    <div class="flex gap-6 border-b">
+      <a
+        href="/collections"
+        class="pb-3 border-b-2 border-black font-medium"
+      >
+        Collections
+      </a>
+
+      <span class="pb-3 text-neutral-400 cursor-not-allowed">
+        Products
+      </span>
+    </div>
+  </section>
+
+  <!-- COLLECTIONS GRID -->
+  <section class="max-w-7xl mx-auto px-6 py-20">
+    <CollectionsGrid collections={collections} />
+  </section>
+
+
+</Layout>

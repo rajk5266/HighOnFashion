@@ -1,0 +1,65 @@
+---
+// FiltersBar.astro
+const sizes = ["M", "L", "XL"];
+
+const priceRanges = [
+  { label: "Under ₹500", value: "under-500" },
+  { label: "₹500 – ₹999", value: "500-999" },
+  { label: "₹1000+", value: "1000-plus" }
+];
+
+const tags = [
+  "Oversized",
+  "Vintage",
+  "Streetwear",
+  "Winterwear",
+  "Minimal",
+  "Daily Wear"
+];
+---
+
+<div class="mb-12 space-y-6">
+
+  <!-- SIZE FILTER -->
+  <div>
+    <p class="text-sm font-medium mb-3">Size</p>
+    <div class="flex flex-wrap gap-2">
+      {sizes.map(size => (
+        <button
+          class="px-4 py-1.5 border rounded-full text-sm hover:bg-black hover:text-white transition"
+        >
+          {size}
+        </button>
+      ))}
+    </div>
+  </div>
+
+  <!-- PRICE FILTER -->
+  <div>
+    <p class="text-sm font-medium mb-3">Price</p>
+    <div class="flex flex-wrap gap-2">
+      {priceRanges.map(price => (
+        <button
+          class="px-4 py-1.5 border rounded-full text-sm hover:bg-black hover:text-white transition"
+        >
+          {price.label}
+        </button>
+      ))}
+    </div>
+  </div>
+
+  <!-- TAG FILTER -->
+  <div>
+    <p class="text-sm font-medium mb-3">Style</p>
+    <div class="flex flex-wrap gap-2">
+      {tags.map(tag => (
+        <button
+          class="px-4 py-1.5 bg-neutral-100 rounded-full text-sm hover:bg-black hover:text-white transition"
+        >
+          {tag}
+        </button>
+      ))}
+    </div>
+  </div>
+
+</div>

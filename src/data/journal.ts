@@ -26,3 +26,4 @@ export const journalEntries = [
     excerpt: "Exploring the stories of the brands that defined modern fashion."
   }
 ];
+

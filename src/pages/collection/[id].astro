@@ -1,10 +1,10 @@
 ---
 import Layout from "../../layouts/Layout.astro";
 import ProductsGrid from "../../components/ProductsGrid.astro";
+import FiltersBar from "../../components/FiltersBar.astro";
 import { collections } from "../../data/collections";
 import { products } from "../../data/products";
 
-// REQUIRED for dynamic routes
 export async function getStaticPaths() {
   return collections.map((collection) => ({
     params: { id: collection.id }
@@ -13,16 +13,11 @@ export async function getStaticPaths() {
 
 const { id } = Astro.params;
 
-// Find collection
 const collection = collections.find(c => c.id === id);
+if (!collection) throw new Error(`Collection not found: ${id}`);
 
-if (!collection) {
-  throw new Error(`Collection not found: ${id}`);
-}
-
-// Filter products by collection id
 const collectionProducts = products.filter(
-  (product) => product.collectionId === id
+  product => product.collectionId === id
 );
 ---
 
@@ -50,8 +45,27 @@ const collectionProducts = products.filter(
     </div>
   </section>
 
-  <!-- PRODUCTS -->
-  <section class="max-w-7xl mx-auto px-6 py-20">
+  <!-- TABS -->
+  <section class="max-w-7xl mx-auto px-6 pt-12">
+    <div class="flex gap-6 border-b">
+      <a
+        href="/collections"
+        class="pb-3 text-neutral-400 hover:text-black"
+      >
+        Collections
+      </a>
+
+      <span
+        class="pb-3 border-b-2 border-black font-medium"
+      >
+        Products
+      </span>
+    </div>
+  </section>
+
+  <!-- FILTER + PRODUCTS -->
+  <section class="max-w-7xl mx-auto px-6 py-16">
+    <FiltersBar />
     <ProductsGrid products={collectionProducts} />
   </section>
 
