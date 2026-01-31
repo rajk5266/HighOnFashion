@@ -1,32 +1,23 @@
 ---
-import { Image } from "astro:assets";
-import type { ImageMetadata } from "astro";
-
-interface Props {
-  title: string;
-  price: string;
-  image: ImageMetadata;
-  category: string;
-}
-
-const { title, price, image, category } = Astro.props;
+const { title, price, image, alt = title } = Astro.props;
 ---
 
-<div class="group relative cursor-pointer">
-  <div class="relative overflow-hidden aspect-[3/4] bg-gray-100">
-    <Image 
-      src={image} 
-      alt={title}
-      class="w-full h-full object-cover transition-transform duration-700 ease-in-out group-hover:scale-105"
+<article class="group cursor-pointer">
+  <div class="relative aspect-[3/4] overflow-hidden bg-neutral-100">
+    <img
+      src={image || "/placeholder.jpg"}
+      alt={alt}
+      class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+      loading="lazy"
     />
-    <div class="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-500"></div>
   </div>
-  
-  <div class="mt-4 flex justify-between items-start">
-    <div>
-      <p class="text-xs uppercase tracking-widest text-[#1A2F23]/60 mb-1">{category}</p>
-      <h3 class="font-serif text-lg text-[#1A2F23] group-hover:underline decoration-1 underline-offset-4">{title}</h3>
-    </div>
-    <span class="font-medium text-[#1A2F23]">{price}</span>
+
+  <div class="mt-3">
+    <h3 class="text-sm font-medium leading-snug">
+      {title}
+    </h3>
+    <p class="text-sm text-neutral-500">
+      ₹{price}
+    </p>
   </div>
-</div>
+</article>

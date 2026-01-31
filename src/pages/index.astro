@@ -1,233 +1,156 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import Header from '../components/Header.astro';
-import Footer from '../components/Footer.astro';
-import ProductCard from '../components/ProductCard.astro';
+import CollectionsGrid from "../components/CollectionsGrid.astro";
+import { products } from '../data/products';
+import { journalEntries } from '../data/journal';
 import { Image } from "astro:assets";
 
 import heroBg from '../assets/hero-bg.png';
-import jacketImg from '../assets/jacket.png';
 import scarfImg from '../assets/scarf.png';
 
-// Mock Data for Products
-const products = [
-  {
-    title: "1980s Yves Saint Laurent Blazer",
-    price: "$245.00",
-    category: "Outerwear",
-    image: jacketImg
-  },
-  {
-    title: "Vintage Hermès Silk Scarf",
-    price: "$180.00",
-    category: "Accessories",
-    image: scarfImg
-  },
-  {
-    title: "Deadstock Levi's 501 (1993)",
-    price: "$125.00",
-    category: "Denim",
-    image: jacketImg // Reusing for demo
-  }
-];
-
-// Mock Data for Journal
-const journalEntries = [
-  {
-    category: "Culture",
-    title: "The Environmental Cost of Fast Fashion",
-    date: "Oct 12, 2024",
-    excerpt: "Why the cycle of buy-wear-toss is destroying our planet, and how the slow fashion movement is fighting back."
-  },
-  {
-    category: "Style",
-    title: "Styling Vintage in a Modern Wardrobe",
-    date: "Sep 28, 2024",
-    excerpt: "Tips and tricks for seamlessly blending heritage pieces with contemporary streetwear basics."
-  }
-];
-
+// JSON-LD schema for SEO
 const schema = {
   "@context": "https://schema.org",
   "@type": "CollectionPage",
-  "name": "HighOnFashion Autumn Heritage Drop",
+  "name": "HighOnFashion – Modern Vintage Editorial Thrift",
   "description": "Curated vintage fashion for the modern editorial. Sustainable style that doesn't compromise on aesthetic.",
-  "url": "https://highonfashion.com",
-  "mainEntity": {
-    "@type": "ItemList",
-    "itemListElement": products.map((product, index) => ({
-      "@type": "ListItem",
-      "position": index + 1,
-      "item": {
-        "@type": "Product",
-        "name": product.title,
-        "image": product.image.src,
-        "offers": {
-            "@type": "Offer",
-            "price": product.price.replace('$', ''),
-            "priceCurrency": "USD",
-            "availability": "https://schema.org/InStock"
-        }
-      }
-    }))
-  }
+  "url": "https://highonfashion.com"
 };
 ---
-
 <Layout title="HighOnFashion | Modern Vintage Editorial Thrift">
   <script type="application/ld+json" set:html={JSON.stringify(schema)} />
-  <Header />
 
   <main>
     <!-- Hero Section -->
     <section class="relative h-screen min-h-[800px] w-full overflow-hidden flex items-center justify-center">
       <div class="absolute inset-0 z-0">
-        <Image 
-          src={heroBg} 
-          alt="High fashion editorial shot of models in vintage clothing" 
+        <Image
+          src={heroBg}
+          alt="High fashion editorial shot of models in vintage clothing"
           class="w-full h-full object-cover object-top"
+          priority
         />
         <div class="absolute inset-0 bg-black/20"></div>
       </div>
-      
+
       <div class="relative z-10 text-center text-[#F9F9F5] px-6 max-w-4xl mx-auto mt-20">
-        <p class="text-sm md:text-base tracking-[0.2em] uppercase mb-6 opacity-90 animate-fade-in-up">Est. 2024 &mdash; Curated Vintage</p>
+        <p class="text-sm tracking-[0.2em] uppercase mb-6 opacity-90 animate-fade-in-up">
+          Est. 2024 — Curated Vintage
+        </p>
+
         <h1 class="font-serif text-5xl md:text-7xl lg:text-8xl leading-none mb-8 animate-fade-in-up delay-100">
-          Rethink.<br/>
-          <span class="italic font-light">Rewear.</span><br/>
+          Rethink.<br />
+          <span class="italic font-light">Rewear.</span><br />
           Repeat.
         </h1>
+
         <div class="animate-fade-in-up delay-200">
-            <a href="#collection" class="inline-block border border-[#F9F9F5] px-8 py-3 hover:bg-[#F9F9F5] hover:text-[#1A2F23] transition-colors duration-300 uppercase tracking-widest text-sm">
+          <a
+            href="#collections"
+            class="inline-block border border-[#F9F9F5] px-8 py-3 hover:bg-[#F9F9F5] hover:text-[#1A2F23] transition-colors uppercase tracking-widest text-sm"
+          >
             View the Drop
           </a>
         </div>
       </div>
     </section>
 
-    <!-- Why Thrift Manifesto -->
-    <section id="manifesto" class="py-24 px-6 md:px-12 bg-[#F9F9F5] text-[#1A2F23]">
+    <!-- Collections -->
+    <section id="collections" class="py-24 px-6 md:px-12">
+      <CollectionsGrid />
+    </section>
+
+    <!-- Manifesto -->
+    <section class="py-24 px-6 md:px-12 bg-[#F9F9F5] text-[#1A2F23]">
       <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
         <div class="space-y-8">
           <h2 class="font-serif text-4xl md:text-5xl leading-tight">
-            Fashion shouldn't cost <br/> <span class="italic text-[#1A2F23]/60">the Earth.</span>
+            Fashion shouldn't cost <br />
+            <span class="italic opacity-60">the Earth.</span>
           </h2>
-          <div class="w-24 h-[1px] bg-[#1A2F23]/20"></div>
+
+          <div class="w-24 h-px bg-[#1A2F23]/20"></div>
+
           <p class="text-lg opacity-80 leading-relaxed font-light">
-            We believe that true style is timeless. In a world obsessed with the new, we choose the enduring. 
-            Every garment in our collection has a story, a past life, and a future with you. 
-            By choosing vintage, you're not just making a fashion statement—you're casting a vote for 
-            a sustainable future.
+            We believe that true style is timeless. In a world obsessed with the new,
+            we choose the enduring. Every garment has a story — and a future with you.
           </p>
+
           <div class="grid grid-cols-2 gap-8 pt-4">
-             <div>
-                <span class="block text-4xl font-serif mb-2">85%</span>
-                <span class="text-xs uppercase tracking-widest opacity-60">Textiles ending in landfills</span>
-             </div>
-             <div>
-                <span class="block text-4xl font-serif mb-2">2700L</span>
-                <span class="text-xs uppercase tracking-widest opacity-60">Water to make one t-shirt</span>
-             </div>
+            <div>
+              <span class="block text-4xl font-serif mb-2">85%</span>
+              <span class="text-xs uppercase tracking-widest opacity-60">
+                Textiles in landfills
+              </span>
+            </div>
+            <div>
+              <span class="block text-4xl font-serif mb-2">2700L</span>
+              <span class="text-xs uppercase tracking-widest opacity-60">
+                Water per t-shirt
+              </span>
+            </div>
           </div>
         </div>
-        
-        <div class="relative h-[600px] w-full hidden lg:block">
-           <div class="absolute top-0 right-0 w-3/4 h-3/4 bg-[#1A2F23] overflow-hidden">
-                <Image src={scarfImg} alt="Silk scarf detail" class="w-full h-full object-cover opacity-80 mix-blend-overlay" />
-           </div>
-           <div class="absolute bottom-0 left-0 w-3/5 h-3/5 border border-[#1A2F23] p-4 flex items-center justify-center bg-[#F9F9F5]">
-                <p class="font-serif text-2xl text-center italic px-8">"Style is eternal. Trends are temporary."</p>
-           </div>
+
+        <div class="relative h-[600px] hidden lg:block">
+          <div class="absolute top-0 right-0 w-3/4 h-3/4 bg-[#1A2F23] overflow-hidden">
+            <Image
+              src={scarfImg}
+              alt="Silk scarf detail"
+              class="w-full h-full object-cover opacity-80 mix-blend-overlay"
+            />
+          </div>
+
+          <div class="absolute bottom-0 left-0 w-3/5 h-3/5 border border-[#1A2F23] p-4 flex items-center justify-center bg-[#F9F9F5]">
+            <p class="font-serif text-2xl text-center italic px-8">
+              “Style is eternal. Trends are temporary.”
+            </p>
+          </div>
         </div>
       </div>
     </section>
 
-    <!-- Product Lookbook (The Drop) -->
-    <section id="collection" class="py-24 px-6 md:px-12">
-      <div class="flex justify-between items-end mb-16 max-w-7xl mx-auto">
-         <div>
-            <h2 class="font-serif text-4xl mb-2 text-[#1A2F23]">The Drop</h2>
-            <p class="text-[#1A2F23]/60 uppercase text-xs tracking-widest">Collection 001: Autumn Heritage</p>
-         </div>
-         <a href="#" class="hidden md:block text-sm uppercase tracking-widest hover:underline underline-offset-4 decoration-[#D4AF37]">View Entire Archive</a>
-      </div>
-
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-y-12 gap-x-8 max-w-7xl mx-auto">
-        {products.map((product) => (
-          <ProductCard 
-            title={product.title} 
-            price={product.price} 
-            category={product.category} 
-            image={product.image} 
-          />
-        ))}
-      </div>
-      
-      <div class="mt-16 text-center md:hidden">
-         <a href="#" class="inline-block text-sm uppercase tracking-widest border-b border-[#1A2F23] pb-1">View Entire Archive</a>
-      </div>
-    </section>
-
-    <!-- The Journal -->
-    <section id="journal" class="py-24 bg-[#1A2F23] text-[#F9F9F5] px-6 md:px-12">
+    <!-- Journal -->
+    <section class="py-24 bg-[#1A2F23] text-[#F9F9F5] px-6 md:px-12">
       <div class="max-w-7xl mx-auto">
-        <h2 class="font-serif text-4xl md:text-5xl mb-16 text-center">The Journal</h2>
-        
+        <h2 class="font-serif text-4xl md:text-5xl mb-16 text-center">
+          The Journal
+        </h2>
+
         <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
-          {journalEntries.map((entry, index) => (
-            <article class="group cursor-pointer">
-              <div class="h-[1px] w-full bg-[#F9F9F5]/20 mb-6 group-hover:w-full transition-all duration-500"></div>
-              <div class="flex justify-between items-start mb-4 opacity-60 text-xs tracking-widest uppercase">
+          {journalEntries.map(entry => (
+            <article class="group">
+              <div class="h-px bg-[#F9F9F5]/20 mb-6"></div>
+              <div class="flex justify-between text-xs tracking-widest uppercase opacity-60 mb-4">
                 <span>{entry.category}</span>
                 <span>{entry.date}</span>
               </div>
-              <h3 class="text-2xl font-serif mb-4 group-hover:text-[#D4AF37] transition-colors">{entry.title}</h3>
-              <p class="opacity-70 font-light leading-relaxed mb-6">{entry.excerpt}</p>
-              <span class="text-xs uppercase tracking-widest border-b border-[#F9F9F5]/30 pb-1 group-hover:border-[#D4AF37] group-hover:text-[#D4AF37] transition-all">Read Story</span>
+              <h3 class="text-2xl font-serif mb-4 group-hover:text-gold transition-colors">
+                {entry.title}
+              </h3>
+              <p class="opacity-70 font-light mb-6">
+                {entry.excerpt}
+              </p>
+              <span class="text-xs uppercase tracking-widest border-b border-[#F9F9F5]/30">
+                Read Story
+              </span>
             </article>
           ))}
         </div>
       </div>
     </section>
-
-    <!-- Contact / Community -->
-    <section id="contact" class="py-32 px-6 md:px-12 flex flex-col items-center justify-center text-center bg-[#F9F9F5]">
-       <h2 class="font-serif text-5xl md:text-7xl text-[#1A2F23] mb-8">Join the Movement</h2>
-       <p class="max-w-lg text-[#1A2F23]/70 mb-10 leading-relaxed">
-         We don't do ADD TO CART here. We build connections. Follow our drops on Instagram or join our WhatsApp community for early access.
-       </p>
-       <div class="flex flex-col md:flex-row gap-6">
-          <a href="#" class="px-8 py-4 bg-[#1A2F23] text-[#F9F9F5] uppercase tracking-widest text-sm hover:bg-[#1A2F23]/90 transition-colors">
-            Follow on Instagram
-          </a>
-          <a href="#" class="px-8 py-4 border border-[#1A2F23] text-[#1A2F23] uppercase tracking-widest text-sm hover:bg-[#1A2F23] hover:text-[#F9F9F5] transition-colors">
-             Join WhatsApp
-          </a>
-       </div>
-    </section>
   </main>
-
-  <Footer />
 </Layout>
 
 <style>
-  /* Simple animations */
-  @keyframes fadeInUp {
-    from {
-      opacity: 0;
-      transform: translateY(20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  .animate-fade-in-up {
-    opacity: 0;
-    animation: fadeInUp 0.8s ease-out forwards;
-  }
-  
-  .delay-100 { animation-delay: 0.1s; }
-  .delay-200 { animation-delay: 0.2s; }
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.animate-fade-in-up {
+  opacity: 0;
+  animation: fadeInUp 0.8s ease-out forwards;
+}
+.delay-100 { animation-delay: 0.1s; }
+.delay-200 { animation-delay: 0.2s; }
 </style>

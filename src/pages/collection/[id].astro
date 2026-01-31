@@ -1,0 +1,58 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import ProductsGrid from "../../components/ProductsGrid.astro";
+import { collections } from "../../data/collections";
+import { products } from "../../data/products";
+
+// REQUIRED for dynamic routes
+export async function getStaticPaths() {
+  return collections.map((collection) => ({
+    params: { id: collection.id }
+  }));
+}
+
+const { id } = Astro.params;
+
+// Find collection
+const collection = collections.find(c => c.id === id);
+
+if (!collection) {
+  throw new Error(`Collection not found: ${id}`);
+}
+
+// Filter products by collection id
+const collectionProducts = products.filter(
+  (product) => product.collectionId === id
+);
+---
+
+<Layout title={collection.name} description={collection.description}>
+
+  <!-- HERO -->
+  <section class="relative h-[60vh] w-full overflow-hidden">
+    <img
+      src={collection.image}
+      alt={collection.alt || collection.name}
+      class="absolute inset-0 w-full h-full object-cover"
+    />
+    <div class="absolute inset-0 bg-black/40"></div>
+
+    <div class="relative z-10 max-w-7xl mx-auto h-full flex flex-col justify-end px-6 pb-16 text-white">
+      <p class="uppercase tracking-widest text-sm mb-2">
+        {collection.season}
+      </p>
+      <h1 class="text-4xl md:text-5xl font-serif mb-4">
+        {collection.name}
+      </h1>
+      <p class="max-w-xl text-white/90">
+        {collection.description}
+      </p>
+    </div>
+  </section>
+
+  <!-- PRODUCTS -->
+  <section class="max-w-7xl mx-auto px-6 py-20">
+    <ProductsGrid products={collectionProducts} />
+  </section>
+
+</Layout>

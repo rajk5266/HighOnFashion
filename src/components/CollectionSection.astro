@@ -1,0 +1,42 @@
+---
+import ProductCard from "./ProductCard.astro";
+import { products } from "../data/products";
+---
+
+<section id="collection" class="py-24 px-6 md:px-12">
+  <div class="flex justify-between items-end mb-16 max-w-7xl mx-auto">
+    <div>
+      <h2 class="font-serif text-4xl mb-2 text-[#1A2F23]">The Drop</h2>
+      <p class="text-[#1A2F23]/60 uppercase text-xs tracking-widest">
+        Collection 001: Autumn Heritage
+      </p>
+    </div>
+
+    <a
+      href="#"
+      class="hidden md:block text-sm uppercase tracking-widest hover:underline underline-offset-4 decoration-[#D4AF37]"
+    >
+      View Entire Archive
+    </a>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-y-12 gap-x-8 max-w-7xl mx-auto">
+    {products.map(product => (
+      <ProductCard
+        title={product.title}
+        price={product.price}
+        image={product.image}
+        alt={product.alt}
+      />
+    ))}
+  </div>
+
+  <div class="mt-16 text-center md:hidden">
+    <a
+      href="#"
+      class="inline-block text-sm uppercase tracking-widest border-b border-[#1A2F23] pb-1"
+    >
+      View Entire Archive
+    </a>
+  </div>
+</section>
