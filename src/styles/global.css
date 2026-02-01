@@ -10,6 +10,7 @@
   --font-sans: "Inter", sans-serif;
 }
 
+
 /* Custom Utilities if needed, but Tailwind 4 handles most via classes */
 @layer base {
   html {
@@ -22,4 +23,29 @@
     font-family: var(--font-serif);
     color: var(--color-forest);
   }
+
+}
+
+  body{
+    background-color: #f5f1e8;
+  }
+
+  
+
+  .social-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 9999px;
+  border: 1px solid rgb(229 229 229);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.25s ease;
+  font-size: 18px;
+}
+
+.social-icon:hover {
+  background-color: black;
+  color: white;
+  transform: translateY(-2px);
 }

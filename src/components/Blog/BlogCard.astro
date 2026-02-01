@@ -1,0 +1,21 @@
+---
+const { post } = Astro.props;
+---
+
+<a
+  href={`/blog/${post.id}`}
+  class="group overflow-hidden rounded-xl shadow hover:shadow-lg transition"
+>
+  <img
+    src={post.cover}
+    alt={post.title}
+    class="w-full h-56 object-cover group-hover:scale-105 transition-transform"
+  />
+  <div class="p-4">
+    <h3 class="text-xl font-serif mb-2">{post.title}</h3>
+    <p class="text-neutral-600 mb-2">{post.description}</p>
+    <p class="text-sm text-neutral-400">
+      {post.date} • {post.readTime}
+    </p>
+  </div>
+</a>

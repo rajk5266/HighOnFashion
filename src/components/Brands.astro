@@ -1,0 +1,35 @@
+---
+import { brands } from "../data/brands";
+---
+<section class="overflow-hidden py-20 bg-neutral-950 text-white">
+  <h2 class="text-center text-3xl font-serif mb-12 text-white">
+    Brands We Curate
+  </h2>
+
+  <div class="relative w-full overflow-hidden">
+    <div class="flex w-max animate-marquee gap-16 px-8">
+      {brands.concat(brands).map((brand) => (
+        <span
+          class="text-6xl md:text-6xl font-semibold tracking-widest opacity-80 hover:opacity-100 transition text-gold"
+        >
+          {brand}
+        </span>
+      ))}
+    </div>
+  </div>
+</section>
+
+
+<style>
+
+
+    @keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+.animate-marquee {
+  animation: marquee 25s linear infinite;
+}
+
+</style>

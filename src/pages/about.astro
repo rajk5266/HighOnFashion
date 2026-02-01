@@ -1,14 +1,12 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import CollectionsGrid from "../components/CollectionsGrid.astro";
-import Brands from '../components/Brands.astro';
+// import Image from 'astro/components/Image.astro';
+import { Image } from "astro:assets";  
+  import heroBg from '../assets/hero-bg.png';
 
-import { Image } from "astro:assets";
-import FeaturedCollectionsGrid from "../components/FeaturedCollectionsGrid.astro";
-import { FeaturedCollections } from "../data/featuredCollections";
+import Journal from '../components/about/Journal.astro'
+import Manifesto from '../components/about/Manifesto.astro'
 
-import heroBg from '../assets/hero-bg.png';
-import scarfImg from '../assets/scarf.png';
 
 // JSON-LD schema for SEO
 const schema = {
@@ -23,8 +21,11 @@ const schema = {
   <script type="application/ld+json" set:html={JSON.stringify(schema)} />
 
   <main>
-    <!-- Hero Section -->
-    <section class="relative h-screen min-h-[800px] w-full overflow-hidden flex items-center justify-center">
+
+
+  
+  <!-- Hero Section -->
+    <section class="relative h-screen min-h-[400px] w-full overflow-hidden flex items-center justify-center">
       <div class="absolute inset-0 z-0">
         <Image
           src={heroBg}
@@ -36,40 +37,19 @@ const schema = {
       </div>
 
       <div class="relative z-10 text-center text-[#F9F9F5] px-6 max-w-4xl mx-auto mt-20">
-        <p class="text-sm tracking-[0.2em] uppercase mb-6 opacity-90 animate-fade-in-up">
-          Est. 2024 — Curated Vintage
-        </p>
 
         <h1 class="font-serif text-5xl md:text-7xl lg:text-8xl leading-none mb-8 animate-fade-in-up delay-100">
-          Rethink.<br />
-          <span class="italic font-light">Rewear.</span><br />
-          Repeat.
+About Us
         </h1>
 
-        <div class="animate-fade-in-up delay-200">
-          <a
-            href="#collections"
-            class="inline-block border border-[#F9F9F5] px-8 py-3 hover:bg-[#F9F9F5] hover:text-[#1A2F23] transition-colors uppercase tracking-widest text-sm"
-          >
-            View the Drop
-          </a>
-        </div>
       </div>
     </section>
 
-    <!-- Collections -->
-    <section id="collections" class="py-24 px-6 md:px-12">
-      <CollectionsGrid />
-    </section>
+    <Manifesto/>
+
+    <Journal/>
 
 
-      <FeaturedCollectionsGrid collections={FeaturedCollections} />
-
-      <Brands/>
-
-
-
-    
   </main>
 </Layout>
 

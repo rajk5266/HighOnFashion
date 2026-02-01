@@ -1,0 +1,36 @@
+---
+
+
+import { journalEntries } from '../../data/journal';
+
+---
+
+<!-- Journal -->
+    <section class="py-24 bg-[#1A2F23] text-[#F9F9F5] px-6 md:px-12">
+      <div class="max-w-7xl mx-auto">
+        <h2 class="font-serif text-4xl md:text-5xl mb-16 text-center">
+          The Journal
+        </h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+          {journalEntries.map(entry => (
+            <article class="group">
+              <div class="h-px bg-[#F9F9F5]/20 mb-6"></div>
+              <div class="flex justify-between text-xs tracking-widest uppercase opacity-60 mb-4">
+                <span>{entry.category}</span>
+                <span>{entry.date}</span>
+              </div>
+              <h3 class="text-2xl font-serif mb-4 group-hover:text-gold transition-colors text-gold">
+                {entry.title}
+              </h3>
+              <p class="opacity-70 font-light mb-6">
+                {entry.excerpt}
+              </p>
+              <span class="text-xs uppercase tracking-widest border-b border-[#F9F9F5]/30">
+                Read Story
+              </span>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
