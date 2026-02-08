@@ -1,0 +1,75 @@
+---
+import { getCollection } from "astro:content";
+import Layout from "../../layouts/Layout.astro";
+import { Image } from "astro:assets";
+
+export async function getStaticPaths() {
+  const posts = await getCollection("blog", ({ data }) => !data.draft);
+
+  return posts.map((post) => ({
+    params: { slug: post.slug },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await post.render();
+---
+
+<Layout title={post.data.title} description={post.data.description}>
+  <!-- FULL-WIDTH COVER -->
+  {
+    post.data.coverImage && (
+      <section class="w-screen relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] mb-20">
+        <Image
+          src={post.data.coverImage}
+          alt={post.data.coverAlt || post.data.title}
+          class="w-full h-[70vh] object-cover object-top"
+          loading="eager"
+          decoding="async"
+        />
+      </section>
+    )
+  }
+
+  <!-- CONTENT -->
+  <article class="mx-auto px-6 max-w-[1200px]">
+    <header class="mb-16">
+      <h1 class="font-serif text-4xl md:text-5xl xl:text-6xl mb-6">
+        {post.data.title}
+      </h1>
+
+      <p class="text-neutral-500">
+        {post.data.publishDate.toDateString()}
+      </p>
+    </header>
+
+<div
+  class="
+  prose
+  prose-neutral
+  lg:prose-lg
+  xl:prose-xl
+  max-w-none
+
+  /* IMAGES */
+  [&_img]:max-w-[350px]
+  [&_img]:w-full
+  [&_img]:mx-auto
+  [&_img]:rounded-xl
+  [&_img]:my-16
+
+  /* BLOCKQUOTE */
+  prose-blockquote:border-l-4
+  prose-blockquote:border-black
+  prose-blockquote:pl-6
+  prose-blockquote:italic
+  prose-blockquote:text-neutral-800
+  prose-blockquote:my-12
+  "
+>
+  <Content />
+</div>
+
+  </article>
+</Layout>

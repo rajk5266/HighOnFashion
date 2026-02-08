@@ -1,0 +1,37 @@
+---
+import { Image } from "astro:assets";
+
+const { heroImage, heading, tagline, imageAlt } = Astro.props;
+---
+
+<section
+  class="relative h-[260px] md:h-[420px] w-full overflow-hidden flex items-center justify-center"
+  aria-label="Page banner"
+>
+  <!-- Background Image -->
+  <div class="absolute inset-0 z-0">
+    <Image
+      src={heroImage}
+      alt={imageAlt}
+      class="w-full h-full object-cover object-center"
+      priority
+      loading="eager"
+      decoding="async"
+    />
+    <!-- Black overlay -->
+    <div class="absolute inset-0 bg-black/60"></div>
+  </div>
+
+  <!-- Content -->
+  <div class="relative z-10 text-center px-6 max-w-4xl mx-auto">
+    <h1 class="font-serif text-white text-3xl md:text-5xl lg:text-6xl leading-tight mb-3">
+      {heading}
+    </h1>
+
+    {tagline && (
+      <p class="text-white/90 text-sm md:text-base max-w-2xl mx-auto">
+        {tagline}
+      </p>
+    )}
+  </div>
+</section>

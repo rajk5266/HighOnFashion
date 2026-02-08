@@ -1,0 +1,43 @@
+---
+
+import { Image } from "astro:assets";
+
+import heroBg from '../assets/hero-bg.png';
+
+---
+
+
+
+<!-- Hero Section -->
+    <section class="relative h-screen min-h-[800px] w-full overflow-hidden flex items-center justify-center">
+      <div class="absolute inset-0 z-0">
+        <Image
+          src={heroBg}
+          alt="High fashion editorial shot of models in vintage clothing"
+          class="w-full h-full object-cover object-top"
+          priority
+        />
+        <div class="absolute inset-0 bg-black/20"></div>
+      </div>
+
+      <div class="relative z-10 text-center text-[#F9F9F5] px-6 max-w-4xl mx-auto mt-20">
+        <p class="text-sm tracking-[0.2em] uppercase mb-6 opacity-90 animate-fade-in-up">
+          Est. 2024 — Curated Vintage
+        </p>
+
+        <h1 class="font-serif text-5xl md:text-7xl lg:text-8xl leading-none mb-8 animate-fade-in-up delay-100">
+          Rethink.<br />
+          <span class="italic font-light">Rewear.</span><br />
+          Repeat.
+        </h1>
+
+        <div class="animate-fade-in-up delay-200">
+          <a
+            href="#collections"
+            class="inline-block border border-[#F9F9F5] px-8 py-3 hover:bg-[#F9F9F5] hover:text-[#1A2F23] transition-colors uppercase tracking-widest text-sm"
+          >
+            View the Drop
+          </a>
+        </div>
+      </div>
+    </section>

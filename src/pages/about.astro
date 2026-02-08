@@ -6,6 +6,7 @@ import { Image } from "astro:assets";
 
 import Journal from '../components/about/Journal.astro'
 import Manifesto from '../components/about/Manifesto.astro'
+import Hero from '../components/Hero.astro';
 
 
 // JSON-LD schema for SEO
@@ -25,25 +26,13 @@ const schema = {
 
   
   <!-- Hero Section -->
-    <section class="relative h-screen min-h-[400px] w-full overflow-hidden flex items-center justify-center">
-      <div class="absolute inset-0 z-0">
-        <Image
-          src={heroBg}
-          alt="High fashion editorial shot of models in vintage clothing"
-          class="w-full h-full object-cover object-top"
-          priority
-        />
-        <div class="absolute inset-0 bg-black/20"></div>
-      </div>
 
-      <div class="relative z-10 text-center text-[#F9F9F5] px-6 max-w-4xl mx-auto mt-20">
-
-        <h1 class="font-serif text-5xl md:text-7xl lg:text-8xl leading-none mb-8 animate-fade-in-up delay-100">
-About Us
-        </h1>
-
-      </div>
-    </section>
+   <Hero
+      heroImage={heroBg}
+      heading="About Us"
+      tagline="Sustainable, curated thrift with a high-fashion editorial edge"
+      imageAlt="Modern vintage fashion editorial featuring curated thrift clothing"
+    />
 
     <Manifesto/>
 
