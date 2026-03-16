@@ -1,12 +1,12 @@
 ---
-const { id, name, description, image, alt, season } = Astro.props;
+const { id, name, description, cardImage, alt, season } = Astro.props;
 ---
 
 <article class="group overflow-hidden border border-neutral-200 hover:shadow-xl transition-shadow duration-300 flex flex-col">
   <!-- Image -->
   <div class="overflow-hidden aspect-[4/3] bg-neutral-100">
     <img
-      src={image}
+      src={cardImage}
       alt={alt}
       class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
       loading="lazy"

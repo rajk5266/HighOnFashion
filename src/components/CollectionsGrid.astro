@@ -1,6 +1,6 @@
 ---
 import CollectionCard from "./CollectionCard.astro";
-import { collections } from "../data/collections";
+import { FeaturedCollections } from "../data/featuredCollections";
 ---
 
 <section class="px-6 md:px-12 py-16">
@@ -14,7 +14,7 @@ import { collections } from "../data/collections";
   </div>
 
   <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-    {collections.map((collection) => (
+    {FeaturedCollections.map((collection) => (
       <CollectionCard {...collection} />
     ))}
   </div>

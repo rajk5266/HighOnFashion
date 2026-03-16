@@ -9,21 +9,21 @@ const { heroImage, heading, tagline, imageAlt } = Astro.props;
   aria-label="Page banner"
 >
   <!-- Background Image -->
-  <div class="absolute inset-0 z-0">
+  <div class="absolute inset-0">
     <Image
       src={heroImage}
       alt={imageAlt}
       class="w-full h-full object-cover object-center"
       priority
-      loading="eager"
-      decoding="async"
     />
-    <!-- Black overlay -->
-    <div class="absolute inset-0 bg-black/60"></div>
   </div>
 
+  
+  <!-- Dark Gradient Overlay -->
+  <!-- <div class="absolute inset-0 bg-gradient-to-b from-black/90 via-black/70 to-black/40 pointer-events-none"></div> -->
+
   <!-- Content -->
-  <div class="relative z-10 text-center px-6 max-w-4xl mx-auto">
+  <div class="relative text-center px-6 max-w-4xl mx-auto z-10">
     <h1 class="font-serif text-white text-3xl md:text-5xl lg:text-6xl leading-tight mb-3">
       {heading}
     </h1>
