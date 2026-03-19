@@ -1,34 +1,46 @@
 ---
 import { Image } from "astro:assets";
 
-import heroBg from "../assets/hero-bg.png";
+import heroBg from "../assets/highonfashion-herobanner.webp";
+import heroBg1 from "../assets/highonfashion-herobanner-1.webp"
+import heromobile from "../assets/heroBg1-mobile.png"
 ---
 
 <!-- Hero Section -->
 <section
   class="relative h-screen min-h-[800px] w-full overflow-hidden flex items-center justify-center"
 >
-  <div class="absolute inset-0 z-0">
-    <Image
-      src={heroBg}
-      alt="High fashion editorial shot of models in vintage clothing"
-      class="w-full h-full object-cover object-top"
-      priority
-    />
-    <div
-      class="absolute inset-0 bg-gradient-to-b from-white/40 via-black/20 to-black/70"
-    >
-    </div>
-  </div>
+<div class="absolute inset-0 z-0">
+  <!-- Desktop Image -->
+  <Image
+    src={heroBg}
+    alt="High fashion editorial shot of models in vintage clothing"
+    class="hidden md:block w-full h-full object-cover object-top"
+    priority
+  />
+
+  <!-- Mobile Image -->
+  <Image
+    src={heromobile}
+    alt="High fashion editorial shot of models in vintage clothing"
+    class="block md:hidden w-full h-full object-cover object-center"
+    priority
+  />
+
+  <!-- Overlay -->
+  <div
+    class="absolute inset-0 bg-gradient-to-b from-white/20 via-black/20 to-black/70"
+  ></div>
+</div>
 
   <div
     class="relative z-10 text-center text-[#F9F9F5] px-6 max-w-4xl mx-auto mt-20"
   >
-    <p
+    <!-- <p
       class="text-sm tracking-[0.2em] uppercase mb-6 opacity-90 animate-fade-in-up"
     >
-      Est. 2024 — Curated Vintage
-    </p>
+      Est. 2025 — Curated Vintage
+    </p> -->
 
     <h1
       class="font-serif text-5xl md:text-7xl lg:text-8xl leading-none mb-8 animate-fade-in-up delay-100"
