@@ -23,10 +23,12 @@ import { products } from "../data/products";
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-y-12 gap-x-8 max-w-7xl mx-auto">
     {products.map(product => (
       <ProductCard
+        id={product.id}
         title={product.title}
         price={product.price}
         image={product.image}
         alt={product.alt}
+        collectionId={product.collectionId}
       />
     ))}
   </div>

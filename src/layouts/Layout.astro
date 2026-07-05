@@ -24,9 +24,141 @@ const {
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
 
+    <!-- Snipcart Integration Preconnect -->
+    <link rel="preconnect" href="https://app.snipcart.com" />
+    <link rel="preconnect" href="https://cdn.snipcart.com" />
 
-    <meta name="google-site-verification" content="3bcyg-NkwfnNRkaX8WaYyUQWjDrsEYb2kz6-wIyvHxQ" />
+    <!-- Official Snipcart Injection Script -->
+    <script
+      is:inline
+      define:vars={{ apiKey: import.meta.env.PUBLIC_SNIPCART_API_KEY }}
+    >
+      window.SnipcartSettings = {
+        publicApiKey: apiKey,
+        // No loadStrategy = loads eagerly on DOMContentLoaded.
+        // 'on-user-interaction' consumes the first click just to load
+        // the library, leaving no click left to open the modal.
+        version: "3.4.0",
+      };
 
+      (function () {
+        var c, d;
+        (d = (c = window.SnipcartSettings).version) != null ||
+          (c.version = "3.0");
+        var s, S;
+        (S = (s = window.SnipcartSettings).timeoutDuration) != null ||
+          (s.timeoutDuration = 2750);
+        var l, p;
+        (p = (l = window.SnipcartSettings).domain) != null ||
+          (l.domain = "cdn.snipcart.com");
+        var w, u;
+        (u = (w = window.SnipcartSettings).protocol) != null ||
+          (w.protocol = "https");
+        var m, g;
+        (g = (m = window.SnipcartSettings).loadCSS) != null || (m.loadCSS = !0);
+        var y =
+            window.SnipcartSettings.version.includes("v3.0.0-ci") ||
+            (window.SnipcartSettings.version != "3.0" &&
+              window.SnipcartSettings.version.localeCompare("3.4.0", void 0, {
+                numeric: !0,
+                sensitivity: "base",
+              }) === -1),
+          f = ["focus", "mouseover", "touchmove", "scroll", "keydown"];
+        window.LoadSnipcart = o;
+        document.readyState === "loading"
+          ? document.addEventListener("DOMContentLoaded", r)
+          : r();
+        function r() {
+          window.SnipcartSettings.loadStrategy
+            ? window.SnipcartSettings.loadStrategy === "on-user-interaction" &&
+              (f.forEach(function (t) {
+                return document.addEventListener(t, o);
+              }),
+              setTimeout(o, window.SnipcartSettings.timeoutDuration))
+            : o();
+        }
+        var a = !1;
+        function o() {
+          if (a) return;
+          a = !0;
+          let t = document.getElementsByTagName("head")[0],
+            n = document.querySelector("#snipcart"),
+            i = document.querySelector(
+              'script[src^="'
+                .concat(window.SnipcartSettings.protocol, "://")
+                .concat(
+                  window.SnipcartSettings.domain,
+                  '"][src$="snipcart.js"]',
+                ),
+            ),
+            e = document.querySelector(
+              'link[href^="'
+                .concat(window.SnipcartSettings.protocol, "://")
+                .concat(
+                  window.SnipcartSettings.domain,
+                  '"][href$="snipcart.css"]',
+                ),
+            );
+          (n ||
+            ((n = document.createElement("div")),
+            (n.id = "snipcart"),
+            n.setAttribute("hidden", "true"),
+            document.body.appendChild(n)),
+            h(n),
+            i ||
+              ((i = document.createElement("script")),
+              (i.src = ""
+                .concat(window.SnipcartSettings.protocol, "://")
+                .concat(window.SnipcartSettings.domain, "/themes/v")
+                .concat(
+                  window.SnipcartSettings.version,
+                  "/default/snipcart.js",
+                )),
+              (i.async = !0),
+              t.appendChild(i)),
+            !e &&
+              window.SnipcartSettings.loadCSS &&
+              ((e = document.createElement("link")),
+              (e.rel = "stylesheet"),
+              (e.type = "text/css"),
+              (e.href = ""
+                .concat(window.SnipcartSettings.protocol, "://")
+                .concat(window.SnipcartSettings.domain, "/themes/v")
+                .concat(
+                  window.SnipcartSettings.version,
+                  "/default/snipcart.css",
+                )),
+              t.prepend(e)),
+            f.forEach(function (v) {
+              return document.removeEventListener(v, o);
+            }));
+        }
+        function h(t) {
+          // Always set the API key and customer dashboard flag
+          t.dataset.v3CustomerDashboard = "true";
+          t.dataset.apiKey = window.SnipcartSettings.publicApiKey;
+          if (window.SnipcartSettings.addProductBehavior) {
+            t.dataset.configAddProductBehavior =
+              window.SnipcartSettings.addProductBehavior;
+          }
+          if (window.SnipcartSettings.modalStyle) {
+            t.dataset.configModalStyle = window.SnipcartSettings.modalStyle;
+          }
+          if (window.SnipcartSettings.currency) {
+            t.dataset.currency = window.SnipcartSettings.currency;
+          }
+          if (window.SnipcartSettings.templatesUrl) {
+            t.dataset.templatesUrl = window.SnipcartSettings.templatesUrl;
+          }
+        }
+      })();
+    </script>
+
+    <!-- Google Site Metrics / Fonts -->
+    <meta
+      name="google-site-verification"
+      content="3bcyg-NkwfnNRkaX8WaYyUQWjDrsEYb2kz6-wIyvHxQ"
+    />
     <script type="text/partytown">
       (function (w, d, s, l, i) {
         w[l] = w[l] || [];
@@ -39,10 +171,6 @@ const {
         f.parentNode.insertBefore(j, f);
       })(window, document, "script", "dataLayer", "GTM-K2M5G63N");
     </script>
-
-    <!-- <GtmAstro/> -->
-
-    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -60,7 +188,6 @@ const {
   <body
     class="antialiased selection:bg-gold selection:text-forest bg-stone-50 text-neutral-900"
   >
-    <!-- Google Tag Manager (noscript) -->
     <noscript
       ><iframe
         src="https://www.googletagmanager.com/ns.html?id=GTM-K2M5G63N"
@@ -68,7 +195,7 @@ const {
         width="0"
         style="display:none;visibility:hidden"></iframe></noscript
     >
-    <!-- End Google Tag Manager (noscript) -->
+
     <Header />
 
     <main class="min-h-screen">
@@ -76,5 +203,8 @@ const {
     </main>
 
     <Footer />
+
+    <!-- ⚠️ Note: The duplicate hardcoded div container has been removed from here. -->
+    <!-- Snipcart's script snippet will dynamically spawn it inside the body automatically with your defined configuration props! -->
   </body>
 </html>

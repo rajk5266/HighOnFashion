@@ -1,0 +1,28 @@
+---
+// src/components/AddToCartButton.astro
+interface Props {
+    id: string;
+    name: string;
+    price: number;
+    image: string;
+    description?: string;
+    slug: string; // The URL path to this specific item page
+}
+
+const { id, name, price, image, description = "", slug } = Astro.props;
+
+// Crucial: Construct an absolute URL or clean relative fallback for Snipcart's verification crawler
+const currentUrl = `/products/${slug}`;
+---
+
+<button
+    class="snipcart-add-item w-full py-3 bg-neutral-900 text-white font-medium text-xs uppercase tracking-widest hover:bg-gold hover:text-forest transition-colors duration-300 rounded-md shadow-sm cursor-pointer"
+    data-item-id={id}
+    data-item-name={name}
+    data-item-price={price}
+    data-item-url={currentUrl}
+    data-item-image={image}
+    data-item-description={description}
+>
+    Add to Bag
+</button>

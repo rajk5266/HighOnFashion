@@ -1,23 +1,49 @@
 ---
-const { title, price, image, alt = title } = Astro.props;
+const { id, title, price, image, alt = title, sizes = [], collectionId = "" } = Astro.props;
+
+const snipcartSizes = sizes && sizes.length > 0 ? sizes.join('|') : '';
+
+// Build a stable product URL for Snipcart's crawler.
+// If we have a collectionId, point to that collection page where this card appears.
+// Snipcart will crawl this URL and find the data-item-id to validate the product.
+const itemUrl = collectionId ? `/collection/${collectionId}` : Astro.url.pathname;
 ---
 
-<article class="group cursor-pointer">
-  <div class="relative aspect-[3/4] overflow-hidden bg-neutral-100">
-    <img
-      src={image || "/placeholder.jpg"}
-      alt={alt}
-      class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-      loading="lazy"
-    />
+<article class="group flex flex-col justify-between h-full bg-white border border-neutral-200/60 rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-300">
+  <div class="cursor-pointer">
+    <div class="relative aspect-[3/4] overflow-hidden bg-neutral-100">
+      <img
+        src={image || "/placeholder.jpg"}
+        alt={alt}
+        class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+        loading="lazy"
+      />
+    </div>
+
+    <div class="p-4">
+      <h3 class="text-sm font-medium leading-snug text-neutral-800">
+        {title}
+      </h3>
+      <p class="text-sm text-neutral-500 mt-1">
+        ₹{price}
+      </p>
+    </div>
   </div>
 
-  <div class="mt-3">
-    <h3 class="text-sm font-medium leading-snug">
-      {title}
-    </h3>
-    <p class="text-sm text-neutral-500">
-      ₹{price}
-    </p>
+  <div class="p-4 pt-0">
+    <button
+      class="snipcart-add-item w-full py-2.5 px-4 bg-forest text-white hover:bg-gold hover:text-forest transition-all duration-200 text-[10px] font-bold uppercase tracking-widest rounded-lg cursor-pointer"
+      data-item-id={id}
+      data-item-name={title}
+      data-item-price={price}
+      data-item-image={image}
+      data-item-url={itemUrl}
+      {...(snipcartSizes ? {
+        "data-item-custom1-name": "Size",
+        "data-item-custom1-options": snipcartSizes
+      } : {})}
+    >
+      Add to Cart
+    </button>
   </div>
 </article>
