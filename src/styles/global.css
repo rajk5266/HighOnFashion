@@ -109,3 +109,11 @@
 .prose ul{
   
 }
+
+
+
+.snipcart-modal__container{
+  /* top: 140px !important; */
+  /* position: relative !important; */
+  z-index: 999999 !important;
+}

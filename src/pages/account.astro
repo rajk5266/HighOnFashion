@@ -1,98 +1,74 @@
 ---
+// src/pages/account.astro
 import Layout from "../layouts/Layout.astro";
 
-// SEO Metadata
-const description = "Access your HighOnFashion customer profile to view your purchase order history, update saved addresses, and manage your billing information.";
+const description =
+  "Access your HighOnFashion customer portal to track order histories, update dynamic drop shipping details, and manage billing.";
 ---
 
 <Layout title="Account Dashboard | HighOnFashion" description={description}>
-  <section class="min-h-[80vh] flex items-center py-24 md:py-32 bg-stone-50">
-    <div class="w-full max-w-4xl mx-auto px-6">
-      
-      <!-- Page Header -->
-      <div class="text-center mb-10 md:mb-14">
-        <span class="text-xs uppercase tracking-[0.25em] text-gold font-semibold">Your Studio</span>
-        <h1 class="text-4xl md:text-5xl font-serif mt-2 mb-3 text-forest">Customer Portal</h1>
-        <div class="h-[1px] w-16 bg-gold/60 mx-auto mb-4"></div>
-        <p class="text-neutral-600 font-light max-w-md mx-auto text-sm tracking-wide leading-relaxed">
-          Manage your editorial collection, track vintage shipping, and update your personal billing profile.
-        </p>
-      </div>
+  <section
+    class="min-h-[85vh] flex items-center justify-center py-20 bg-stone-50"
+  >
+    <div class="w-full max-w-md mx-auto px-6 text-center">
+      <!-- Studio Header -->
+      <span class="text-xs uppercase tracking-[0.25em] text-gold font-semibold"
+        >Your Studio</span
+      >
+      <h1 class="text-3xl md:text-4xl font-serif mt-2 mb-3 text-forest">
+        Customer Portal
+      </h1>
+      <div class="h-[1px] w-12 bg-gold/60 mx-auto mb-6"></div>
 
-      <!-- Main Dashboard Wrapper -->
-      <div class="bg-white border border-neutral-200/60 p-6 md:p-12 shadow-xl shadow-stone-200/40 rounded-xl min-h-[450px] transition-all duration-300">
-        
-        <!-- Snipcart Embedded customer dashboard hook -->
-        <div class="snipcart-customer-dashboard">
-          
-          <!-- Elegant loading skeleton displayed while Snipcart scripts initialize -->
-          <div class="flex flex-col items-center justify-center py-20 space-y-6">
-            <div class="relative w-14 h-14">
-              <div class="absolute inset-0 border-2 border-stone-200 rounded-full"></div>
-              <div class="absolute inset-0 border-2 border-gold border-t-transparent rounded-full animate-spin"></div>
-            </div>
-            <div class="text-center space-y-2">
-              <p class="text-neutral-500 text-xs tracking-[0.2em] uppercase font-medium animate-pulse">
-                Establishing Secured Connection
-              </p>
-              <p class="text-neutral-400 text-[11px] font-light italic">
-                Loading order history and profile...
-              </p>
-            </div>
-          </div>
-          
-        </div>
+      <p
+        class="text-neutral-600 font-light text-sm tracking-wide leading-relaxed mb-8"
+      >
+        Review your curated vintage orders, trace dynamic shipping statuses, and
+        manage your custom profile file details.
+      </p>
 
-      </div>
+      <!-- The Direct Portal Activation Hook -->
+      <button
+        id="open-portal-btn"
+        class="snipcart-customer-signin inline-block w-full text-center px-6 py-3.5 text-xs uppercase tracking-widest font-semibold text-white bg-neutral-900 hover:bg-neutral-800 transition-colors duration-300 rounded-md shadow-sm cursor-pointer"
+      >
+        View Order History
+      </button>
 
-      <!-- Return Button -->
-      <div class="mt-8 text-center">
-        <a 
-          href="/collections" 
-          class="inline-flex items-center gap-2 text-xs uppercase tracking-widest text-neutral-500 hover:text-black transition-colors duration-200"
+      <!-- Context Fallback Return -->
+      <div class="mt-8">
+        <a
+          href="/"
+          class="inline-flex items-center gap-2 text-xs uppercase tracking-widest text-neutral-400 hover:text-black transition-colors duration-200"
         >
-          <i class="fa-solid fa-arrow-left"></i>
-          Back to Collections
+          <i class="fa-solid fa-arrow-left text-[10px]"></i>
+          Return to Storefront
         </a>
       </div>
-
     </div>
   </section>
 </Layout>
 
-<style is:global>
-  /* Custom overrides to integrate Snipcart's customer dashboard nicely into our cream/forest theme */
-  .snipcart-customer-dashboard {
-    font-family: 'Inter', sans-serif !important;
-  }
-  
-  .snipcart-customer-dashboard h1, 
-  .snipcart-customer-dashboard h2, 
-  .snipcart-customer-dashboard h3 {
-    font-family: 'Playfair Display', serif !important;
-    color: var(--color-forest) !important;
+<script>
+  // Dynamic Route Security: Force open the session sidebar if loaded unauthenticated
+  function handleSecureVerification() {
+    if (typeof (window as any).Snipcart !== "undefined") {
+      const SnipcartGlobal = (window as any).Snipcart;
+      const state = SnipcartGlobal.store.getState();
+      const customer = state.session?.customer;
+
+      // If user isn't signed in yet, fire the side modal directly on mount
+      if (!customer || customer.status !== "SignedIn") {
+        SnipcartGlobal.api.customer.openSigninModal();
+      }
+    }
   }
 
-  /* Custom styling override for buttons inside the Snipcart customer portal */
-  .snipcart-customer-dashboard button:not(.snipcart-btn--secondary) {
-    background-color: var(--color-forest) !important;
-    color: white !important;
-    transition: all 0.2s ease-in-out !important;
-    border-radius: 4px !important;
-  }
+  document.addEventListener("snipcart.initialized", () => {
+    handleSecureVerification();
+  });
 
-  .snipcart-customer-dashboard button:not(.snipcart-btn--secondary):hover {
-    background-color: var(--color-gold) !important;
-    color: var(--color-forest) !important;
+  if ((window as any).Snipcart) {
+    handleSecureVerification();
   }
-
-  /* Make links look elegant */
-  .snipcart-customer-dashboard a {
-    color: var(--color-forest) !important;
-    text-underline-offset: 4px;
-  }
-
-  .snipcart-customer-dashboard a:hover {
-    color: var(--color-gold) !important;
-  }
-</style>
+</script>

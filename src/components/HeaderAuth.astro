@@ -1,57 +1,43 @@
 ---
-// HeaderAuth.astro - E-Commerce Auth & Cart Navigation
+// src/components/HeaderAuth.astro
 ---
 
 <div class="flex items-center gap-4 md:gap-6 text-black">
-  <!-- Login / Sign In Button (Opens Snipcart Auth Modal) -->
+  <!-- Native Sign In / Profile Switch Trigger -->
   <button
-    class="js-snipcart-auth-signin snipcart-customer-signin flex items-center gap-1.5 text-xs md:text-sm tracking-widest uppercase font-medium hover:text-gold transition-colors duration-200 cursor-pointer"
+    id="nav-signin-trigger"
+    class="snipcart-customer-signin flex items-center gap-1.5 text-xs md:text-sm tracking-widest uppercase font-medium hover:text-gold transition-colors duration-200 cursor-pointer"
   >
     <i class="fa-regular fa-user text-base"></i>
-    <span class="hidden sm:inline">Sign In</span>
+    <span>Sign In / Account</span>
   </button>
 
-  <!-- Account Dashboard Page Link (Visible when Logged In) -->
-  <a
-    href="/account"
-    class="js-snipcart-auth-account hidden flex items-center gap-1.5 text-xs md:text-sm tracking-widest uppercase font-medium hover:text-gold transition-colors duration-200"
-  >
-    <i class="fa-solid fa-circle-user text-base text-forest"></i>
-    <span class="hidden sm:inline">Profile</span>
-  </a>
-
-  <!-- Sign Out Button (Visible when Logged In) -->
+  <!-- Sign Out Trigger -->
   <button
-    class="js-snipcart-auth-signout snipcart-customer-signout hidden flex items-center gap-1.5 text-xs md:text-sm tracking-widest uppercase font-medium text-red-700 hover:text-red-900 transition-colors duration-200 cursor-pointer"
+    id="nav-signout-trigger"
+    class="snipcart-customer-signout hidden flex items-center gap-1.5 text-xs md:text-sm tracking-widest uppercase font-medium text-red-700 hover:text-red-900 transition-colors duration-200 cursor-pointer"
   >
     <i class="fa-solid fa-arrow-right-from-bracket text-base"></i>
-    <span class="hidden sm:inline">Sign Out</span>
+    <span>Sign Out</span>
   </button>
 
-  <!-- Cart / Checkout Button -->
+  <!-- Cart Button -->
   <button
-    class="snipcart-checkout flex items-center gap-2 relative p-1.5 md:p-2 text-xs md:text-sm tracking-widest uppercase font-medium hover:text-gold transition-colors duration-200 cursor-pointer"
-    aria-label="Open shopping cart"
+    class="snipcart-checkout flex items-center gap-2 relative p-1.5 text-xs uppercase tracking-widest font-medium hover:text-gold transition-colors duration-200 cursor-pointer"
   >
-    <div class="relative">
-      <i class="fa-solid fa-bag-shopping text-lg md:text-xl"></i>
-      <span
-        class="snipcart-total-items absolute -top-2.5 -right-2.5 bg-gold text-forest text-[10px] font-bold w-4.5 h-4.5 rounded-full flex items-center justify-center border border-white shadow-sm"
-      >
-        0
-      </span>
-    </div>
-    <span class="hidden md:inline">Cart</span>
+    <i class="fa-solid fa-bag-shopping text-lg"></i>
+    <span
+      class="snipcart-total-items absolute -top-2.5 -right-2.5 bg-gold text-forest text-[10px] font-bold w-4.5 h-4.5 rounded-full flex items-center justify-center border border-white"
+      >0</span
+    >
+    <span>Cart</span>
   </button>
 </div>
 
 <script>
-  function updateAuthState() {
-    const signinButtons = document.querySelectorAll(".js-snipcart-auth-signin");
-    const accountLinks = document.querySelectorAll(".js-snipcart-auth-account");
-    const signoutButtons = document.querySelectorAll(
-      ".js-snipcart-auth-signout",
-    );
+  function synchronizeAuthenticationEcosystem() {
+    const signInBtn = document.getElementById("nav-signin-trigger");
+    const signOutBtn = document.getElementById("nav-signout-trigger");
 
     try {
       const SnipcartGlobal = (window as any).Snipcart;
@@ -60,43 +46,49 @@
         typeof SnipcartGlobal.store?.getState === "function"
       ) {
         const state = SnipcartGlobal.store.getState();
-
-        // FIX: In Snipcart v3, the customer info lives inside state.session.customer
         const customer = state.session?.customer;
         const isSignedIn = customer && customer.status === "SignedIn";
 
         if (isSignedIn) {
-          signinButtons.forEach((btn) => btn.classList.add("hidden"));
-          accountLinks.forEach((link) => link.classList.remove("hidden"));
-          signoutButtons.forEach((btn) => btn.classList.remove("hidden"));
+          // Dynamic label swap: updates the native login trigger to say "My Profile" when authenticated
+          if (signInBtn) {
+            const textSpan = signInBtn.querySelector("span");
+            if (textSpan) textSpan.textContent = "My Profile";
+          }
+          signOutBtn?.classList.remove("hidden");
         } else {
-          signinButtons.forEach((btn) => btn.classList.remove("hidden"));
-          accountLinks.forEach((link) => link.classList.add("hidden"));
-          signoutButtons.forEach((btn) => btn.classList.add("hidden"));
+          if (signInBtn) {
+            const textSpan = signInBtn.querySelector("span");
+            if (textSpan) textSpan.textContent = "Sign In / Account";
+          }
+          signOutBtn?.classList.add("hidden");
         }
       }
-    } catch (error) {
-      console.warn("Failed to check Snipcart session status:", error);
+    } catch (err) {
+      console.warn("Session synchronization paused:", err);
     }
   }
 
-  // Bind listener once Snipcart is fully booted
+  // Core Lifecycle Hooks
   document.addEventListener("snipcart.initialized", () => {
-    updateAuthState();
+    synchronizeAuthenticationEcosystem();
 
-    // Listen for real-time authentication shifts (login/logout events)
     (window as any).Snipcart.events.on("customer.session.changed", () => {
-      updateAuthState();
+      synchronizeAuthenticationEcosystem();
     });
   });
 
-  // Re-run execution logic when Astro completes a client-side route change
-  document.addEventListener("astro:after-swap", () => {
-    updateAuthState();
+  // Init setups on standard load and Astro client-side layout swaps
+  document.addEventListener("DOMContentLoaded", () => {
+    synchronizeAuthenticationEcosystem();
   });
 
-  // Instant fallback fallback loop if Snipcart loaded faster than the DOM listener
+  document.addEventListener("astro:after-swap", () => {
+    synchronizeAuthenticationEcosystem();
+  });
+
+  // Instant execution fallback if the SDK script beat the DOM listeners
   if ((window as any).Snipcart) {
-    updateAuthState();
+    synchronizeAuthenticationEcosystem();
   }
 </script>

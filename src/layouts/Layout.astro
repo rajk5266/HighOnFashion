@@ -29,16 +29,17 @@ const {
     <link rel="preconnect" href="https://cdn.snipcart.com" />
 
     <!-- Official Snipcart Injection Script -->
+    <!-- Official Snipcart Injection Script inside Layout.astro Head -->
+    <!-- Official Snipcart Injection Script -->
     <script
       is:inline
       define:vars={{ apiKey: import.meta.env.PUBLIC_SNIPCART_API_KEY }}
     >
       window.SnipcartSettings = {
         publicApiKey: apiKey,
-        // No loadStrategy = loads eagerly on DOMContentLoaded.
-        // 'on-user-interaction' consumes the first click just to load
-        // the library, leaving no click left to open the modal.
         version: "3.4.0",
+        modalStyle: "side",
+        currency: "inr",
       };
 
       (function () {
@@ -99,12 +100,13 @@ const {
                   '"][href$="snipcart.css"]',
                 ),
             );
-          (n ||
-            ((n = document.createElement("div")),
-            (n.id = "snipcart"),
+          (n || ((n = document.createElement("div")), (n.id = "snipcart")),
             n.setAttribute("hidden", "true"),
-            document.body.appendChild(n)),
-            h(n),
+            (n.dataset.v3CustomerDashboard = "true"),
+            (n.dataset.apiKey = window.SnipcartSettings.publicApiKey),
+            (n.dataset.configModalStyle = window.SnipcartSettings.modalStyle),
+            (n.dataset.currency = window.SnipcartSettings.currency),
+            document.body.appendChild(n),
             i ||
               ((i = document.createElement("script")),
               (i.src = ""
@@ -128,29 +130,9 @@ const {
                   window.SnipcartSettings.version,
                   "/default/snipcart.css",
                 )),
-              t.prepend(e)),
-            f.forEach(function (v) {
-              return document.removeEventListener(v, o);
-            }));
+              t.prepend(e)));
         }
-        function h(t) {
-          // Always set the API key and customer dashboard flag
-          t.dataset.v3CustomerDashboard = "true";
-          t.dataset.apiKey = window.SnipcartSettings.publicApiKey;
-          if (window.SnipcartSettings.addProductBehavior) {
-            t.dataset.configAddProductBehavior =
-              window.SnipcartSettings.addProductBehavior;
-          }
-          if (window.SnipcartSettings.modalStyle) {
-            t.dataset.configModalStyle = window.SnipcartSettings.modalStyle;
-          }
-          if (window.SnipcartSettings.currency) {
-            t.dataset.currency = window.SnipcartSettings.currency;
-          }
-          if (window.SnipcartSettings.templatesUrl) {
-            t.dataset.templatesUrl = window.SnipcartSettings.templatesUrl;
-          }
-        }
+        Def = o;
       })();
     </script>
 
