@@ -4,11 +4,25 @@ import { defineConfig } from 'astro/config';
 import tailwindcss from '@tailwindcss/vite';
 
 import partytown from '@astrojs/partytown';
+import node from '@astrojs/node';
+
 
 // https://astro.build/config
 export default defineConfig({
+  // API routes in src/pages/api/ use `export const prerender = false` to opt into
+  // server-side rendering, while all other pages remain statically generated.
+  // The node adapter enables this in both local dev and Vercel deployment.
+  adapter: node({ mode: 'middleware' }),
+
   vite: {
     plugins: [tailwindcss()]
+  },
+
+  server: {
+    allowedHosts: [
+      'vessel-tricky-brunette.ngrok-free.dev', // Your specific ngrok domain
+      '.ngrok-free.dev'                        // Allows any future ngrok domains you generate
+    ]
   },
 
   integrations: [

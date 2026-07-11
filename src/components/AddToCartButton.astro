@@ -11,8 +11,10 @@ interface Props {
 
 const { id, name, price, image, description = "", slug } = Astro.props;
 
-// Crucial: Construct an absolute URL or clean relative fallback for Snipcart's verification crawler
-const currentUrl = `/products/${slug}`;
+// Snipcart's crawler runs server-side and needs a full absolute URL to validate products.
+// Using Astro.url ensures the correct domain is used in every environment
+// (ngrok, localhost, Vercel production, custom domain).
+const currentUrl = new URL(`/products/${slug}`, Astro.url).href;
 ---
 
 <button

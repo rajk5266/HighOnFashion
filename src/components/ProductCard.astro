@@ -3,10 +3,12 @@ const { id, title, price, image, alt = title, sizes = [], collectionId = "" } = 
 
 const snipcartSizes = sizes && sizes.length > 0 ? sizes.join('|') : '';
 
-// Build a stable product URL for Snipcart's crawler.
-// If we have a collectionId, point to that collection page where this card appears.
-// Snipcart will crawl this URL and find the data-item-id to validate the product.
-const itemUrl = collectionId ? `/collection/${collectionId}` : Astro.url.pathname;
+// Build a stable, absolute product URL for Snipcart's external crawler.
+// Snipcart's server crawls this URL to verify product price — relative paths don't work.
+// Using Astro.url.origin ensures correct domain in all envs (ngrok, Vercel, custom domain).
+const itemUrl = collectionId
+  ? new URL(`/collection/${collectionId}`, Astro.url).href
+  : Astro.url.href;
 ---
 
 <article class="group flex flex-col justify-between h-full bg-white border border-neutral-200/60 rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-300">

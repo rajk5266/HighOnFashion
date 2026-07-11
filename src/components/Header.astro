@@ -8,8 +8,6 @@ import HeaderAuth from "./HeaderAuth.astro";
 const isHome = Astro.url.pathname === "/";
 ---
 
-
-
 <header
   id="site-header"
   class={`${isHome ? "relative" : "relative"} top-0 w-full z-50
@@ -18,8 +16,7 @@ const isHome = Astro.url.pathname === "/";
   transition-all duration-300
   ${isHome ? "bg-white md:bg-transparent" : "bg-white"}`}
 >
-
-<!-- <header
+  <!-- <header
   id="site-header"
   class="fixed top-0 w-full z-50
          py-4 px-6 md:px-12
@@ -36,9 +33,13 @@ const isHome = Astro.url.pathname === "/";
     />
   </a>
 
-  <nav class="hidden md:flex gap-8 text-sm tracking-widest uppercase text-black">
+  <nav
+    class="hidden md:flex gap-8 text-sm tracking-widest uppercase text-black"
+  >
     <a href="/about" class="hover:underline underline-offset-4">About</a>
-    <a href="/collections" class="hover:underline underline-offset-4">Collection</a>
+    <a href="/collections" class="hover:underline underline-offset-4"
+      >Collection</a
+    >
     <a href="/blog" class="hover:underline underline-offset-4">Blogs</a>
   </nav>
 
@@ -55,18 +56,17 @@ const isHome = Astro.url.pathname === "/";
   </div>
 
   <div class="flex items-center gap-2 md:hidden">
-    <!-- Mobile Cart Shortcut -->
     <button
       class="snipcart-checkout flex items-center p-2 text-black hover:text-gold transition-colors cursor-pointer"
       aria-label="Open shopping cart"
     >
       <div class="relative">
         <i class="fa-solid fa-bag-shopping text-xl"></i>
-        <span
+        <!-- <span
           class="snipcart-total-items absolute -top-2 -right-2 bg-gold text-forest text-[10px] font-bold w-4.5 h-4.5 rounded-full flex items-center justify-center border border-white shadow-sm"
         >
           0
-        </span>
+        </span> -->
       </div>
     </button>
 
@@ -78,131 +78,135 @@ const isHome = Astro.url.pathname === "/";
       ☰
     </button>
   </div>
-</header>
 
-<div
-  id="mobile-menu"
-  class="fixed inset-0 z-[100]
+  <div
+    id="mobile-menu"
+    class="fixed inset-0 z-[100]
          bg-white
          flex flex-col
          px-8 pt-24 pb-10
          gap-8
          text-black uppercase tracking-widest
          mobile-menu-hidden md:hidden"
->
-  <button
-    id="close-menu"
-    class="absolute top-6 right-6 text-5xl p-2 leading-none cursor-pointer text-black"
-    aria-label="Close menu"
   >
-    &times;
-  </button>
-
-  <nav class="flex flex-col gap-10">
-    <a href="#manifesto" class="text-3xl font-light mobile-link">Manifesto</a>
-    <a href="#collection" class="text-3xl font-light mobile-link">Collection</a>
-    <a href="#journal" class="text-3xl font-light mobile-link">Journal</a>
-  </nav>
-
-  <div class="mt-auto flex flex-col gap-6 w-full">
-    <!-- Mobile Auth & Cart Info -->
-    <div class="flex justify-center py-4 border-t border-b border-neutral-100">
-      <HeaderAuth />
-    </div>
-
-    <a
-      href="/contact"
-      class="border border-black px-8 py-4 w-full text-center text-sm font-bold mobile-link"
+    <button
+      id="close-menu"
+      class="absolute top-6 right-6 text-5xl p-2 leading-none cursor-pointer text-black"
+      aria-label="Close menu"
     >
-      Get in Touch
-    </a>
+      &times;
+    </button>
+
+    <nav class="flex flex-col gap-10">
+      <a href="#manifesto" class="text-3xl font-light mobile-link">Manifesto</a>
+      <a href="#collection" class="text-3xl font-light mobile-link"
+        >Collection</a
+      >
+      <a href="#journal" class="text-3xl font-light mobile-link">Journal</a>
+    </nav>
+
+    <div class="mt-auto flex flex-col gap-6 w-full">
+      <!-- Mobile Auth & Cart Info -->
+      <div
+        class="flex justify-center py-4 border-t border-b border-neutral-100"
+      >
+        <HeaderAuth />
+      </div>
+
+      <a
+        href="/contact"
+        class="border border-black px-8 py-4 w-full text-center text-sm font-bold mobile-link"
+      >
+        Get in Touch
+      </a>
+    </div>
   </div>
-</div>
 
-<script>
-  const setupMobileMenu = () => {
-    const header = document.getElementById("site-header");
-    const menuBtn = document.getElementById("menu-btn");
-    const mobileMenu = document.getElementById("mobile-menu");
-    const closeBtn = document.getElementById("close-menu");
-    const mobileLinks = document.querySelectorAll(".mobile-link");
+  <script>
+    const setupMobileMenu = () => {
+      const header = document.getElementById("site-header");
+      const menuBtn = document.getElementById("menu-btn");
+      const mobileMenu = document.getElementById("mobile-menu");
+      const closeBtn = document.getElementById("close-menu");
+      const mobileLinks = document.querySelectorAll(".mobile-link");
 
-    if (!menuBtn || !mobileMenu || !closeBtn) return;
+      if (!menuBtn || !mobileMenu || !closeBtn) return;
 
-    // Toggle Menu
-    const openMenu = () => {
-      mobileMenu.classList.remove("mobile-menu-hidden");
-      mobileMenu.classList.add("mobile-menu-visible");
-      document.body.style.overflow = "hidden"; // Stop background scroll
-    };
+      // Toggle Menu
+      const openMenu = () => {
+        mobileMenu.classList.remove("mobile-menu-hidden");
+        mobileMenu.classList.add("mobile-menu-visible");
+        document.body.style.overflow = "hidden"; // Stop background scroll
+      };
 
-    const closeMenu = () => {
-      mobileMenu.classList.remove("mobile-menu-visible");
-      mobileMenu.classList.add("mobile-menu-hidden");
-      document.body.style.overflow = ""; // Resume scroll
-    };
+      const closeMenu = () => {
+        mobileMenu.classList.remove("mobile-menu-visible");
+        mobileMenu.classList.add("mobile-menu-hidden");
+        document.body.style.overflow = ""; // Resume scroll
+      };
 
-    menuBtn.addEventListener("click", openMenu);
-    closeBtn.addEventListener("click", closeMenu);
-    
-    // Close when clicking any link
-    mobileLinks.forEach(link => link.addEventListener("click", closeMenu));
+      menuBtn.addEventListener("click", openMenu);
+      closeBtn.addEventListener("click", closeMenu);
 
-    // Desktop-only Scroll Logic
-    const handleScroll = () => {
-      if (window.innerWidth >= 768) {
-        if (window.scrollY > 50) {
-          header?.classList.add("bg-white", "shadow-sm");
-          header?.classList.remove("md:bg-transparent");
-        } else {
-          header?.classList.remove("bg-white", "shadow-sm");
-          header?.classList.add("md:bg-transparent");
+      // Close when clicking any link
+      mobileLinks.forEach((link) => link.addEventListener("click", closeMenu));
+
+      // Desktop-only Scroll Logic
+      const handleScroll = () => {
+        if (window.innerWidth >= 768) {
+          if (window.scrollY > 50) {
+            header?.classList.add("bg-white", "shadow-sm");
+            header?.classList.remove("md:bg-transparent");
+          } else {
+            header?.classList.remove("bg-white", "shadow-sm");
+            header?.classList.add("md:bg-transparent");
+          }
         }
-      }
+      };
+
+      window.addEventListener("scroll", handleScroll);
+      handleScroll(); // Initial run
     };
 
-    window.addEventListener("scroll", handleScroll);
-    handleScroll(); // Initial run
-  };
+    // Support for standard loads and Astro View Transitions
+    document.addEventListener("DOMContentLoaded", setupMobileMenu);
+    document.addEventListener("astro:after-swap", setupMobileMenu);
+  </script>
 
-  // Support for standard loads and Astro View Transitions
-  document.addEventListener("DOMContentLoaded", setupMobileMenu);
-  document.addEventListener("astro:after-swap", setupMobileMenu);
-</script>
-
-<style>
-  /* Base Mobile States (Always Solid White) */
-  #site-header {
-    background-color: white;
-    border-bottom: 1px solid #f3f4f6;
-  }
-
-  /* Desktop Override: Start Transparent */
-  @media (min-width: 768px) {
+  <style>
+    /* Base Mobile States (Always Solid White) */
     #site-header {
-      background-color: transparent;
-      border-bottom: none;
+      background-color: white;
+      border-bottom: 1px solid #f3f4f6;
     }
-    
-    /* When scrolled on desktop */
-    #site-header.bg-white {
-      background-color: white !important;
-      border-bottom: 1px solid #eee;
+
+    /* Desktop Override: Start Transparent */
+    @media (min-width: 768px) {
+      #site-header {
+        background-color: transparent;
+        border-bottom: none;
+      }
+
+      /* When scrolled on desktop */
+      #site-header.bg-white {
+        background-color: white !important;
+        border-bottom: 1px solid #eee;
+      }
     }
-  }
 
-  /* Mobile Menu Transitions */
-  .mobile-menu-hidden {
-    opacity: 0;
-    visibility: hidden;
-    transform: translateY(-20px);
-    transition: all 0.3s ease-in-out;
-  }
+    /* Mobile Menu Transitions */
+    .mobile-menu-hidden {
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-20px);
+      transition: all 0.3s ease-in-out;
+    }
 
-  .mobile-menu-visible {
-    opacity: 1;
-    visibility: visible;
-    transform: translateY(0);
-    transition: all 0.3s ease-in-out;
-  }
-</style>
+    .mobile-menu-visible {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+      transition: all 0.3s ease-in-out;
+    }
+  </style>
+</header>
