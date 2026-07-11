@@ -50,14 +50,12 @@ export const POST: APIRoute = async ({ request, url: astroUrl }) => {
     );
 
     if (!validationRes.ok) {
-      console.error('Snipcart token validation failed:', validationRes.status);
       return new Response(JSON.stringify({ error: 'Invalid or expired publicToken' }), {
         status: 401,
         headers: corsHeaders,
       });
     }
   } catch (err) {
-    console.error('Snipcart validation network error:', err);
     return new Response(JSON.stringify({ error: 'Failed to validate with Snipcart' }), {
       status: 500,
       headers: corsHeaders,
@@ -65,10 +63,11 @@ export const POST: APIRoute = async ({ request, url: astroUrl }) => {
   }
 
   // ── Build checkout URL ────────────────────────────────────────────────────
-  // Use SITE_URL env var if set (production/custom domain), otherwise derive from request
-  const siteUrl =
-    import.meta.env.SITE_URL ||
-    `${astroUrl.protocol}//${astroUrl.host}`;
+  // Use request headers to automatically adapt to ngrok, localhost, Vercel, or custom domains.
+  const headers = request.headers;
+  const forwardedProto = headers.get('x-forwarded-proto') || (astroUrl.protocol === 'https:' ? 'https' : 'http');
+  const forwardedHost = headers.get('x-forwarded-host') || headers.get('host') || astroUrl.host;
+  const siteUrl = `${forwardedProto}://${forwardedHost}`;
 
   return new Response(
     JSON.stringify([

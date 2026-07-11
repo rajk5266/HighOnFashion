@@ -1,18 +1,16 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
-
 import tailwindcss from '@tailwindcss/vite';
-
 import partytown from '@astrojs/partytown';
-import node from '@astrojs/node';
-
+import vercel from '@astrojs/vercel'; // 1. Swapped from @astrojs/node
 
 // https://astro.build/config
 export default defineConfig({
-  // API routes in src/pages/api/ use `export const prerender = false` to opt into
-  // server-side rendering, while all other pages remain statically generated.
-  // The node adapter enables this in both local dev and Vercel deployment.
-  adapter: node({ mode: 'middleware' }),
+
+  // 3. Apply the Vercel Serverless Adapter instead of the Node middleware
+  adapter: vercel({
+    webAnalytics: { enabled: true }
+  }),
 
   vite: {
     plugins: [tailwindcss()]
@@ -20,8 +18,8 @@ export default defineConfig({
 
   server: {
     allowedHosts: [
-      'vessel-tricky-brunette.ngrok-free.dev', // Your specific ngrok domain
-      '.ngrok-free.dev'                        // Allows any future ngrok domains you generate
+      'vessel-tricky-brunette.ngrok-free.dev',
+      '.ngrok-free.dev'
     ]
   },
 
@@ -35,9 +33,7 @@ export default defineConfig({
         logImageRequests: false,
         logScriptExecution: false,
         logStackTraces: false,
-        forward: [
-          ["dataLayer.push"],
-        ],
+        forward: [["dataLayer.push"]],
         resolveUrl: (url) => {
           const siteUrl = "https://your-proxy.url/";
           const proxyUrl = new URL(siteUrl);

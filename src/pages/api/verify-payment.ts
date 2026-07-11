@@ -55,24 +55,17 @@ export const POST: APIRoute = async ({ request }) => {
   // ── Step 1: Verify Razorpay Signature ─────────────────────────────────────
   // Razorpay computes: HMAC-SHA256(order_id + "|" + payment_id, key_secret)
   // We independently compute the same value and compare. Match = authentic payment.
-  console.log('[verify-payment] Verifying signature for order:', razorpay_order_id, 'payment:', razorpay_payment_id);
-
   const expectedSignature = crypto
     .createHmac('sha256', import.meta.env.RAZORPAY_KEY_SECRET)
     .update(`${razorpay_order_id}|${razorpay_payment_id}`)
     .digest('hex');
 
   if (expectedSignature !== razorpay_signature) {
-    console.error('[verify-payment] Signature mismatch!');
-    console.error('  expected:', expectedSignature);
-    console.error('  received:', razorpay_signature);
     return new Response(
       JSON.stringify({ error: 'Payment signature verification failed' }),
       { status: 400, headers: corsHeaders }
     );
   }
-
-  console.log('[verify-payment] Signature verified ✓');
 
 
   // ── Step 2: Notify Snipcart that order is paid ───────────────────────────
@@ -84,7 +77,6 @@ export const POST: APIRoute = async ({ request }) => {
   const paymentApiKey = import.meta.env.SNIPCART_PAYMENT_API_KEY || import.meta.env.SNIPCART_SECRET_API_KEY;
 
   if (!paymentApiKey) {
-    console.error('[verify-payment] ❌ No Snipcart payment API key found!');
     return new Response(
       JSON.stringify({ error: 'Server misconfiguration: missing Snipcart payment API key' }),
       { status: 500, headers: corsHeaders }
@@ -101,14 +93,10 @@ export const POST: APIRoute = async ({ request }) => {
       Buffer.from(publicToken.split('.')[1], 'base64url').toString('utf-8')
     );
     paymentSessionId = jwtPayload.paymentSessionId || publicToken;
-    console.log('[verify-payment] Extracted paymentSessionId:', paymentSessionId);
   } catch {
     // Fallback: use full token if JWT decode fails
-    console.warn('[verify-payment] Could not decode JWT, using raw publicToken as paymentSessionId');
     paymentSessionId = publicToken;
   }
-
-  console.log('[verify-payment] Using key prefix:', paymentApiKey.substring(0, 8) + '...');
 
   const snipcartAuthHeader = `Bearer ${paymentApiKey}`;
 
@@ -118,8 +106,6 @@ export const POST: APIRoute = async ({ request }) => {
     transactionId: razorpay_payment_id,
     instructionsData: null,
   };
-
-  console.log('[verify-payment] Notifying Snipcart:', JSON.stringify(snipcartPayload));
 
   let snipcartData: any;
   try {
@@ -137,8 +123,6 @@ export const POST: APIRoute = async ({ request }) => {
     );
 
     const responseText = await snipcartRes.text();
-    console.log('[verify-payment] Snipcart response status:', snipcartRes.status);
-    console.log('[verify-payment] Snipcart response body:', responseText);
 
     if (!snipcartRes.ok) {
       return new Response(
@@ -158,7 +142,6 @@ export const POST: APIRoute = async ({ request }) => {
       snipcartData = {};
     }
   } catch (err) {
-    console.error('[verify-payment] Snipcart notification network error:', err);
     return new Response(
       JSON.stringify({ error: 'Network error notifying Snipcart' }),
       { status: 500, headers: corsHeaders }

@@ -50,8 +50,6 @@ export const POST: APIRoute = async ({ request }) => {
     );
 
     if (!sessionRes.ok) {
-      const errText = await sessionRes.text();
-      console.error('Snipcart session fetch failed:', sessionRes.status, errText);
       return new Response(
         JSON.stringify({ error: 'Could not fetch order session from Snipcart' }),
         { status: 401, headers: corsHeaders }
@@ -60,7 +58,6 @@ export const POST: APIRoute = async ({ request }) => {
 
     session = await sessionRes.json();
   } catch (err) {
-    console.error('Snipcart session network error:', err);
     return new Response(
       JSON.stringify({ error: 'Network error fetching Snipcart session' }),
       { status: 500, headers: corsHeaders }
@@ -100,7 +97,6 @@ export const POST: APIRoute = async ({ request }) => {
       },
     });
   } catch (err) {
-    console.error('Razorpay order creation failed:', err);
     return new Response(
       JSON.stringify({ error: 'Failed to create Razorpay order' }),
       { status: 500, headers: corsHeaders }

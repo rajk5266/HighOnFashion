@@ -569,9 +569,6 @@
 
               const verifyData = await verifyRes.json();
 
-              // Log full response to browser console for debugging
-              console.log('[checkout] verify-payment response:', verifyData);
-
               if (!verifyRes.ok || !verifyData.success) {
                 // Build a detailed error message for display
                 let errMsg = verifyData.error || 'Payment verification failed';
@@ -595,7 +592,6 @@
 
             } catch (err) {
               hide('overlay-processing');
-              console.error('[checkout] Payment verification error:', err);
               showError(
                 err.message ||
                 'Your payment was received but we could not confirm your order. Payment ID: ' +
