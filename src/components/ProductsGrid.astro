@@ -12,9 +12,10 @@ const { products = [] } = Astro.props;
             {products.map((product: any) => (
                 <ProductCard
                     id={product.id}
+                    slug={product.slug}
                     title={product.title}
                     price={product.price}
-                    image={product.image}
+                    image={product.images.main}
                     alt={product.alt}
                     sizes={product.sizes}
                     collectionId={product.collectionId}

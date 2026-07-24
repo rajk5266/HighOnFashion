@@ -1,30 +1,29 @@
 ---
 // src/components/AddToCartButton.astro
+
+import type { Product } from "../types/product";
+
+
 interface Props {
-    id: string;
-    name: string;
-    price: number;
-    image: string;
-    description?: string;
-    slug: string; // The URL path to this specific item page
+    product: Product;
 }
 
-const { id, name, price, image, description = "", slug } = Astro.props;
+const { product } = Astro.props;
 
 // Snipcart's crawler runs server-side and needs a full absolute URL to validate products.
 // Using Astro.url ensures the correct domain is used in every environment
 // (ngrok, localhost, Vercel production, custom domain).
-const currentUrl = new URL(`/products/${slug}`, Astro.url).href;
+const currentUrl = new URL(`/products/${product.slug}`, Astro.url).href;
 ---
 
 <button
     class="snipcart-add-item w-full py-3 bg-neutral-900 text-white font-medium text-xs uppercase tracking-widest hover:bg-gold hover:text-forest transition-colors duration-300 rounded-md shadow-sm cursor-pointer"
-    data-item-id={id}
-    data-item-name={name}
-    data-item-price={price}
+    data-item-id={product.id}
+    data-item-name={product.title}
+    data-item-price={product.price}
     data-item-url={currentUrl}
-    data-item-image={image}
-    data-item-description={description}
+    data-item-image={product.images.main}
+    data-item-description={product.condition.description}
 >
-    Add to Bag
+    Add to Cart
 </button>

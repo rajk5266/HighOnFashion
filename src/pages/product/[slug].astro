@@ -1,0 +1,119 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { products } from "../../data/products";
+import { imageUrl } from "../../utils/image";
+import AddToCartButton from "../../components/AddToCartButton.astro";
+
+export function getStaticPaths() {
+  return products.map((product) => ({
+    params: {
+      slug: product.slug,
+    },
+    props: {
+      product,
+    },
+  }));
+}
+
+const { product } = Astro.props;
+
+const galleryImages = product.images.gallery || [];
+const flawImages = product.images.flaws || [];
+---
+
+<Layout title={product.title} description={product.title}>
+  <div class="max-w-7xl mx-auto px-6 py-16">
+    <div class="grid md:grid-cols-2 gap-10">
+      <!-- Product Images -->
+      <div class="grid grid-cols-2 gap-4">
+        {
+          galleryImages.map((image) => (
+            <img
+              src={imageUrl(image)}
+              alt={product.alt}
+              class="rounded-xl w-full object-cover"
+              loading="lazy"
+            />
+          ))
+        }
+      </div>
+
+      <!-- Product Details -->
+      <div>
+        <h1 class="text-4xl font-serif mb-4">
+          {product.title}
+        </h1>
+
+        <p class="text-2xl mb-6">
+          ₹{product.price}
+        </p>
+
+        <p class="text-neutral-600 mb-6">
+          {product.condition.description}
+        </p>
+
+        <div class="space-y-2">
+          <p>
+            <strong>Size:</strong>
+            {product.taggedSize}
+          </p>
+
+          <p>
+            <strong>Fits Like:</strong>
+            {product.fitsLike}
+          </p>
+
+          <p>
+            <strong>Brand:</strong>
+            {product.brand}
+          </p>
+        </div>
+
+        {
+          product.measurements && (
+            <div class="mt-8">
+              <h2 class="font-semibold mb-3">Measurements</h2>
+
+              <ul class="text-sm text-neutral-600">
+                <li>
+                  Pit to Pit:
+                  {product.measurements.pitToPitInches}"
+                </li>
+
+                <li>
+                  Length:
+                  {product.measurements.lengthInches}"
+                </li>
+
+                <li>
+                  Strap Length:
+                  {product.measurements.strapLengthInches}"
+                </li>
+              </ul>
+            </div>
+          )
+        }
+
+        {
+          flawImages.length > 0 && (
+            <div class="mt-8">
+              <h2 class="font-semibold mb-3">Flaw Details</h2>
+
+              <div class="grid grid-cols-3 gap-3">
+                {flawImages.map((image) => (
+                  <img
+                    src={imageUrl(image)}
+                    alt="Product flaw detail"
+                    class="rounded-lg"
+                  />
+                ))}
+              </div>
+            </div>
+          )
+        }
+      </div>
+
+      <AddToCartButton product={product} />
+    </div>
+  </div>
+</Layout>

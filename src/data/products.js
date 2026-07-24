@@ -1,193 +1,271 @@
 // src/data/products.js
 
 export const products = [
-  /* ================= OVERSIZED EDIT ================= */
+  /* ================= AFTERGLOW ORANGE (Oversized Edit) ================= */
   {
-    id: "os-001",
-    title: "Black Oversized Tee",
-    price: 899,
-    collectionId: "afterglow-orange",
-    image: "/images/products/scarf.png",
-    sizes: ["M", "L", "XL"],
-    alt: "Black oversized t-shirt with relaxed streetwear fit"
+    id: "top-004",
+    title: "Floral Printed Noodle Strap Camisole Top",
+    slug: "floral-printed-noodle-strap-camisole-top-top004",
+    price: 699,
+    originalPrice: 999,
+    collectionId: "lucid-purple",
+    brand: "Unbranded / Thrifted",
+
+    // Thrift Sizing System
+    taggedSize: "M",
+    fitsLike: "S/M (Relaxed Flowy Fit)",
+    measurements: {
+      pitToPitInches: 17.5,
+      lengthInches: 23.0,
+      strapLengthInches: 6.0
+    },
+
+    // Category & Style
+    category: "tops",
+    gender: "women",
+    style: ["casual", "summerwear", "vintage", "y2k"],
+    era: "Y2K / Early 00s",
+
+    // Condition & Flaws
+    condition: {
+      grade: "Grade A",
+      label: "Mint / Like-New",
+      description: "Clean fabric with crisp floral printing, sturdy straps, and no visible wear."
+    },
+    flaws: [],
+
+    // Inventory Control
+    stock: 1,
+    isSold: false,
+    isFeatured: false,
+
+    // Media
+    images: {
+      main: "/product/floral-printed-noodle-strap-camisole-top-top004.webp",
+      flaws: [],
+      gallery: [
+        "/product/floral-printed-noodle-strap-camisole-top-top004.webp",
+        "/product/floral-printed-noodle-strap-camisole-top-top004.webp",
+      ]
+    },
+    alt: "White floral printed camisole top with thin spaghetti straps"
   },
   {
     id: "os-002",
-    title: "Washed Grey Oversized Tee",
+    title: "Washed Grey Fade Oversized Tee",
+    slug: "washed-grey-fade-oversized-tee-os002",
     price: 949,
+    originalPrice: 1350,
     collectionId: "afterglow-orange",
-    image: "/images/products/scarf.png",
-    sizes: ["M", "L", "XL"],
+    brand: "Zara",
+
+    taggedSize: "M",
+    fitsLike: "L (Oversized Cut)",
+    measurements: {
+      pitToPitInches: 22.5,
+      lengthInches: 28.0,
+      shoulderInches: 20.5
+    },
+
+    category: "tshirt",
+    gender: "unisex",
+    style: ["oversized", "streetwear", "vintage"],
+    era: "Modern Thrift",
+
+    condition: {
+      grade: "Grade B",
+      label: "Good Vintage",
+      description: "Light intentional wash fade across seams."
+    },
+    flaws: ["Light wash fade near hem"],
+
+    stock: 1,
+    isSold: false,
+    isFeatured: true,
+
+    images: {
+      main: "/images/products/grey-oversized-tee-front.png",
+      back: "/images/products/grey-oversized-tee-back.png",
+      flaws: [],
+      gallery: []
+    },
     alt: "Washed grey oversized t-shirt with vintage fade"
   },
   {
     id: "os-003",
-    title: "Beige Oversized Tee",
+    title: "Beige Minimalist Heavyweight Tee",
+    slug: "beige-minimalist-heavyweight-tee-os003",
     price: 899,
+    originalPrice: 1199,
     collectionId: "afterglow-orange",
-    image: "/images/products/scarf.png",
-    sizes: ["S", "M", "L"],
-    alt: "Beige oversized t-shirt with minimal design"
-  },
-  {
-    id: "os-004",
-    title: "Olive Oversized Tee",
-    price: 999,
-    collectionId: "afterglow-orange",
-    image: "/images/products/scarf.png",
-    sizes: ["M", "L", "XL"],
-    alt: "Olive green oversized t-shirt for casual streetwear"
+    brand: "Uniqlo",
+
+    taggedSize: "XL",
+    fitsLike: "XL (Relaxed Fit)",
+    measurements: {
+      pitToPitInches: 24.0,
+      lengthInches: 29.0,
+      shoulderInches: 22.0
+    },
+
+    category: "tshirt",
+    gender: "unisex",
+    style: ["oversized", "minimalist"],
+    era: "Modern Thrift",
+
+    condition: {
+      grade: "Grade A",
+      label: "Mint / Like-New",
+      description: "Thick heavy cotton, clean neckline, ready to wear."
+    },
+    flaws: [],
+
+    stock: 1,
+    isSold: false,
+    isFeatured: false,
+
+    images: {
+      main: "/images/products/beige-oversized-tee-front.png",
+      back: "/images/products/beige-oversized-tee-back.png",
+      flaws: [],
+      gallery: []
+    },
+    alt: "Beige heavy cotton minimalist oversized tee"
   },
 
-  /* ================= STREETWEAR CORE ================= */
-  {
-    id: "st-001",
-    title: "Graphic Street Tee – Black",
-    price: 1099,
-    collectionId: "lucid-purple",
-    image: "/images/products/scarf.png",
-    sizes: ["S", "M", "L"],
-    alt: "Black graphic streetwear t-shirt"
-  },
-  {
-    id: "st-002",
-    title: "Urban Printed Tee – White",
-    price: 1199,
-    collectionId: "lucid-purple",
-    image: "/images/products/scarf.png",
-    sizes: ["M", "L"],
-    alt: "White urban printed streetwear t-shirt"
-  },
-  {
-    id: "st-003",
-    title: "Street Cargo Pants",
-    price: 1899,
-    collectionId: "lucid-purple",
-    image: "/images/products/scarf.png",
-    sizes: ["30", "32", "34"],
-    alt: "Streetwear cargo pants with relaxed fit"
-  },
-  {
-    id: "st-004",
-    title: "Relaxed Fit Denim",
-    price: 1999,
-    collectionId: "lucid-purple",
-    image: "/images/products/scarf.png",
-    sizes: ["30", "32", "34"],
-    alt: "Relaxed fit streetwear denim jeans"
-  },
-
-  /* ================= VINTAGE ARCHIVE ================= */
+  /* ================= LUCID PURPLE (Statement Streetwear Edit) ================= */
   {
     id: "vt-001",
-    title: "Vintage Denim Jacket",
-    price: 2499,
-    collectionId: "astral-blue",
-    image: "/images/products/scarf.png",
-    sizes: ["M", "L"],
-    alt: "Vintage blue denim jacket with classic buttons"
-  },
-  {
-    id: "vt-002",
-    title: "Retro Graphic Tee",
-    price: 1199,
-    collectionId: "astral-blue",
-    image: "/images/products/scarf.png",
-    sizes: ["S", "M", "L"],
-    alt: "Retro graphic t-shirt with vintage print"
-  },
-  {
-    id: "vt-003",
-    title: "Checked Vintage Shirt",
-    price: 1399,
-    collectionId: "astral-blue",
-    image: "/images/products/scarf.png",
-    sizes: ["M", "L"],
-    alt: "Checked vintage shirt with relaxed fit"
-  },
-  {
-    id: "vt-004",
-    title: "Washed Vintage Jeans",
-    price: 2199,
-    collectionId: "astral-blue",
-    image: "/images/products/scarf.png",
-    sizes: ["32", "34"],
-    alt: "Washed vintage denim jeans"
+    title: "Vintage Nike Center Swoosh Tee",
+    slug: "vintage-nike-center-swoosh-tee-vt001",
+    price: 1499,
+    originalPrice: 2000,
+    collectionId: "lucid-purple",
+    brand: "Nike",
+
+    taggedSize: "XL",
+    fitsLike: "L (Boxy Vintage Fit)",
+    measurements: {
+      pitToPitInches: 23.5,
+      lengthInches: 27.5,
+      shoulderInches: 21.0
+    },
+
+    category: "tshirt",
+    gender: "unisex",
+    style: ["streetwear", "vintage", "retro"],
+    era: "90s / Single Stitch",
+
+    condition: {
+      grade: "Grade B",
+      label: "Good Vintage",
+      description: "Authentic 90s wash tone with light print cracking."
+    },
+    flaws: [
+      "Minor graphic micro-cracking",
+      "Slight fading around neck band"
+    ],
+
+    stock: 1,
+    isSold: false,
+    isFeatured: true,
+
+    images: {
+      main: "/images/products/nike-center-swoosh-front.png",
+      back: "/images/products/nike-center-swoosh-back.png",
+      flaws: ["/images/products/nike-center-swoosh-cracking.png"],
+      gallery: []
+    },
+    alt: "90s Vintage Nike Center Swoosh Navy Graphic T-Shirt"
   },
 
-  /* ================= WINTER ARCHIVE ================= */
+  /* ================= PULSE GREEN (Winter & Heavyweight Edit) ================= */
   {
-    id: "wn-001",
-    title: "Heavyweight Black Hoodie",
-    price: 1999,
-    collectionId: "pulse-green",
-    image: "/images/products/scarf.png",
-    sizes: ["M", "L", "XL"],
-    alt: "Heavyweight black hoodie with oversized fit"
-  },
-  {
-    id: "wn-002",
-    title: "Grey Pullover Hoodie",
+    id: "sw-001",
+    title: "Sunfaded Heavyweight Grey Pullover Hoodie",
+    slug: "sunfaded-heavyweight-grey-pullover-hoodie-sw001",
     price: 1899,
+    originalPrice: 2500,
     collectionId: "pulse-green",
-    image: "/images/products/scarf.png",
-    sizes: ["M", "L"],
-    alt: "Grey pullover hoodie for winter layering"
-  },
-  {
-    id: "wn-003",
-    title: "Puffer Jacket – Black",
-    price: 2999,
-    collectionId: "pulse-green",
-    image: "/images/products/scarf.png",
-    sizes: ["L", "XL"],
-    alt: "Black puffer jacket for winter streetwear"
-  },
-  {
-    id: "wn-004",
-    title: "Fleece Sweatshirt",
-    price: 1699,
-    collectionId: "pulse-green",
-    image: "/images/products/sweatshirt.png",
-    sizes: ["M", "L", "XL"],
-    alt: "Warm fleece sweatshirt for winter"
+    brand: "Puma",
+
+    taggedSize: "L",
+    fitsLike: "L (Heavyweight Relaxed)",
+    measurements: {
+      pitToPitInches: 24.5,
+      lengthInches: 28.0,
+      sleeveInches: 24.0
+    },
+
+    category: "sweatshirt",
+    gender: "unisex",
+    style: ["winterwear", "streetwear"],
+    era: "Y2K (Early 2000s)",
+
+    condition: {
+      grade: "Grade B",
+      label: "Good Vintage",
+      description: "Heavy fleece interior with nice lived-in wash."
+    },
+    flaws: ["Faint bleach speck near right cuff"],
+
+    stock: 1,
+    isSold: false,
+    isFeatured: true,
+
+    images: {
+      main: "/images/products/grey-pullover-hoodie.png",
+      back: "/images/products/grey-pullover-hoodie-back.png",
+      flaws: ["/images/products/grey-hoodie-cuff-flaw.png"],
+      gallery: []
+    },
+    alt: "Sunfaded heavyweight grey pullover hoodie"
   },
 
-  /* ================= EVERYDAY BASICS ================= */
+  /* ================= ASTRAL BLUE (Retro Archive Edit) ================= */
   {
-    id: "bs-001",
-    title: "Plain White Tee",
-    price: 699,
-    collectionId: "everyday-basics",
-    image: "/images/products/scarf.png",
-    sizes: ["S", "M", "L", "XL"],
-    alt: "Plain white t-shirt everyday basic wear"
-  },
-  {
-    id: "bs-002",
-    title: "Plain Black Tee",
-    price: 699,
-    collectionId: "everyday-basics",
-    image: "/images/products/scarf.png",
-    sizes: ["S", "M", "L", "XL"],
-    alt: "Plain black t-shirt minimal everyday wear"
-  },
-  {
-    id: "bs-003",
-    title: "Neutral Beige Shirt",
-    price: 1299,
-    collectionId: "everyday-basics",
-    image: "/images/products/scarf.png",
-    sizes: ["M", "L"],
-    alt: "Beige casual shirt for everyday use"
-  },
-  {
-    id: "bs-004",
-    title: "Classic Blue Denim",
-    price: 1799,
-    collectionId: "everyday-basics",
-    image: "/images/products/scarf.png",
-    sizes: ["30", "32", "34"],
-    alt: "Classic blue denim jeans everyday staple"
+    id: "dn-001",
+    title: "Distressed Levi's 501 Sunfaded Denim",
+    slug: "distressed-levis-501-sunfaded-denim-dn001",
+    price: 2199,
+    originalPrice: 3000,
+    collectionId: "astral-blue",
+    brand: "Levi’s",
+
+    taggedSize: "W34 L32",
+    fitsLike: "W32 L30 (Shrunken Vintage Fit)",
+    measurements: {
+      waistInches: 32.0,
+      lengthInches: 40.0,
+      inseamInches: 30.0,
+      legOpeningInches: 8.0
+    },
+
+    category: "jeans",
+    gender: "unisex",
+    style: ["vintage", "retro", "distressed"],
+    era: "90s Archive",
+
+    condition: {
+      grade: "Grade C",
+      label: "Distressed / Well-Loved",
+      description: "Heavy natural distressing with sun-faded patina."
+    },
+    flaws: [
+      "Knee blowout distressing",
+      "Fraying on back heel hem"
+    ],
+
+    stock: 1,
+    isSold: false,
+    isFeatured: true,
+
+    images: {
+      main: "/images/products/levis-501-front.png",
+      back: "/images/products/levis-501-back.png",
+      flaws: ["/images/products/levis-501-knee-flaw.png"],
+      gallery: []
+    },
+    alt: "Vintage distressed Levi's 501 sunfaded denim jeans"
   }
 ];
