@@ -1,4 +1,5 @@
 ---
+// src/components/ProductCard.astro
 import { imageUrl } from "../utils/image";
 
 const {
@@ -12,13 +13,13 @@ const {
   collectionId = "",
 } = Astro.props;
 
+// Original full-res image from static.domain.com
 const finalImage = imageUrl(image);
 
+// Generate 450px WebP thumbnail on the fly via wsrv.nl (~20-30KB)
+const thumbnailUrl = `https://wsrv.nl/?url=${encodeURIComponent(finalImage)}&w=450&q=80&output=webp`;
 
-
-// Build a stable, absolute product URL for Snipcart's external crawler.
-// Snipcart's server crawls this URL to verify product price — relative paths don't work.
-// Using Astro.url.origin ensures correct domain in all envs (ngrok, Vercel, custom domain).
+// Snipcart stable product URL
 const itemUrl = collectionId
   ? new URL(`/collection/${collectionId}`, Astro.url).href
   : Astro.url.href;
@@ -27,29 +28,38 @@ const itemUrl = collectionId
 <article
   class="group flex flex-col justify-between h-full bg-white border border-neutral-200/60 rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-300"
 >
-  <a href={`/product/${slug}`} class="cursor-pointer block">
-    <div class="cursor-pointer">
-      <div class="relative aspect-[3/4] overflow-hidden bg-neutral-100">
-        <img
-          src={finalImage}
-          alt={alt}
-          class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-          loading="lazy"
-        />
-      </div>
+  <div>
+    <!-- IMAGE WITH LIGHTBOX TRIGGER -->
+    <div class="relative aspect-[3/4] overflow-hidden bg-neutral-100 cursor-pointer">
+      <img
+        src={thumbnailUrl}
+        alt={alt}
+        loading="lazy"
+        decoding="async"
+        class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 product-lightbox-trigger"
+        data-full-img={finalImage}
+        data-title={title}
+      />
+    </div>
 
-      <div class="p-4">
+    <!-- PRODUCT TITLE & DETAILS -->
+    <div class="p-4">
+      <a href={`/product/${slug}`} class="block hover:underline">
         <h3 class="text-sm font-medium leading-snug text-neutral-800">
           {title}
         </h3>
-        <p class="text-sm text-neutral-500 mt-1">
-          ₹{price}
-        </p>
-      </div>
+      </a>
+      <p class="text-sm text-neutral-500 mt-1 font-semibold">
+        ₹{price}
+      </p>
     </div>
+  </div>
 
-    <div class="p-4 pt-0">
-    <button class="snipcart-add-item"
+  <!-- SNIPCART BUTTON -->
+  <div class="p-4 pt-0">
+    <button
+      type="button"
+      class="snipcart-add-item w-full bg-black text-white text-xs font-bold uppercase tracking-wider py-2.5 px-4 rounded-lg hover:bg-neutral-800 active:scale-95 transition"
       data-item-id={id}
       data-item-name={title}
       data-item-price={price}
@@ -59,5 +69,4 @@ const itemUrl = collectionId
       Add to Cart
     </button>
   </div>
-  </a>
 </article>

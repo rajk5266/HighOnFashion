@@ -100,6 +100,57 @@ export const products = [
     },
     alt: "White floral printed camisole top with thin spaghetti straps"
   },
+  {
+    id: "top-005",
+    title: "Navy Blue Sheer Floral Lace Long-Sleeve Top",
+    slug: "navy-blue-sheer-floral-lace-long-sleeve-top-top005",
+    price: 899,
+    originalPrice: 1299,
+    collectionId: "lucid-purple",
+    brand: "Unbranded / Thrifted",
+    
+    // Thrift Sizing System
+    taggedSize: "M",
+    fitsLike: "M (Relaxed Flowy Fit)",
+    measurements: {
+      pitToPitInches: 18.5,
+      lengthInches: 24.0,
+      sleeveInches: 23.0,
+      shoulderInches: 15.5
+    },
+
+    // Category & Style
+    category: "tops",
+    gender: "women",
+    style: ["vintage", "y2k", "boho", "minimalist"],
+    era: "Y2K / Early 00s",
+
+    // Condition & Flaws (Using your 3-tier system)
+    condition: {
+      grade: "Tier 1",
+      label: "Superb",
+      description: "Intricate metallic-finish navy lace with full elasticity intact. No snagging, tears, or loose threads."
+    },
+    flaws: [],
+
+    // Inventory Control
+    stock: 1,
+    isSold: false,
+    isFeatured: true,
+
+    // Media
+    images: {
+      main: "/product/navy-lace-top-front.webp",
+      back: "/product/navy-lace-top-back.webp",
+      flaws: [],
+      gallery: [
+        "/product/navy-lace-top-front.webp",
+        "/product/navy-lace-top-back.webp",
+        "/product/navy-lace-top-back.webp"
+      ]
+    },
+    alt: "Sheer navy blue floral lace long-sleeve top with subtle shimmer"
+  },
 
   /* ================= PULSE GREEN (Winter & Heavyweight Edit) ================= */
 {

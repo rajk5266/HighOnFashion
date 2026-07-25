@@ -22,98 +22,332 @@ const flawImages = product.images.flaws || [];
 ---
 
 <Layout title={product.title} description={product.title}>
-  <div class="max-w-7xl mx-auto px-6 py-16">
-    <div class="grid md:grid-cols-2 gap-10">
-      <!-- Product Images -->
-      <div class="grid grid-cols-2 gap-4">
-        {
-          galleryImages.map((image) => (
-            <img
-              src={imageUrl(image)}
-              alt={product.alt}
-              class="rounded-xl w-full object-cover"
-              loading="lazy"
-            />
-          ))
-        }
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 py-10 sm:py-16">
+    <div class="grid md:grid-cols-2 gap-8 lg:gap-12 items-start">
+      
+      <!-- GALLERY SLIDER SECTION -->
+      <div class="w-full space-y-4">
+        <!-- Main Slider Container -->
+        <div class="relative group aspect-[3/4] lg:max-h-[700px] w-full overflow-hidden rounded-2xl bg-neutral-100 shadow-sm border border-neutral-200/80">
+          
+          <!-- Slides Track -->
+          <div id="slider-track" class="flex h-full w-full transition-transform duration-500 ease-out">
+            {
+              galleryImages.map((image, index) => {
+                const fullUrl = imageUrl(image);
+                const thumbUrl = `https://wsrv.nl/?url=${encodeURIComponent(fullUrl)}&w=800&q=85&output=webp`;
+
+                return (
+                  <div class="min-w-full h-full relative flex-shrink-0 cursor-pointer">
+                    <img
+                      src={thumbUrl}
+                      alt={`${product.title} - view ${index + 1}`}
+                      class="w-full h-full object-cover detail-lightbox-trigger"
+                      loading={index === 0 ? "eager" : "lazy"}
+                      decoding="async"
+                      data-full-img={fullUrl}
+                      data-title={product.title}
+                    />
+                  </div>
+                );
+              })
+            }
+          </div>
+
+          <!-- Slider Controls (Arrows) -->
+          {galleryImages.length > 1 && (
+            <>
+              <button
+                id="prev-slide-btn"
+                type="button"
+                class="absolute left-3 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-white/80 hover:bg-white text-black shadow-md flex items-center justify-center transition opacity-90 sm:opacity-0 sm:group-hover:opacity-100 active:scale-95 cursor-pointer"
+                aria-label="Previous Slide"
+              >
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                </svg>
+              </button>
+
+              <button
+                id="next-slide-btn"
+                type="button"
+                class="absolute right-3 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-white/80 hover:bg-white text-black shadow-md flex items-center justify-center transition opacity-90 sm:opacity-0 sm:group-hover:opacity-100 active:scale-95 cursor-pointer"
+                aria-label="Next Slide"
+              >
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                </svg>
+              </button>
+
+              <!-- Slide Indicator Badge -->
+              <div class="absolute bottom-4 right-4 z-10 bg-black/70 text-white text-[11px] font-bold px-3 py-1 rounded-full backdrop-blur-xs tracking-widest uppercase">
+                <span id="slide-current">1</span> / <span>{galleryImages.length}</span>
+              </div>
+            </>
+          )}
+        </div>
+
+        <!-- Thumbnail Selection Strip -->
+        {galleryImages.length > 1 && (
+          <div class="flex items-center gap-3 overflow-x-auto pb-2 scrollbar-none">
+            {
+              galleryImages.map((image, index) => {
+                const fullUrl = imageUrl(image);
+                const thumbUrl = `https://wsrv.nl/?url=${encodeURIComponent(fullUrl)}&w=200&q=75&output=webp`;
+
+                return (
+                  <button
+                    type="button"
+                    data-slide-index={index}
+                    class={`thumb-btn relative aspect-[3/4] w-16 sm:w-20 rounded-lg overflow-hidden border-2 transition flex-shrink-0 cursor-pointer ${
+                      index === 0 ? "border-black scale-95" : "border-transparent opacity-60 hover:opacity-100"
+                    }`}
+                  >
+                    <img src={thumbUrl} alt="" class="w-full h-full object-cover" />
+                  </button>
+                );
+              })
+            }
+          </div>
+        )}
       </div>
 
-      <!-- Product Details -->
-      <div>
-        <h1 class="text-4xl font-serif mb-4">
+      <!-- PRODUCT DETAILS -->
+      <div class="flex flex-col">
+        <h1 class="text-3xl sm:text-4xl font-serif mb-3 text-neutral-900">
           {product.title}
         </h1>
 
-        <p class="text-2xl mb-6">
+        <p class="text-2xl font-bold mb-6 text-black">
           ₹{product.price}
         </p>
 
-        <p class="text-neutral-600 mb-6">
+        <p class="text-neutral-600 mb-6 leading-relaxed text-sm sm:text-base">
           {product.condition.description}
         </p>
 
-        <div class="space-y-2">
-          <p>
-            <strong>Size:</strong>
-            {product.taggedSize}
+        <!-- SPECS TABLE -->
+        <div class="space-y-2.5 text-sm border-y border-neutral-200 py-5 mb-6">
+          <p class="flex justify-between sm:justify-start gap-4">
+            <strong class="text-neutral-900 font-semibold w-24">Size:</strong>
+            <span class="text-neutral-600 font-medium">{product.taggedSize}</span>
           </p>
 
-          <p>
-            <strong>Fits Like:</strong>
-            {product.fitsLike}
+          <p class="flex justify-between sm:justify-start gap-4">
+            <strong class="text-neutral-900 font-semibold w-24">Fits Like:</strong>
+            <span class="text-neutral-600 font-medium">{product.fitsLike}</span>
           </p>
 
-          <p>
-            <strong>Brand:</strong>
-            {product.brand}
+          <p class="flex justify-between sm:justify-start gap-4">
+            <strong class="text-neutral-900 font-semibold w-24">Brand:</strong>
+            <span class="text-neutral-600 font-medium">{product.brand}</span>
           </p>
         </div>
 
+        <!-- MEASUREMENTS -->
         {
           product.measurements && (
-            <div class="mt-8">
-              <h2 class="font-semibold mb-3">Measurements</h2>
+            <div class="mb-8">
+              <h2 class="font-bold text-xs uppercase tracking-wider mb-3 text-neutral-900">Measurements</h2>
 
-              <ul class="text-sm text-neutral-600">
-                <li>
-                  Pit to Pit:
-                  {product.measurements.pitToPitInches}"
-                </li>
-
-                <li>
-                  Length:
-                  {product.measurements.lengthInches}"
-                </li>
-
-                <li>
-                  Strap Length:
-                  {product.measurements.strapLengthInches}"
-                </li>
+              <ul class="text-sm text-neutral-600 space-y-1.5 bg-neutral-50 p-4 rounded-xl border border-neutral-200/60">
+                {product.measurements.pitToPitInches && (
+                  <li>• Pit to Pit: <span class="font-semibold text-neutral-800">{product.measurements.pitToPitInches}"</span></li>
+                )}
+                {product.measurements.lengthInches && (
+                  <li>• Length: <span class="font-semibold text-neutral-800">{product.measurements.lengthInches}"</span></li>
+                )}
+                {product.measurements.strapLengthInches && (
+                  <li>• Strap Length: <span class="font-semibold text-neutral-800">{product.measurements.strapLengthInches}"</span></li>
+                )}
               </ul>
             </div>
           )
         }
 
+        <!-- FLAWS SECTION -->
         {
           flawImages.length > 0 && (
-            <div class="mt-8">
-              <h2 class="font-semibold mb-3">Flaw Details</h2>
+            <div class="mb-8">
+              <h2 class="font-bold text-xs uppercase tracking-wider mb-3 text-neutral-900">Flaw Details</h2>
 
               <div class="grid grid-cols-3 gap-3">
-                {flawImages.map((image) => (
-                  <img
-                    src={imageUrl(image)}
-                    alt="Product flaw detail"
-                    class="rounded-lg"
-                  />
-                ))}
+                {flawImages.map((image) => {
+                  const fullUrl = imageUrl(image);
+                  const thumbUrl = `https://wsrv.nl/?url=${encodeURIComponent(fullUrl)}&w=300&q=80&output=webp`;
+
+                  return (
+                    <div class="relative aspect-square overflow-hidden rounded-lg bg-neutral-100 border border-neutral-200 cursor-pointer">
+                      <img
+                        src={thumbUrl}
+                        alt="Product flaw detail"
+                        class="w-full h-full object-cover detail-lightbox-trigger"
+                        loading="lazy"
+                        data-full-img={fullUrl}
+                        data-title="Flaw Detail"
+                      />
+                    </div>
+                  );
+                })}
               </div>
             </div>
           )
         }
-      </div>
 
-      <AddToCartButton product={product} />
+        <AddToCartButton product={product} />
+      </div>
     </div>
   </div>
+
+  <!-- LIGHTBOX DIALOG -->
+  <dialog
+    id="detail-lightbox"
+    class="fixed inset-0 z-50 m-auto bg-transparent p-0 backdrop:bg-black/85 backdrop:backdrop-blur-sm border-0 max-w-4xl max-h-[90vh] w-[92vw] rounded-2xl overflow-hidden shadow-2xl"
+  >
+    <div class="relative flex flex-col items-center justify-center p-4 min-h-[300px]">
+      <button
+        id="close-lightbox-btn"
+        type="button"
+        class="absolute top-4 right-4 z-10 p-2 bg-black/60 hover:bg-black text-white rounded-full transition cursor-pointer"
+        aria-label="Close Lightbox"
+      >
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+        </svg>
+      </button>
+
+      <div id="lightbox-loader" class="absolute inset-0 flex items-center justify-center bg-black/20">
+        <div class="w-8 h-8 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+      </div>
+
+      <img
+        id="lightbox-full-img"
+        src=""
+        alt=""
+        class="max-h-[82vh] w-auto object-contain rounded-lg opacity-0 transition-opacity duration-300"
+      />
+
+      <p id="lightbox-title" class="mt-3 text-xs font-semibold text-white/80 uppercase tracking-widest"></p>
+    </div>
+  </dialog>
 </Layout>
+
+<script>
+  function initProductPage() {
+    // === 1. CAROUSEL SLIDER LOGIC ===
+    const track = document.getElementById('slider-track');
+    const prevBtn = document.getElementById('prev-slide-btn');
+    const nextBtn = document.getElementById('next-slide-btn');
+    const currentIndicator = document.getElementById('slide-current');
+    const thumbBtns = document.querySelectorAll<HTMLButtonElement>('.thumb-btn');
+
+    let currentIndex = 0;
+    const totalSlides = thumbBtns.length || 1;
+
+    function goToSlide(index: number) {
+      if (!track) return;
+      
+      // Clamp index boundary
+      if (index < 0) currentIndex = totalSlides - 1;
+      else if (index >= totalSlides) currentIndex = 0;
+      else currentIndex = index;
+
+      // Translate track
+      track.style.transform = `translateX(-${currentIndex * 100}%)`;
+
+      // Update indicator counter
+      if (currentIndicator) {
+        currentIndicator.textContent = (currentIndex + 1).toString();
+      }
+
+      // Update thumbnail active styles
+      thumbBtns.forEach((btn, idx) => {
+        if (idx === currentIndex) {
+          btn.classList.add('border-black', 'scale-95');
+          btn.classList.remove('border-transparent', 'opacity-60');
+        } else {
+          btn.classList.remove('border-black', 'scale-95');
+          btn.classList.add('border-transparent', 'opacity-60');
+        }
+      });
+    }
+
+    prevBtn?.addEventListener('click', () => goToSlide(currentIndex - 1));
+    nextBtn?.addEventListener('click', () => goToSlide(currentIndex + 1));
+
+    thumbBtns.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const idx = parseInt(btn.getAttribute('data-slide-index') || '0', 10);
+        goToSlide(idx);
+      });
+    });
+
+    // Touch Swipe Support for Mobile
+    let startX = 0;
+    let isSwiping = false;
+
+    track?.addEventListener('touchstart', (e) => {
+      startX = e.touches[0].clientX;
+      isSwiping = true;
+    }, { passive: true });
+
+    track?.addEventListener('touchend', (e) => {
+      if (!isSwiping) return;
+      const endX = e.changedTouches[0].clientX;
+      const diffX = startX - endX;
+
+      if (Math.abs(diffX) > 40) {
+        if (diffX > 0) goToSlide(currentIndex + 1); // Swipe left -> Next
+        else goToSlide(currentIndex - 1);           // Swipe right -> Prev
+      }
+      isSwiping = false;
+    }, { passive: true });
+
+
+    // === 2. LIGHTBOX DIALOG LOGIC ===
+    const dialog = document.getElementById('detail-lightbox') as HTMLDialogElement;
+    const fullImg = document.getElementById('lightbox-full-img') as HTMLImageElement;
+    const titleEl = document.getElementById('lightbox-title');
+    const loader = document.getElementById('lightbox-loader');
+    const closeBtn = document.getElementById('close-lightbox-btn');
+
+    if (!dialog || !fullImg) return;
+
+    document.querySelectorAll('.detail-lightbox-trigger').forEach((trigger) => {
+      trigger.addEventListener('click', () => {
+        const fullSrc = trigger.getAttribute('data-full-img');
+        const title = trigger.getAttribute('data-title');
+
+        if (!fullSrc) return;
+
+        fullImg.classList.add('opacity-0');
+        loader?.classList.remove('hidden');
+
+        fullImg.src = fullSrc;
+        if (titleEl) titleEl.textContent = title || '';
+
+        dialog.showModal();
+        document.body.classList.add('overflow-hidden');
+
+        fullImg.onload = () => {
+          loader?.classList.add('hidden');
+          fullImg.classList.remove('opacity-0');
+        };
+      });
+    });
+
+    const closeLightbox = () => {
+      dialog.close();
+      document.body.classList.remove('overflow-hidden');
+      fullImg.src = '';
+    };
+
+    closeBtn?.addEventListener('click', closeLightbox);
+    dialog.addEventListener('click', (e) => {
+      if (e.target === dialog) closeLightbox();
+    });
+  }
+
+  document.addEventListener('astro:page-load', initProductPage);
+  initProductPage();
+</script>
