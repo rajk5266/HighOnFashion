@@ -23,15 +23,15 @@ const collectionProducts = products.filter(
 
 <Layout title={collection.name} description={collection.description}>
   <!-- HERO -->
-  <section class="relative h-[60vh] w-full overflow-hidden">
-    <img
+  <section class="relative h-[30vh] w-full overflow-hidden">
+    <!-- <img
       src={collection.bannerImage}
       alt={collection.alt || collection.name}
       class="absolute inset-0 w-full h-full object-cover"
-    />
-    <div
-      class="absolute inset-0 bg-gradient-to-b from-transparent via-black/40 to-black/90"
-    >
+    /> -->
+  <div
+  class="absolute inset-0 bg-gradient-to-b from-[#1A2F23] to-[#000000]/90"
+>
     </div>
     <div
       class="relative z-10 max-w-7xl mx-auto h-full flex flex-col justify-end px-6 pb-16 text-white"
@@ -39,7 +39,7 @@ const collectionProducts = products.filter(
       <p class="uppercase tracking-widest text-sm mb-2">
         {collection.season}
       </p>
-      <h1 class="text-4xl md:text-5xl font-serif mb-4">
+      <h1 class="text-4xl md:text-5xl font-serif mb-4 text-[#D4AF37]">
         {collection.name}
       </h1>
       <p class="max-w-xl text-white/90">

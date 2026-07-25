@@ -1,14 +1,14 @@
 ---
 import { Image } from "astro:assets";
 
-import heroBg from "../assets/highonfashion-herobanner.webp";
+import heroBg from "../assets/hof_banner.webp";
 import heroBg1 from "../assets/highonfashion-herobanner-1.webp"
-import heromobile from "../assets/heroBg1-mobile.png"
+import heromobile from "../assets/hof_banner_mobile.webp";
 ---
 
 <!-- Hero Section -->
 <section
-  class="relative h-screen min-h-[800px] w-full overflow-hidden flex items-center justify-center"
+  class="relative w-full min-h-[400px] lg:min-h-[600px] overflow-hidden flex items-center justify-center"
 >
 <div class="absolute inset-0 z-0">
   <!-- Desktop Image -->
@@ -23,7 +23,7 @@ import heromobile from "../assets/heroBg1-mobile.png"
   <Image
     src={heromobile}
     alt="High fashion editorial shot of models in vintage clothing"
-    class="block md:hidden w-full h-full object-cover object-center"
+    class="block md:hidden w-full h-[400px] object-cover object-center"
     priority
   />
 
@@ -42,17 +42,17 @@ import heromobile from "../assets/heroBg1-mobile.png"
       Est. 2025 — Curated Vintage
     </p> -->
 
-    <h1
+    <!-- <h1
       class="font-serif text-5xl md:text-7xl lg:text-8xl leading-none mb-8 animate-fade-in-up delay-100"
     >
       Rethink.<br />
       <span class="italic font-light">Rewear.</span><br />
       Repeat.
-    </h1>
+    </h1> -->
 
     <div class="animate-fade-in-up delay-200">
       <a
-        href="#collections"
+        href="/collections"
         class="inline-block border border-[#F9F9F5] px-8 py-3 hover:bg-[#F9F9F5] hover:text-[#1A2F23] transition-colors uppercase tracking-widest text-sm"
       >
         View the Drop

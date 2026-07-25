@@ -7,11 +7,11 @@ export const products = [
     id: "ts-005",
     title: "Abstract Art Print White Crewneck Tee",
     slug: "abstract-art-print-white-crewneck-tee-ts005",
-    price: 799,
-    originalPrice: 1199,
+    price: 99,
+    // originalPrice: 1199,
     collectionId: "afterglow-orange",
     brand: "Unbranded / Thrifted",
-    
+
     // Thrift Sizing System
     taggedSize: "M",
     fitsLike: "M (Relaxed Casual Fit)",
@@ -45,19 +45,19 @@ export const products = [
       main: "/product/abstract-art-print-white-crewneck-tee-ts005.webp",
       flaws: [],
       gallery: [
-          "/product/abstract-art-print-white-crewneck-tee-ts005.webp"
-        ]
+        "/product/abstract-art-print-white-crewneck-tee-ts005.webp"
+      ]
     },
     alt: "White scoop crewneck t-shirt featuring an abstract muted print with text 'RECONNECT WITH NATURE AND EACH OTHER'"
   },
 
   /* ================= LUCID PURPLE (Statement Streetwear Edit) ================= */
-   {
+  {
     id: "top-004",
     title: "Floral Printed Noodle Strap Camisole Top",
     slug: "floral-printed-noodle-strap-camisole-top-top004",
-    price: 699,
-    originalPrice: 999,
+    price: 99,
+    // originalPrice: 999,
     collectionId: "lucid-purple",
     brand: "Unbranded / Thrifted",
 
@@ -104,11 +104,11 @@ export const products = [
     id: "top-005",
     title: "Navy Blue Sheer Floral Lace Long-Sleeve Top",
     slug: "navy-blue-sheer-floral-lace-long-sleeve-top-top005",
-    price: 899,
-    originalPrice: 1299,
+    price: 149,
+    // originalPrice: 1299,
     collectionId: "lucid-purple",
     brand: "Unbranded / Thrifted",
-    
+
     // Thrift Sizing System
     taggedSize: "M",
     fitsLike: "M (Relaxed Flowy Fit)",
@@ -141,7 +141,6 @@ export const products = [
     // Media
     images: {
       main: "/product/navy-lace-top-front.webp",
-      back: "/product/navy-lace-top-back.webp",
       flaws: [],
       gallery: [
         "/product/navy-lace-top-front.webp",
@@ -151,17 +150,65 @@ export const products = [
     },
     alt: "Sheer navy blue floral lace long-sleeve top with subtle shimmer"
   },
+  {
+    id: "top-006",
+    title: "Vintage Pink Floral Chiffon Peplum Blouse",
+    slug: "vintage-pink-floral-chiffon-peplum-blouse-top006",
+    price: 149,
+    // originalPrice: 1399,
+    collectionId: "lucid-purple",
+    brand: "Unbranded / Thrifted",
+
+    // Thrift Sizing System
+    taggedSize: "M",
+    fitsLike: "M (Relaxed Flowy Fit)",
+    measurements: {
+      pitToPitInches: 19.0,
+      lengthInches: 24.0,
+      sleeveInches: 23.5,
+      shoulderInches: 15.0
+    },
+
+    // Category & Style
+    category: "tops",
+    gender: "women",
+    style: ["boho", "vintage", "y2k", "casual"],
+    era: "Y2K / Early 00s",
+
+    // Condition & Flaws (Using your 3-tier system)
+    condition: {
+      grade: "Tier 1",
+      label: "Superb",
+      description: "Lightweight sheer floral chiffon with built-in inner lining. Elastic smocked hem and split neck tie details are intact with no tears, pulls, or staining."
+    },
+    flaws: [],
+
+    // Inventory Control
+    stock: 1,
+    isSold: false,
+    isFeatured: true,
+
+    // Media
+    images: {
+      main: "/product/pink-floral-blouse-front.webp",
+      flaws: [],
+      gallery: [
+        "/product/pink-floral-blouse-print-front.webp"
+      ]
+    },
+    alt: "Sheer pink and green floral print long-sleeve blouse with smocked hem and split neckline"
+  },
 
   /* ================= PULSE GREEN (Winter & Heavyweight Edit) ================= */
-{
+  {
     id: "hd-002",
     title: "Pastel Yellow Heavyweight Pullover Hoodie",
     slug: "pastel-yellow-heavyweight-pullover-hoodie-hd002",
-    price: 1299,
-    originalPrice: 1799,
+    price: 299,
+    // originalPrice: 1799,
     collectionId: "pulse-green",
     brand: "Unbranded / Thrifted",
-    
+
     // Thrift Sizing System
     taggedSize: "L",
     fitsLike: "L (Relaxed Drop-Shoulder Fit)",
@@ -206,15 +253,15 @@ export const products = [
 
 
   /* ================= ASTRAL BLUE (Retro Archive Edit) ================= */
-{
+  {
     id: "jk-001",
     title: "Embellished Geometric Trim Denim Jacket",
     slug: "embellished-geometric-trim-denim-jacket-jk001",
-    price: 1799,
-    originalPrice: 2499,
+    price: 399,
+    // originalPrice: 2499,
     collectionId: "astral-blue",
     brand: "Unbranded / Thrifted",
-    
+
     // Thrift Sizing System
     taggedSize: "M",
     fitsLike: "M (Structured Fit)",

@@ -13,14 +13,14 @@ const { heroImage, heading, tagline, imageAlt } = Astro.props;
     <Image
       src={heroImage}
       alt={imageAlt}
-      class="w-full h-full object-cover object-center"
+      class="w-full h-full object-cover object-[center_10%]"
       priority
     />
   </div>
 
   
   <!-- Dark Gradient Overlay -->
-  <!-- <div class="absolute inset-0 bg-gradient-to-b from-black/90 via-black/70 to-black/40 pointer-events-none"></div> -->
+  <div class="absolute inset-0 bg-gradient-to-b from-black/40 via-black/40 to-black/40 pointer-events-none"></div>
 
   <!-- Content -->
   <div class="relative text-center px-6 max-w-4xl mx-auto z-10">

@@ -1,7 +1,7 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import { Image } from "astro:assets";
-import heroBg from "../assets/hero-bg.png";
+import heroBg from "../assets/contact_banner.webp";
 
 ---
 
@@ -10,29 +10,26 @@ import heroBg from "../assets/hero-bg.png";
   description="Get in touch with our thrift store. Visit us or reach out anytime."
 >
   <!-- Hero Section -->
-  <section
-    class="relative min-h-[400px] w-full overflow-hidden flex items-center justify-center"
-  >
-    <div class="absolute inset-0 z-0">
-      <Image
-        src={heroBg}
-        alt="High fashion editorial shot of models in vintage clothing"
-        class="w-full h-full object-cover object-top"
-        priority
-      />
-      <div class="absolute inset-0 bg-black/20"></div>
-    </div>
+<section class="relative min-h-[400px] w-full overflow-hidden flex items-center justify-center">
+  <!-- Background Image & Black Overlay -->
+  <div class="absolute inset-0 z-0">
+    <Image
+      src={heroBg}
+      alt="High fashion editorial shot of models in vintage clothing"
+      class="w-full h-full object-cover object-[center_30%]"
+      priority
+    />
+    <!-- Black Gradient Overlay -->
+    <div class="absolute inset-0 bg-gradient-to-b from-black/30 via-black/50 to-black/70 pointer-events-none"></div>
+  </div>
 
-    <div
-      class="relative z-10 text-center text-[#F9F9F5] px-6 max-w-4xl mx-auto mt-20"
-    >
-      <h1
-        class="font-serif text-5xl md:text-7xl lg:text-8xl leading-none mb-8 animate-fade-in-up delay-100"
-      >
-        Contact Us
-      </h1>
-    </div>
-  </section>
+  <!-- Content Layer -->
+  <div class="relative z-10 text-center text-[#F9F9F5] px-6 max-w-4xl mx-auto mt-20">
+    <h1 class="font-serif text-5xl md:text-7xl lg:text-8xl leading-none mb-8 animate-fade-in-up delay-100 text-[#D4AF37]">
+      Contact Us
+    </h1>
+  </div>
+</section>
 
   <!-- CONTENT -->
   <section class="max-w-7xl mx-auto px-6 py-12">
