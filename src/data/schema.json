@@ -1,0 +1,322 @@
+{
+    "storeInfo": {
+        "name": "HighOnFashion",
+        "currency": "INR",
+        "currencySymbol": "₹"
+    },
+    "conditionGrades": [
+        {
+            "grade": "Tier 1",
+            "label": "Superb",
+            "description": "Pristine or deadstock condition. Barely worn with zero visible fading, holes, stains, or cracking."
+        },
+        {
+            "grade": "Tier 2",
+            "label": "Good",
+            "description": "Gently worn with standard vintage character. Light wash fade or soft break-in, but fully intact with no major flaws."
+        },
+        {
+            "grade": "Tier 3",
+            "label": "Fair",
+            "description": "Authentic worn/distressed piece with noticeable character—such as sun-fading, minor pinholes, fraying, or paint splatters."
+        }
+    ],
+    "styles": [
+        {
+            "id": "streetwear",
+            "name": "Streetwear",
+            "slug": "streetwear"
+        },
+        {
+            "id": "oversized",
+            "name": "Oversized & Boxy",
+            "slug": "oversized"
+        },
+        {
+            "id": "vintage",
+            "name": "Vintage Archive",
+            "slug": "vintage"
+        },
+        {
+            "id": "retro",
+            "name": "Retro Sportswear",
+            "slug": "retro"
+        },
+        {
+            "id": "y2k",
+            "name": "Y2K / 00s",
+            "slug": "y2k"
+        },
+        {
+            "id": "minimalist",
+            "name": "Minimalist",
+            "slug": "minimalist"
+        },
+        {
+            "id": "distressed",
+            "name": "Distressed & Sunfaded",
+            "slug": "distressed"
+        },
+        {
+            "id": "boho",
+            "name": "Boho & Embellished",
+            "slug": "boho"
+        },
+        {
+            "id": "winterwear",
+            "name": "Winterwear & Layering",
+            "slug": "winterwear"
+        }
+    ],
+    "vintageEras": [
+        "80s Archive",
+        "90s / Single Stitch",
+        "Y2K / Early 00s",
+        "Modern Thrift"
+    ],
+    "categories": [
+        {
+            "id": "tshirt",
+            "name": "T-Shirts",
+            "slug": "t-shirts",
+            "subcategories": [
+                {
+                    "id": "graphic-tee",
+                    "name": "Graphic Tees",
+                    "slug": "graphic-tees"
+                },
+                {
+                    "id": "oversized-tee",
+                    "name": "Oversized Tees",
+                    "slug": "oversized-tees"
+                },
+                {
+                    "id": "vintage-tee",
+                    "name": "Vintage Tees",
+                    "slug": "vintage-tees"
+                }
+            ]
+        },
+        {
+            "id": "tops",
+            "name": "Tops & Camisoles",
+            "slug": "tops-camisoles",
+            "subcategories": [
+                {
+                    "id": "camisole",
+                    "name": "Camisoles & Tank Tops",
+                    "slug": "camisoles-tank-tops"
+                },
+                {
+                    "id": "crop-top",
+                    "name": "Crop Tops",
+                    "slug": "crop-tops"
+                },
+                {
+                    "id": "flannels",
+                    "name": "Flannels & Shirts",
+                    "slug": "flannels-shirts"
+                }
+            ]
+        },
+        {
+            "id": "sweatshirt",
+            "name": "Sweatshirts & Hoodies",
+            "slug": "sweatshirts-hoodies",
+            "subcategories": [
+                {
+                    "id": "hoodie",
+                    "name": "Hoodies",
+                    "slug": "hoodies"
+                },
+                {
+                    "id": "crewneck",
+                    "name": "Crewneck Sweatshirts",
+                    "slug": "crewnecks"
+                },
+                {
+                    "id": "zip-up",
+                    "name": "Zip-up Hoodies",
+                    "slug": "zip-ups"
+                }
+            ]
+        },
+        {
+            "id": "jacket",
+            "name": "Jackets & Outerwear",
+            "slug": "jackets-outerwear",
+            "subcategories": [
+                {
+                    "id": "denim-jacket",
+                    "name": "Denim Jackets",
+                    "slug": "denim-jackets"
+                },
+                {
+                    "id": "windbreaker",
+                    "name": "Windbreakers",
+                    "slug": "windbreakers"
+                },
+                {
+                    "id": "varsity",
+                    "name": "Varsity Jackets",
+                    "slug": "varsity-jackets"
+                }
+            ]
+        },
+        {
+            "id": "jeans",
+            "name": "Denim & Bottoms",
+            "slug": "denim-bottoms",
+            "subcategories": [
+                {
+                    "id": "denim-pants",
+                    "name": "Jeans & Denim",
+                    "slug": "jeans"
+                },
+                {
+                    "id": "cargo",
+                    "name": "Cargo & Utility Pants",
+                    "slug": "cargo-pants"
+                },
+                {
+                    "id": "track-pants",
+                    "name": "Track Pants & Sweatpants",
+                    "slug": "track-pants"
+                },
+                {
+                    "id": "shorts",
+                    "name": "Shorts",
+                    "slug": "shorts"
+                }
+            ]
+        }
+    ],
+    "collections": [
+        {
+            "id": "lucid-purple",
+            "slug": "lucid-purple",
+            "name": "Lucid Purple",
+            "tagline": "Statement pieces with bold street energy",
+            "description": "A bold edit of statement thrift pieces featuring graphic tees, oversized silhouettes, and standout streetwear finds.",
+            "bannerImage": "/images/collections/highonfashion-collections3.jpg",
+            "cardImage": "/images/collections/highonfashion-collections.jpg",
+            "alt": "Lucid Purple thrift streetwear collection",
+            "season": "All Season",
+            "drop": "2025 Drop 01",
+            "featuredCategories": [
+                "tshirt",
+                "hoodie",
+                "sweatshirt"
+            ],
+            "style": [
+                "streetwear",
+                "oversized"
+            ],
+            "order": 1
+        },
+        {
+            "id": "astral-blue",
+            "slug": "astral-blue",
+            "name": "Astral Blue",
+            "tagline": "Retro archive from the golden era",
+            "description": "A curated vintage archive featuring retro sportswear, old-school graphics, and nostalgic street fashion.",
+            "bannerImage": "/images/collections/highonfashion-collections3.jpg",
+            "cardImage": "/images/collections/highonfashion-collections1.jpg",
+            "alt": "Astral Blue vintage thrift collection",
+            "season": "All Season",
+            "drop": "Archive Edit",
+            "featuredCategories": [
+                "tshirt",
+                "jacket",
+                "sweatshirt"
+            ],
+            "style": [
+                "vintage",
+                "retro"
+            ],
+            "order": 2
+        },
+        {
+            "id": "pulse-green",
+            "slug": "pulse-green",
+            "name": "Pulse Green",
+            "tagline": "Cold weather essentials",
+            "description": "A winter-focused thrift collection featuring hoodies, jackets, and heavyweight pieces designed for layering.",
+            "bannerImage": "/images/collections/highonfashion-collections3.jpg",
+            "cardImage": "/images/collections/highonfashion-collections3.jpg",
+            "alt": "Pulse Green winter thrift collection",
+            "season": "Winter",
+            "drop": "Winter Edit",
+            "featuredCategories": [
+                "hoodie",
+                "jacket"
+            ],
+            "style": [
+                "winterwear"
+            ],
+            "order": 3
+        },
+        {
+            "id": "afterglow-orange",
+            "slug": "afterglow-orange",
+            "name": "Afterglow Orange",
+            "tagline": "Relaxed oversized fits",
+            "description": "A relaxed collection featuring oversized t-shirts and laid-back silhouettes inspired by modern streetwear culture.",
+            "bannerImage": "/images/collections/highonfashion-collections2.jpg",
+            "cardImage": "/images/collections/highonfashion-collections2.jpg",
+            "alt": "Afterglow Orange oversized thrift collection",
+            "season": "All Season",
+            "drop": "Oversized Edit",
+            "featuredCategories": [
+                "tshirt"
+            ],
+            "style": [
+                "oversized",
+                "streetwear"
+            ],
+            "order": 4
+        }
+    ],
+    "brands": [
+        "Nike",
+        "Adidas",
+        "Levi’s",
+        "Zara",
+        "H&M",
+        "Uniqlo",
+        "Puma",
+        "Reebok",
+        "Unbranded / Thrifted"
+    ],
+    "sizingConfig": {
+        "standardSizes": [
+            "XS",
+            "S",
+            "M",
+            "L",
+            "XL",
+            "XXL"
+        ],
+        "waistSizes": [
+            "W28",
+            "W30",
+            "W32",
+            "W34",
+            "W36"
+        ],
+        "measurementFields": {
+            "tops": [
+                "pitToPitInches",
+                "lengthInches",
+                "shoulderInches",
+                "sleeveInches"
+            ],
+            "bottoms": [
+                "waistInches",
+                "lengthInches",
+                "inseamInches",
+                "legOpeningInches"
+            ]
+        }
+    }
+}

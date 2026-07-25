@@ -1,26 +1,37 @@
 ---
+// src/components/ProductsGrid.astro
 import ProductCard from "./ProductCard.astro";
 
 const { products = [] } = Astro.props;
 ---
 
 {
-    products.length === 0 ? (
-        <p class="text-center text-neutral-500">No products available.</p>
-    ) : (
-        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            {products.map((product: any) => (
-                <ProductCard
-                    id={product.id}
-                    slug={product.slug}
-                    title={product.title}
-                    price={product.price}
-                    image={product.images.main}
-                    alt={product.alt}
-                    sizes={product.sizes}
-                    collectionId={product.collectionId}
-                />
-            ))}
+  products.length === 0 ? (
+    <p class="text-center text-neutral-500">No products available.</p>
+  ) : (
+    <div data-product-grid class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 gap-6">
+      {products.map((product: any) => (
+        <div
+          data-product-card
+          data-collection={product.collectionId || ""}
+          data-category={product.category || ""}
+          data-size={product.taggedSize || ""}
+          data-style={Array.isArray(product.style) ? product.style.join(",") : product.style || ""}
+          data-brand={product.brand || ""}
+          data-price={product.price || 0}
+        >
+          <ProductCard
+            id={product.id}
+            slug={product.slug}
+            title={product.title}
+            price={product.price}
+            image={product.images?.main}
+            alt={product.alt}
+            sizes={product.sizes}
+            collectionId={product.collectionId}
+          />
         </div>
-    )
+      ))}
+    </div>
+  )
 }

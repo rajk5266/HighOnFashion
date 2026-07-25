@@ -117,3 +117,12 @@
   /* position: relative !important; */
   z-index: 999999 !important;
 }
+
+.snipcart-add-item{
+      background: black;
+    width: 100%;
+    color: white;
+    padding: 6px;
+    border-radius: 8px;
+    cursor: pointer;
+}

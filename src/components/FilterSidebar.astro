@@ -1,0 +1,558 @@
+---
+// src/components/FilterSidebar.astro
+interface Props {
+  collections?: { id: string; name: string }[];
+  categories?: string[];
+  sizes?: string[];
+  styles?: string[];
+  brands?: string[];
+}
+
+const {
+  collections = [],
+  categories = [],
+  sizes = [],
+  styles = [],
+  brands = []
+} = Astro.props;
+---
+
+<div class="w-full">
+  <!-- TOP TOOLBAR: Total Count & Sort -->
+  <div class="flex flex-wrap items-center justify-between pb-5 mb-8 border-b border-neutral-200 gap-4">
+    <div class="flex items-center gap-3">
+      <span class="text-xs font-semibold uppercase tracking-widest text-neutral-400">Catalog</span>
+      <span class="text-xs bg-neutral-100 text-neutral-800 font-bold px-2.5 py-1 rounded-full border border-neutral-200">
+        <span id="product-count">0</span> Items
+      </span>
+    </div>
+
+    <!-- SORT DROPDOWN -->
+    <div class="flex items-center gap-2">
+      <label for="sort-select" class="text-xs uppercase font-medium tracking-wider text-neutral-500 whitespace-nowrap">
+        Sort By
+      </label>
+      <div class="relative">
+        <select
+          id="sort-select"
+          class="text-xs font-semibold border border-neutral-300 rounded-lg pl-3 pr-8 py-2 focus:outline-none focus:ring-2 focus:ring-black focus:border-black bg-white cursor-pointer appearance-none transition-all"
+        >
+          <option value="newest" selected>Newest In</option>
+          <option value="price-asc">Price: Low to High</option>
+          <option value="price-desc">Price: High to Low</option>
+        </select>
+        <svg class="w-3.5 h-3.5 absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none text-neutral-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-4 gap-10">
+    <!-- BACKDROP (Mobile Only) -->
+    <div
+      id="filter-backdrop"
+      class="fixed inset-0 bg-black/60 backdrop-blur-xs z-40 opacity-0 pointer-events-none transition-opacity duration-300 lg:hidden"
+    ></div>
+
+    <!-- FILTER SIDEBAR / MOBILE DRAWER -->
+    <aside
+      id="filter-drawer"
+      class="fixed top-0 left-0 bottom-0 z-50 w-[88%] max-w-sm bg-white overflow-hidden flex flex-col -translate-x-full transition-transform duration-300 ease-out lg:static lg:w-full lg:max-w-none lg:z-auto lg:translate-x-0 lg:overflow-visible lg:bg-transparent"
+    >
+      <!-- DRAWER HEADER -->
+      <div class="flex items-center justify-between p-5 border-b border-neutral-200 lg:px-0 lg:pt-0 lg:pb-4">
+        <div class="flex items-center gap-2.5">
+          <h2 class="font-bold text-base uppercase tracking-wider text-black">Filters</h2>
+          <span id="active-count-badge" class="hidden bg-black text-white text-[10px] font-bold px-2 py-0.5 rounded-full">
+            0
+          </span>
+        </div>
+
+        <div class="flex items-center gap-3">
+          <button
+            id="clear-all-btn"
+            type="button"
+            class="hidden text-xs font-semibold text-neutral-500 hover:text-black underline underline-offset-4 transition"
+          >
+            Reset
+          </button>
+
+          <!-- MOBILE CROSS BUTTON -->
+          <button
+            id="close-drawer-btn"
+            type="button"
+            class="p-1.5 rounded-full text-neutral-500 hover:text-black hover:bg-neutral-100 lg:hidden transition"
+            aria-label="Close filters"
+          >
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- SCROLLABLE FILTER CONTENT -->
+      <div class="flex-1 overflow-y-auto p-5 space-y-7 lg:p-0 lg:overflow-visible">
+        
+        <!-- COLLECTION FILTER -->
+        {collections.length > 0 && (
+          <div class="filter-group border-b border-neutral-100 pb-6">
+            <h3 class="font-bold text-xs uppercase tracking-wider text-neutral-900 mb-3">Collection</h3>
+            <div class="space-y-1.5 max-h-48 overflow-hidden filter-list transition-all duration-300">
+              {collections.map((col) => (
+                <button
+                  type="button"
+                  data-filter-key="collection"
+                  data-filter-val={col.id}
+                  class="filter-btn group w-full text-left text-xs font-medium py-2 px-3 rounded-lg border border-transparent transition-all flex items-center justify-between text-neutral-600 hover:text-black hover:bg-neutral-50 active:scale-[0.99]"
+                >
+                  <span>{col.name}</span>
+                  <span class="check-mark hidden text-black font-bold">✓</span>
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
+        <!-- CATEGORY FILTER -->
+        {categories.length > 0 && (
+          <div class="filter-group border-b border-neutral-100 pb-6">
+            <h3 class="font-bold text-xs uppercase tracking-wider text-neutral-900 mb-3">Category</h3>
+            <div class="space-y-1.5 max-h-48 overflow-hidden filter-list transition-all duration-300">
+              {categories.map((cat) => (
+                <button
+                  type="button"
+                  data-filter-key="category"
+                  data-filter-val={cat}
+                  class="filter-btn group w-full text-left text-xs font-medium capitalize py-2 px-3 rounded-lg border border-transparent transition-all flex items-center justify-between text-neutral-600 hover:text-black hover:bg-neutral-50 active:scale-[0.99]"
+                >
+                  <span>{cat}</span>
+                  <span class="check-mark hidden text-black font-bold">✓</span>
+                </button>
+              ))}
+            </div>
+            {categories.length > 5 && (
+              <button type="button" class="view-more-btn text-[11px] font-bold tracking-wider uppercase text-neutral-400 hover:text-black mt-3 transition">
+                + View More
+              </button>
+            )}
+          </div>
+        )}
+
+        <!-- SIZES FILTER -->
+        {sizes.length > 0 && (
+          <div class="filter-group border-b border-neutral-100 pb-6">
+            <h3 class="font-bold text-xs uppercase tracking-wider text-neutral-900 mb-3">Size</h3>
+            <div class="flex flex-wrap gap-2">
+              {sizes.map((sz) => (
+                <button
+                  type="button"
+                  data-filter-key="size"
+                  data-filter-val={sz}
+                  class="filter-btn min-w-[42px] h-9 px-3 text-xs font-bold uppercase tracking-wider border border-neutral-200 bg-white text-neutral-800 rounded-lg transition-all hover:border-black active:scale-95 flex items-center justify-center"
+                >
+                  {sz}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
+        <!-- STYLES FILTER -->
+        {styles.length > 0 && (
+          <div class="filter-group border-b border-neutral-100 pb-6">
+            <h3 class="font-bold text-xs uppercase tracking-wider text-neutral-900 mb-3">Style</h3>
+            <div class="space-y-1.5 max-h-40 overflow-hidden filter-list transition-all duration-300">
+              {styles.map((st) => (
+                <button
+                  type="button"
+                  data-filter-key="style"
+                  data-filter-val={st}
+                  class="filter-btn group w-full text-left text-xs font-medium capitalize py-2 px-3 rounded-lg border border-transparent transition-all flex items-center justify-between text-neutral-600 hover:text-black hover:bg-neutral-50 active:scale-[0.99]"
+                >
+                  <span>{st}</span>
+                  <span class="check-mark hidden text-black font-bold">✓</span>
+                </button>
+              ))}
+            </div>
+            {styles.length > 4 && (
+              <button type="button" class="view-more-btn text-[11px] font-bold tracking-wider uppercase text-neutral-400 hover:text-black mt-3 transition">
+                + View More
+              </button>
+            )}
+          </div>
+        )}
+
+        <!-- BRANDS FILTER -->
+        {brands.length > 0 && (
+          <div class="filter-group border-b border-neutral-100 pb-6">
+            <h3 class="font-bold text-xs uppercase tracking-wider text-neutral-900 mb-3">Brand</h3>
+            <div class="space-y-1.5 max-h-40 overflow-hidden filter-list transition-all duration-300">
+              {brands.map((b) => (
+                <button
+                  type="button"
+                  data-filter-key="brand"
+                  data-filter-val={b}
+                  class="filter-btn group w-full text-left text-xs font-medium py-2 px-3 rounded-lg border border-transparent transition-all flex items-center justify-between text-neutral-600 hover:text-black hover:bg-neutral-50 active:scale-[0.99]"
+                >
+                  <span>{b}</span>
+                  <span class="check-mark hidden text-black font-bold">✓</span>
+                </button>
+              ))}
+            </div>
+            {brands.length > 4 && (
+              <button type="button" class="view-more-btn text-[11px] font-bold tracking-wider uppercase text-neutral-400 hover:text-black mt-3 transition">
+                + View More
+              </button>
+            )}
+          </div>
+        )}
+      </div>
+
+      <!-- STICKY MOBILE DRAWER FOOTER -->
+      <div class="p-4 border-t border-neutral-200 bg-white lg:hidden">
+        <button
+          id="apply-mobile-btn"
+          type="button"
+          class="w-full bg-black text-white text-xs font-bold uppercase tracking-widest py-3.5 rounded-xl shadow-md active:scale-95 transition-transform"
+        >
+          Apply Filters
+        </button>
+      </div>
+    </aside>
+
+    <!-- MAIN PRODUCT SLOT + EMPTY & PAGINATION STATES -->
+    <main class="lg:col-span-3">
+      <slot />
+
+      <!-- NO RESULTS -->
+      <div id="no-results" class="hidden py-24 text-center">
+        <div class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-neutral-100 text-neutral-400 mb-4">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+          </svg>
+        </div>
+        <h4 class="text-base font-bold text-neutral-900">No items found</h4>
+        <p class="text-xs text-neutral-500 mt-1 max-w-sm mx-auto">Try adjusting your active filters or clear them to view the full product edit.</p>
+        <button
+          id="reset-filters-btn"
+          type="button"
+          class="mt-5 inline-block text-xs font-bold uppercase tracking-wider bg-black text-white px-5 py-2.5 rounded-lg active:scale-95 transition"
+        >
+          Clear All Filters
+        </button>
+      </div>
+
+      <!-- CLIENT-SIDE PAGINATION -->
+      <nav id="pagination-nav" class="flex items-center justify-between mt-16 pt-8 border-t border-neutral-200">
+        <button
+          id="prev-page-btn"
+          type="button"
+          class="px-4 py-2 text-xs font-bold uppercase tracking-wider border border-neutral-300 rounded-lg hover:bg-neutral-100 transition disabled:opacity-30 disabled:hover:bg-transparent disabled:cursor-not-allowed"
+        >
+          Previous
+        </button>
+        <div id="page-numbers" class="flex items-center gap-1.5"></div>
+        <button
+          id="next-page-btn"
+          type="button"
+          class="px-4 py-2 text-xs font-bold uppercase tracking-wider border border-neutral-300 rounded-lg hover:bg-neutral-100 transition disabled:opacity-30 disabled:hover:bg-transparent disabled:cursor-not-allowed"
+        >
+          Next
+        </button>
+      </nav>
+    </main>
+  </div>
+</div>
+
+<!-- FIXED FLOATING BUTTON (Mobile Only) -->
+<div class="fixed bottom-6 left-1/2 -translate-x-1/2 z-30 lg:hidden">
+  <button
+    id="open-drawer-btn"
+    type="button"
+    class="flex items-center gap-3 bg-black text-white px-6 py-3.5 rounded-full shadow-2xl font-bold text-xs uppercase tracking-widest border border-neutral-800 active:scale-95 transition-all"
+  >
+    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path>
+    </svg>
+    <span>Filter</span>
+    <span id="floating-badge" class="hidden bg-white text-black text-[10px] w-5 h-5 rounded-full items-center justify-center font-bold">
+      0
+    </span>
+  </button>
+</div>
+
+<script>
+  interface FilterState {
+    collection: string | null;
+    category: string | null;
+    size: string | null;
+    style: string | null;
+    brand: string | null;
+  }
+
+  interface AppState {
+    filters: FilterState;
+    sort: string;
+    currentPage: number;
+    itemsPerPage: number;
+  }
+
+  function initFilters() {
+    const state: AppState = {
+      filters: {
+        collection: null,
+        category: null,
+        size: null,
+        style: null,
+        brand: null
+      },
+      sort: 'newest',
+      currentPage: 1,
+      itemsPerPage: 12
+    };
+
+    const productContainer = document.querySelector('[data-product-grid]');
+    const productCards = Array.from(document.querySelectorAll<HTMLElement>('[data-product-card]'));
+    const countEl = document.getElementById('product-count');
+    const noResultsEl = document.getElementById('no-results');
+    const clearAllBtn = document.getElementById('clear-all-btn');
+    const badgeEl = document.getElementById('active-count-badge');
+    const floatingBadgeEl = document.getElementById('floating-badge');
+    const paginationNav = document.getElementById('pagination-nav');
+    const pageNumbersEl = document.getElementById('page-numbers');
+    const prevBtn = document.getElementById('prev-page-btn') as HTMLButtonElement;
+    const nextBtn = document.getElementById('next-page-btn') as HTMLButtonElement;
+
+    function render() {
+      // 1. Filter Logic
+      const filtered = productCards.filter((card) => {
+        const col = card.dataset.collection;
+        const cat = card.dataset.category;
+        const size = card.dataset.size;
+        const style = card.dataset.style ? card.dataset.style.split(',') : [];
+        const brand = card.dataset.brand;
+
+        if (state.filters.collection && col !== state.filters.collection) return false;
+        if (state.filters.category && cat !== state.filters.category) return false;
+        if (state.filters.size && size !== state.filters.size) return false;
+        if (state.filters.style && !style.includes(state.filters.style)) return false;
+        if (state.filters.brand && brand !== state.filters.brand) return false;
+
+        return true;
+      });
+
+      // 2. Sorting
+      filtered.sort((a, b) => {
+        const priceA = parseFloat(a.dataset.price || '0');
+        const priceB = parseFloat(b.dataset.price || '0');
+
+        if (state.sort === 'price-asc') return priceA - priceB;
+        if (state.sort === 'price-desc') return priceB - priceA;
+        return 0;
+      });
+
+      // 3. Count & Badge Updates
+      if (countEl) countEl.textContent = filtered.length.toString();
+      const activeCount = Object.values(state.filters).filter(Boolean).length;
+
+      if (badgeEl && floatingBadgeEl && clearAllBtn) {
+        if (activeCount > 0) {
+          badgeEl.textContent = activeCount.toString();
+          badgeEl.classList.remove('hidden');
+          floatingBadgeEl.textContent = activeCount.toString();
+          floatingBadgeEl.classList.remove('hidden');
+          floatingBadgeEl.classList.add('flex');
+          clearAllBtn.classList.remove('hidden');
+        } else {
+          badgeEl.classList.add('hidden');
+          floatingBadgeEl.classList.add('hidden');
+          clearAllBtn.classList.add('hidden');
+        }
+      }
+
+      // 4. Empty Results View
+      if (filtered.length === 0) {
+        productCards.forEach((c) => c.classList.add('hidden'));
+        noResultsEl?.classList.remove('hidden');
+        paginationNav?.classList.add('hidden');
+        return;
+      } else {
+        noResultsEl?.classList.add('hidden');
+        paginationNav?.classList.remove('hidden');
+      }
+
+      // 5. Paginate Cards
+      const totalPages = Math.ceil(filtered.length / state.itemsPerPage);
+      if (state.currentPage > totalPages) state.currentPage = 1;
+
+      const start = (state.currentPage - 1) * state.itemsPerPage;
+      const end = start + state.itemsPerPage;
+      const visibleSet = new Set(filtered.slice(start, end));
+
+      productCards.forEach((card) => card.classList.add('hidden'));
+      filtered.forEach((card) => {
+        if (visibleSet.has(card) && productContainer) {
+          card.classList.remove('hidden');
+          productContainer.appendChild(card);
+        }
+      });
+
+      // 6. Pagination UI
+      if (totalPages <= 1) {
+        paginationNav?.classList.add('hidden');
+      } else {
+        paginationNav?.classList.remove('hidden');
+        if (prevBtn) prevBtn.disabled = state.currentPage === 1;
+        if (nextBtn) nextBtn.disabled = state.currentPage === totalPages;
+
+        if (pageNumbersEl) {
+          pageNumbersEl.innerHTML = '';
+          for (let i = 1; i <= totalPages; i++) {
+            const btn = document.createElement('button');
+            btn.textContent = i.toString();
+            btn.className = `w-8 h-8 text-xs font-bold rounded-lg transition ${
+              i === state.currentPage
+                ? 'bg-black text-white shadow-xs'
+                : 'bg-white hover:bg-neutral-100 text-neutral-600 border border-neutral-200'
+            }`;
+            btn.addEventListener('click', () => {
+              state.currentPage = i;
+              render();
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+            pageNumbersEl.appendChild(btn);
+          }
+        }
+      }
+    }
+
+    // Filter Button Click Listener
+    document.querySelectorAll<HTMLButtonElement>('.filter-btn').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const key = btn.getAttribute('data-filter-key') as keyof FilterState;
+        const val = btn.getAttribute('data-filter-val');
+        if (!key || !val) return;
+
+        state.filters[key] = state.filters[key] === val ? null : val;
+
+        const siblingGroup = btn.closest('.filter-group');
+        siblingGroup?.querySelectorAll('.filter-btn').forEach((b) => {
+          const check = b.querySelector('.check-mark');
+          const isSelected = b.getAttribute('data-filter-val') === state.filters[key];
+
+          if (isSelected) {
+            b.classList.add('bg-black', 'text-white', 'border-black');
+            b.classList.remove('text-neutral-600', 'hover:bg-neutral-50', 'border-transparent', 'bg-white', 'text-neutral-800');
+            check?.classList.remove('hidden');
+          } else {
+            b.classList.remove('bg-black', 'text-white', 'border-black');
+            b.classList.add('text-neutral-600', 'border-transparent');
+            check?.classList.add('hidden');
+
+            if (key === 'size') {
+              b.classList.add('border-neutral-200', 'bg-white', 'text-neutral-800');
+            }
+          }
+        });
+
+        state.currentPage = 1;
+        render();
+      });
+    });
+
+    // Sort Dropdown Change
+    document.getElementById('sort-select')?.addEventListener('change', (e) => {
+      state.sort = (e.target as HTMLSelectElement).value;
+      render();
+    });
+
+    // Reset All Filters
+    function clearAll() {
+      (Object.keys(state.filters) as Array<keyof FilterState>).forEach((k) => {
+        state.filters[k] = null;
+      });
+      document.querySelectorAll('.filter-btn').forEach((b) => {
+        b.classList.remove('bg-black', 'text-white', 'border-black');
+        b.classList.add('text-neutral-600', 'border-transparent');
+        b.querySelector('.check-mark')?.classList.add('hidden');
+
+        if (b.getAttribute('data-filter-key') === 'size') {
+          b.classList.add('border-neutral-200', 'bg-white', 'text-neutral-800');
+        }
+      });
+      state.currentPage = 1;
+      render();
+    }
+
+    clearAllBtn?.addEventListener('click', clearAll);
+    document.getElementById('reset-filters-btn')?.addEventListener('click', clearAll);
+
+    // Pagination Controls
+    prevBtn?.addEventListener('click', () => {
+      if (state.currentPage > 1) {
+        state.currentPage--;
+        render();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    });
+
+    nextBtn?.addEventListener('click', () => {
+      state.currentPage++;
+      render();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    // Drawer Motion Handlers
+    const openBtn = document.getElementById('open-drawer-btn');
+    const closeBtn = document.getElementById('close-drawer-btn');
+    const applyBtn = document.getElementById('apply-mobile-btn');
+    const drawer = document.getElementById('filter-drawer');
+    const backdrop = document.getElementById('filter-backdrop');
+
+    openBtn?.addEventListener('click', () => {
+      drawer?.classList.remove('-translate-x-full');
+      backdrop?.classList.remove('opacity-0', 'pointer-events-none');
+      backdrop?.classList.add('opacity-100');
+      document.body.classList.add('overflow-hidden');
+    });
+
+    const closeDrawer = () => {
+      drawer?.classList.add('-translate-x-full');
+      backdrop?.classList.remove('opacity-100');
+      backdrop?.classList.add('opacity-0', 'pointer-events-none');
+      document.body.classList.remove('overflow-hidden');
+    };
+
+    closeBtn?.addEventListener('click', closeDrawer);
+    backdrop?.addEventListener('click', closeDrawer);
+    applyBtn?.addEventListener('click', closeDrawer);
+
+    // Expandable Filter Section Handles
+    document.querySelectorAll<HTMLButtonElement>('.view-more-btn').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const parent = btn.closest('.filter-group');
+        const list = parent?.querySelector('.filter-list');
+        if (list) {
+          const isExpanded = list.classList.contains('max-h-none');
+          if (isExpanded) {
+            list.classList.remove('max-h-none');
+            list.classList.add('max-h-40');
+            btn.textContent = '+ View More';
+          } else {
+            list.classList.remove('max-h-40', 'max-h-48');
+            list.classList.add('max-h-none');
+            btn.textContent = '- View Less';
+          }
+        }
+      });
+    });
+
+    // Run initial filter render
+    render();
+  }
+
+  document.addEventListener('astro:page-load', initFilters);
+  initFilters();
+</script>

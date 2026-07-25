@@ -2,7 +2,57 @@
 
 export const products = [
   /* ================= AFTERGLOW ORANGE (Oversized Edit) ================= */
+
   {
+    id: "ts-005",
+    title: "Abstract Art Print White Crewneck Tee",
+    slug: "abstract-art-print-white-crewneck-tee-ts005",
+    price: 799,
+    originalPrice: 1199,
+    collectionId: "afterglow-orange",
+    brand: "Unbranded / Thrifted",
+    
+    // Thrift Sizing System
+    taggedSize: "M",
+    fitsLike: "M (Relaxed Casual Fit)",
+    measurements: {
+      pitToPitInches: 19.0,
+      lengthInches: 24.5,
+      shoulderInches: 16.5
+    },
+
+    // Category & Style
+    category: "tshirt",
+    gender: "women",
+    style: ["minimalist", "casual", "streetwear"],
+    era: "Modern Thrift",
+
+    // Condition & Flaws (Using your 3-tier system)
+    condition: {
+      grade: "Tier 1",
+      label: "Superb",
+      description: "Clean white fabric with intact abstract artwork graphic featuring glitter accent details. No visible stains, holes, or fading."
+    },
+    flaws: [],
+
+    // Inventory Control
+    stock: 1,
+    isSold: false,
+    isFeatured: false,
+
+    // Media
+    images: {
+      main: "/product/abstract-art-print-white-crewneck-tee-ts005.webp",
+      flaws: [],
+      gallery: [
+          "/product/abstract-art-print-white-crewneck-tee-ts005.webp"
+        ]
+    },
+    alt: "White scoop crewneck t-shirt featuring an abstract muted print with text 'RECONNECT WITH NATURE AND EACH OTHER'"
+  },
+
+  /* ================= LUCID PURPLE (Statement Streetwear Edit) ================= */
+   {
     id: "top-004",
     title: "Floral Printed Noodle Strap Camisole Top",
     slug: "floral-printed-noodle-strap-camisole-top-top004",
@@ -50,222 +100,107 @@ export const products = [
     },
     alt: "White floral printed camisole top with thin spaghetti straps"
   },
-  {
-    id: "os-002",
-    title: "Washed Grey Fade Oversized Tee",
-    slug: "washed-grey-fade-oversized-tee-os002",
-    price: 949,
-    originalPrice: 1350,
-    collectionId: "afterglow-orange",
-    brand: "Zara",
 
-    taggedSize: "M",
-    fitsLike: "L (Oversized Cut)",
-    measurements: {
-      pitToPitInches: 22.5,
-      lengthInches: 28.0,
-      shoulderInches: 20.5
-    },
-
-    category: "tshirt",
-    gender: "unisex",
-    style: ["oversized", "streetwear", "vintage"],
-    era: "Modern Thrift",
-
-    condition: {
-      grade: "Grade B",
-      label: "Good Vintage",
-      description: "Light intentional wash fade across seams."
-    },
-    flaws: ["Light wash fade near hem"],
-
-    stock: 1,
-    isSold: false,
-    isFeatured: true,
-
-    images: {
-      main: "/images/products/grey-oversized-tee-front.png",
-      back: "/images/products/grey-oversized-tee-back.png",
-      flaws: [],
-      gallery: []
-    },
-    alt: "Washed grey oversized t-shirt with vintage fade"
-  },
-  {
-    id: "os-003",
-    title: "Beige Minimalist Heavyweight Tee",
-    slug: "beige-minimalist-heavyweight-tee-os003",
-    price: 899,
-    originalPrice: 1199,
-    collectionId: "afterglow-orange",
-    brand: "Uniqlo",
-
-    taggedSize: "XL",
-    fitsLike: "XL (Relaxed Fit)",
-    measurements: {
-      pitToPitInches: 24.0,
-      lengthInches: 29.0,
-      shoulderInches: 22.0
-    },
-
-    category: "tshirt",
-    gender: "unisex",
-    style: ["oversized", "minimalist"],
-    era: "Modern Thrift",
-
-    condition: {
-      grade: "Grade A",
-      label: "Mint / Like-New",
-      description: "Thick heavy cotton, clean neckline, ready to wear."
-    },
-    flaws: [],
-
-    stock: 1,
-    isSold: false,
-    isFeatured: false,
-
-    images: {
-      main: "/images/products/beige-oversized-tee-front.png",
-      back: "/images/products/beige-oversized-tee-back.png",
-      flaws: [],
-      gallery: []
-    },
-    alt: "Beige heavy cotton minimalist oversized tee"
-  },
-
-  /* ================= LUCID PURPLE (Statement Streetwear Edit) ================= */
-  {
-    id: "vt-001",
-    title: "Vintage Nike Center Swoosh Tee",
-    slug: "vintage-nike-center-swoosh-tee-vt001",
-    price: 1499,
-    originalPrice: 2000,
-    collectionId: "lucid-purple",
-    brand: "Nike",
-
-    taggedSize: "XL",
-    fitsLike: "L (Boxy Vintage Fit)",
+  /* ================= PULSE GREEN (Winter & Heavyweight Edit) ================= */
+{
+    id: "hd-002",
+    title: "Pastel Yellow Heavyweight Pullover Hoodie",
+    slug: "pastel-yellow-heavyweight-pullover-hoodie-hd002",
+    price: 1299,
+    originalPrice: 1799,
+    collectionId: "pulse-green",
+    brand: "Unbranded / Thrifted",
+    
+    // Thrift Sizing System
+    taggedSize: "L",
+    fitsLike: "L (Relaxed Drop-Shoulder Fit)",
     measurements: {
       pitToPitInches: 23.5,
       lengthInches: 27.5,
-      shoulderInches: 21.0
+      sleeveInches: 24.0,
+      shoulderInches: 22.0
     },
 
-    category: "tshirt",
-    gender: "unisex",
-    style: ["streetwear", "vintage", "retro"],
-    era: "90s / Single Stitch",
-
-    condition: {
-      grade: "Grade B",
-      label: "Good Vintage",
-      description: "Authentic 90s wash tone with light print cracking."
-    },
-    flaws: [
-      "Minor graphic micro-cracking",
-      "Slight fading around neck band"
-    ],
-
-    stock: 1,
-    isSold: false,
-    isFeatured: true,
-
-    images: {
-      main: "/images/products/nike-center-swoosh-front.png",
-      back: "/images/products/nike-center-swoosh-back.png",
-      flaws: ["/images/products/nike-center-swoosh-cracking.png"],
-      gallery: []
-    },
-    alt: "90s Vintage Nike Center Swoosh Navy Graphic T-Shirt"
-  },
-
-  /* ================= PULSE GREEN (Winter & Heavyweight Edit) ================= */
-  {
-    id: "sw-001",
-    title: "Sunfaded Heavyweight Grey Pullover Hoodie",
-    slug: "sunfaded-heavyweight-grey-pullover-hoodie-sw001",
-    price: 1899,
-    originalPrice: 2500,
-    collectionId: "pulse-green",
-    brand: "Puma",
-
-    taggedSize: "L",
-    fitsLike: "L (Heavyweight Relaxed)",
-    measurements: {
-      pitToPitInches: 24.5,
-      lengthInches: 28.0,
-      sleeveInches: 24.0
-    },
-
+    // Category & Style
     category: "sweatshirt",
     gender: "unisex",
-    style: ["winterwear", "streetwear"],
-    era: "Y2K (Early 2000s)",
+    style: ["streetwear", "winterwear", "minimalist", "oversized"],
+    era: "Modern Thrift",
 
+    // Condition & Flaws
     condition: {
-      grade: "Grade B",
-      label: "Good Vintage",
-      description: "Heavy fleece interior with nice lived-in wash."
+      grade: "Grade A",
+      label: "Mint / Like-New",
+      description: "Clean pastel yellow fabric, crisp ribbed cuffs and hem, sturdy drawstrings, and a spotless kangaroo pocket."
     },
-    flaws: ["Faint bleach speck near right cuff"],
+    flaws: [],
 
+    // Inventory Control
     stock: 1,
     isSold: false,
     isFeatured: true,
 
+    // Media
     images: {
-      main: "/images/products/grey-pullover-hoodie.png",
-      back: "/images/products/grey-pullover-hoodie-back.png",
-      flaws: ["/images/products/grey-hoodie-cuff-flaw.png"],
-      gallery: []
+      main: "/product/pastel-yellow-heavyweight-pullover-hoodie-hd002.webp",
+      flaws: [],
+      gallery: [
+        "/product/pastel-yellow-heavyweight-pullover-hoodie-hd002.webp"
+      ]
     },
-    alt: "Sunfaded heavyweight grey pullover hoodie"
+    alt: "Pastel yellow oversized pullover hoodie with front kangaroo pocket"
   },
 
+
+
+
   /* ================= ASTRAL BLUE (Retro Archive Edit) ================= */
-  {
-    id: "dn-001",
-    title: "Distressed Levi's 501 Sunfaded Denim",
-    slug: "distressed-levis-501-sunfaded-denim-dn001",
-    price: 2199,
-    originalPrice: 3000,
+{
+    id: "jk-001",
+    title: "Embellished Geometric Trim Denim Jacket",
+    slug: "embellished-geometric-trim-denim-jacket-jk001",
+    price: 1799,
+    originalPrice: 2499,
     collectionId: "astral-blue",
-    brand: "Levi’s",
-
-    taggedSize: "W34 L32",
-    fitsLike: "W32 L30 (Shrunken Vintage Fit)",
+    brand: "Unbranded / Thrifted",
+    
+    // Thrift Sizing System
+    taggedSize: "M",
+    fitsLike: "M (Structured Fit)",
     measurements: {
-      waistInches: 32.0,
-      lengthInches: 40.0,
-      inseamInches: 30.0,
-      legOpeningInches: 8.0
+      pitToPitInches: 19.5,
+      lengthInches: 22.0,
+      sleeveInches: 23.5,
+      shoulderInches: 16.5
     },
 
-    category: "jeans",
-    gender: "unisex",
-    style: ["vintage", "retro", "distressed"],
-    era: "90s Archive",
+    // Category & Style
+    category: "jacket",
+    gender: "women",
+    style: ["vintage", "retro", "boho", "streetwear"],
+    era: "Y2K / Early 00s",
 
+    // Condition & Flaws
     condition: {
-      grade: "Grade C",
-      label: "Distressed / Well-Loved",
-      description: "Heavy natural distressing with sun-faded patina."
+      grade: "Grade A",
+      label: "Mint / Like-New",
+      description: "Medium-wash denim with intricate beaded geometric trim along the shoulder yoke, chest pocket flap, and hem. All buttons and embellishments intact."
     },
-    flaws: [
-      "Knee blowout distressing",
-      "Fraying on back heel hem"
-    ],
+    flaws: [],
 
+    // Inventory Control
     stock: 1,
     isSold: false,
     isFeatured: true,
 
+    // Media
     images: {
-      main: "/images/products/levis-501-front.png",
-      back: "/images/products/levis-501-back.png",
-      flaws: ["/images/products/levis-501-knee-flaw.png"],
-      gallery: []
+      main: "/product/embellished-geometric-trim-denim-jacket-jk001.webp",
+      flaws: [],
+      gallery: [
+        "/product/embellished-geometric-trim-denim-jacket-jk001.webp"
+      ]
     },
-    alt: "Vintage distressed Levi's 501 sunfaded denim jeans"
+    alt: "Medium wash blue denim jacket featuring beaded geometric embroidery on shoulders and hem"
   }
 ];

@@ -1,0 +1,65 @@
+---
+// src/components/Pagination.astro
+interface Props {
+  currentPage: number;
+  totalPages: number;
+}
+
+const { currentPage, totalPages } = Astro.props;
+
+if (totalPages <= 1) return null;
+
+const currentUrl = Astro.url;
+
+function getPageUrl(pageNumber: number) {
+  const url = new URL(currentUrl);
+  url.searchParams.set("page", pageNumber.toString());
+  return url.pathname + url.search;
+}
+---
+
+<nav class="flex items-center justify-center gap-2 mt-16 pt-8 border-t border-neutral-200">
+  <!-- PREVIOUS -->
+  {currentPage > 1 ? (
+    <a
+      href={getPageUrl(currentPage - 1)}
+      class="px-4 py-2 text-sm font-medium border border-neutral-300 rounded-md hover:bg-neutral-100 transition"
+    >
+      Previous
+    </a>
+  ) : (
+    <span class="px-4 py-2 text-sm font-medium border border-neutral-200 rounded-md text-neutral-300 cursor-not-allowed">
+      Previous
+    </span>
+  )}
+
+  <!-- PAGE NUMBERS -->
+  <div class="flex items-center gap-1">
+    {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+      <a
+        href={getPageUrl(page)}
+        class={`px-3.5 py-2 text-sm font-medium rounded-md transition ${
+          page === currentPage
+            ? "bg-black text-white"
+            : "hover:bg-neutral-100 text-neutral-700"
+        }`}
+      >
+        {page}
+      </a>
+    ))}
+  </div>
+
+  <!-- NEXT -->
+  {currentPage < totalPages ? (
+    <a
+      href={getPageUrl(currentPage + 1)}
+      class="px-4 py-2 text-sm font-medium border border-neutral-300 rounded-md hover:bg-neutral-100 transition"
+    >
+      Next
+    </a>
+  ) : (
+    <span class="px-4 py-2 text-sm font-medium border border-neutral-200 rounded-md text-neutral-300 cursor-not-allowed">
+      Next
+    </span>
+  )}
+</nav>
