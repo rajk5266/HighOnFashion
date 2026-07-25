@@ -11,13 +11,14 @@ const {
   alt = title,
   sizes = [],
   collectionId = "",
+  isFirst = false,
 } = Astro.props;
 
 // Original full-res image from static.domain.com
 const finalImage = imageUrl(image);
 
-// Generate 450px WebP thumbnail on the fly via wsrv.nl (~20-30KB)
-const thumbnailUrl = `https://wsrv.nl/?url=${encodeURIComponent(finalImage)}&w=450&q=80&output=webp`;
+// Generate 350px WebP thumbnail on the fly via wsrv.nl (~20-30KB)
+const thumbnailUrl = `https://wsrv.nl/?url=${encodeURIComponent(finalImage)}&w=350&q=75&output=webp`;
 
 // Snipcart stable product URL
 const itemUrl = collectionId
@@ -28,14 +29,17 @@ const itemUrl = collectionId
 <article
   class="group flex flex-col justify-between h-full bg-white border border-neutral-200/60 rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-300"
 >
-  <div>
+  <a href={`/product/${slug}`} class="block flex-1">
     <!-- IMAGE WITH LIGHTBOX TRIGGER -->
-    <div class="relative aspect-[3/4] overflow-hidden bg-neutral-100 cursor-pointer">
+    <div
+      class="relative aspect-[3/4] overflow-hidden bg-neutral-100 cursor-pointer"
+    >
       <img
         src={thumbnailUrl}
         alt={alt}
-        loading="lazy"
-        decoding="async"
+        loading={isFirst ? "eager" : "lazy"}
+        fetchpriority={isFirst ? "high" : "auto"}
+        decoding={isFirst ? "sync" : "async"}
         class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 product-lightbox-trigger"
         data-full-img={finalImage}
         data-title={title}
@@ -44,29 +48,29 @@ const itemUrl = collectionId
 
     <!-- PRODUCT TITLE & DETAILS -->
     <div class="p-4">
-      <a href={`/product/${slug}`} class="block hover:underline">
-        <h3 class="text-sm font-medium leading-snug text-neutral-800">
-          {title}
-        </h3>
-      </a>
+      <h3
+        class="text-sm font-medium leading-snug text-neutral-800 hover:underline"
+      >
+        {title}
+      </h3>
       <p class="text-sm text-neutral-500 mt-1 font-semibold">
         ₹{price}
       </p>
     </div>
-  </div>
-
+  </a>
   <!-- SNIPCART BUTTON -->
-  <div class="p-4 pt-0">
-    <button
-      type="button"
-      class="snipcart-add-item w-full bg-black text-white text-xs font-bold uppercase tracking-wider py-2.5 px-4 rounded-lg hover:bg-neutral-800 active:scale-95 transition"
-      data-item-id={id}
-      data-item-name={title}
-      data-item-price={price}
-      data-item-image={finalImage}
-      data-item-url={itemUrl}
-    >
-      Add to Cart
-    </button>
-  </div>
+<div class="p-4 pt-0">
+  <button
+    type="button"
+    class="snipcart-add-item w-full bg-black text-white text-xs font-bold uppercase tracking-wider py-2.5 px-4 rounded-lg hover:bg-neutral-800 active:scale-95 transition"
+    data-item-id={id}
+    data-item-name={title}
+    data-item-price={price}
+    data-item-image={finalImage}
+    data-item-url={itemUrl}
+  >
+    Add to Cart
+  </button>
+</div>
+
 </article>

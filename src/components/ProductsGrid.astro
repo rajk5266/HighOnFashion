@@ -10,7 +10,7 @@ const { products = [] } = Astro.props;
     <p class="text-center text-neutral-500">No products available.</p>
   ) : (
     <div data-product-grid class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 gap-6">
-      {products.map((product: any) => (
+      {products.map((product: any, index: number) => (
         <div
           data-product-card
           data-collection={product.collectionId || ""}
@@ -29,6 +29,7 @@ const { products = [] } = Astro.props;
             alt={product.alt}
             sizes={product.sizes}
             collectionId={product.collectionId}
+            isFirst={index === 0}
           />
         </div>
       ))}

@@ -19,18 +19,39 @@ const {
   <head>
     <meta charset="UTF-8" />
     <meta name="description" content={description} />
-    <meta name="viewport" content="width=device-width" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
 
-    <!-- Snipcart Integration Preconnect -->
+    <!-- Preconnects for High-Priority Assets -->
+    <link rel="preconnect" href="https://wsrv.nl" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="preconnect" href="https://app.snipcart.com" />
     <link rel="preconnect" href="https://cdn.snipcart.com" />
 
-    <!-- Official Snipcart Injection Script -->
-    <!-- Official Snipcart Injection Script inside Layout.astro Head -->
-    <!-- Official Snipcart Injection Script -->
+    <!-- Google Fonts with display=swap -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- FontAwesome (Loaded Non-Blocking) -->
+    <link
+      rel="preload"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      as="style"
+      onload="this.onload=null;this.rel='stylesheet'"
+    />
+    <noscript>
+      <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      />
+    </noscript>
+
+    <!-- Deferred Snipcart Integration (Loads on Interaction or 3s Timeout) -->
     <script
       is:inline
       define:vars={{ apiKey: import.meta.env.PUBLIC_SNIPCART_API_KEY }}
@@ -40,6 +61,8 @@ const {
         version: "3.4.0",
         modalStyle: "side",
         currency: "inr",
+        loadStrategy: "on-user-interaction", // <-- Fixes initial render blocking!
+        timeoutDuration: 3000,
       };
 
       (function () {
@@ -136,7 +159,7 @@ const {
       })();
     </script>
 
-    <!-- Google Site Metrics / Fonts -->
+    <!-- Google Tag Manager (Partytown) -->
     <meta
       name="google-site-verification"
       content="3bcyg-NkwfnNRkaX8WaYyUQWjDrsEYb2kz6-wIyvHxQ"
@@ -153,18 +176,6 @@ const {
         f.parentNode.insertBefore(j, f);
       })(window, document, "script", "dataLayer", "GTM-K2M5G63N");
     </script>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:wght@400;600;700&display=swap"
-      rel="stylesheet"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
-      crossorigin="anonymous"
-      referrerpolicy="no-referrer"
-    />
   </head>
 
   <body
@@ -185,8 +196,5 @@ const {
     </main>
 
     <Footer />
-
-    <!-- ⚠️ Note: The duplicate hardcoded div container has been removed from here. -->
-    <!-- Snipcart's script snippet will dynamically spawn it inside the body automatically with your defined configuration props! -->
   </body>
 </html>
