@@ -193,7 +193,7 @@ export const products = [
       main: "/product/pink-floral-blouse-front.webp",
       flaws: [],
       gallery: [
-        "/product/pink-floral-blouse-print-front.webp"
+        "/product/pink-floral-blouse-front.webp"
       ]
     },
     alt: "Sheer pink and green floral print long-sleeve blouse with smocked hem and split neckline"
