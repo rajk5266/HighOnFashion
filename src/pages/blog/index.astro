@@ -2,7 +2,7 @@
 import Layout from "../../layouts/Layout.astro";
 import Hero from "../../components/Hero.astro";
 import BlogCard from "../../components/Blog/BlogCard.astro";
-import heroBg from "../../assets/hero-bg.png";
+import heroBg from "../../assets/hof_banner.webp";
 import { getCollection } from "astro:content";
 
 const posts = await getCollection("blog", ({ data }) => !data.draft);
