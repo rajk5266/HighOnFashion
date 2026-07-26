@@ -67,7 +67,7 @@ Editorial thrift is built on thought.
 When thrift is approached editorially, it stops being random.  
 It becomes curated, expressive, and elevated.
 
-![Layered vintage outfits styled editorially](../../assets/blog/highonfashion-collections.jpg)
+<!-- ![Layered vintage outfits styled editorially](../../assets/blog/highonfashion-collections.jpg) -->
 
 *Layered vintage pieces styled with intention — proof that pre-loved can feel contemporary.*
 
