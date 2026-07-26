@@ -5,10 +5,8 @@ import ProductsGrid from "../../components/ProductsGrid.astro";
 import FilterSidebar from "../../components/FilterSidebar.astro";
 
 import { products } from "../../data/products";
-// import { FeaturedCollections } from "../../data/collections";
 
 // Safely extract filter lists with fallbacks
-// const collections = FeaturedCollections ? FeaturedCollections.map((c) => ({ id: c.id, name: c.name })) : [];
 const categories = products ? [...new Set(products.map((p) => p.category).filter(Boolean))] : [];
 const sizes = products ? [...new Set(products.map((p) => p.taggedSize).filter(Boolean))] : [];
 const styles = products ? [...new Set(products.flatMap((p) => p.style || []).filter(Boolean))] : [];
@@ -33,7 +31,7 @@ const brands = products ? [...new Set(products.map((p) => p.brand).filter(Boolea
       styles={styles}
       brands={brands}
     >
-      <ProductsGrid products={products} />
+      <ProductsGrid products={products} initialLimit={4} />
     </FilterSidebar>
   </section>
 </Layout>

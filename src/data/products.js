@@ -198,6 +198,53 @@ export const products = [
     },
     alt: "Sheer pink and green floral print long-sleeve blouse with smocked hem and split neckline"
   },
+  {
+    id: "top-007",
+    title: "White Sleeveless Eyelet Crochet Lace Top",
+    slug: "white-sleeveless-eyelet-crochet-lace-top-top007",
+    price: 99,
+    // originalPrice: 1299,
+    collectionId: "lucid-purple",
+    brand: "STEPS",
+    
+    // Thrift Sizing System
+    taggedSize: "M",
+    fitsLike: "M (Boxy Regular Fit)",
+    measurements: {
+      pitToPitInches: 18.0,
+      lengthInches: 22.5,
+      shoulderInches: 13.5
+    },
+
+    // Category & Style
+    category: "tops",
+    gender: "women",
+    style: ["boho", "vintage", "summerwear", "minimalist"],
+    era: "Modern Thrift",
+
+    // Condition & Flaws (Using your 3-tier system)
+    condition: {
+      grade: "Tier 1",
+      label: "Superb",
+      description: "Intricate circular eyelet crochet overlay with clean inner lining. Back button closure intact with zero discoloration, pulls, or loose threads."
+    },
+    flaws: [],
+
+    // Inventory Control
+    stock: 1,
+    isSold: false,
+    isFeatured: true,
+
+    // Media
+    images: {
+      main: "/product/white-crochet-top-front.webp",
+      flaws: [],
+      gallery: [
+        "/product/white-crochet-top-front.webp"
+      ]
+    },
+    alt: "White sleeveless crewneck top with geometric circular crochet lace overlay and sheer hem"
+  },
 
   /* ================= PULSE GREEN (Winter & Heavyweight Edit) ================= */
   {
@@ -300,5 +347,105 @@ export const products = [
       ]
     },
     alt: "Medium wash blue denim jacket featuring beaded geometric embroidery on shoulders and hem"
-  }
+  },
+  {
+    id: "jk-002",
+    title: "Light Wash Hooded Chambray Utility Jacket",
+    slug: "light-wash-hooded-chambray-utility-jacket-jk002",
+    price: 299,
+    // originalPrice: 299,
+    collectionId: "astral-blue",
+    brand: "SERRA",
+    
+    // Thrift Sizing System
+    taggedSize: "14",
+    fitsLike: "L (Relaxed Layering Fit)",
+    measurements: {
+      pitToPitInches: 21.5,
+      lengthInches: 25.0,
+      sleeveInches: 24.0,
+      shoulderInches: 17.5
+    },
+
+    // Category & Style
+    category: "jacket",
+    gender: "women",
+    style: ["streetwear", "utility", "casual", "vintage"],
+    era: "Modern Thrift",
+
+    // Condition & Flaws (Using your 3-tier system)
+    condition: {
+      grade: "Tier 1",
+      label: "Superb",
+      description: "Soft lightweight denim fabric with clean snap buttons, working front zipper, drawstring hem, and an attached hood. No visible stains or tears."
+    },
+    flaws: [],
+
+    // Inventory Control
+    stock: 1,
+    isSold: false,
+    isFeatured: true,
+
+    // Media
+    images: {
+      main: "/product/light-chambray-jacket-front.webp",
+      flaws: [],
+      gallery: [
+        "/product/light-chambray-jacket-front.webp"
+      ]
+    },
+    alt: "Light wash denim chambray hooded utility jacket with front snap pockets and drawstring hem"
+  },
+  {
+    id: "pt-002",
+    title: "Vintage Earth Brown Corduroy Trousers",
+    slug: "vintage-earth-brown-corduroy-trousers-pt002",
+    price: 199,
+    // originalPrice: 1699,
+    collectionId: "astral-blue",
+    brand: "Unbranded / Thrifted",
+    
+    // Thrift Sizing System
+    taggedSize: "W32",
+    fitsLike: "W32 L31 (Straight Leg Fit)",
+    measurements: {
+      waistInches: 32.0,
+      lengthInches: 41.0,
+      inseamInches: 31.0,
+      legOpeningInches: 8.5
+    },
+
+    // Category & Style
+    category: "jeans",
+    gender: "unisex",
+    style: ["vintage", "retro", "streetwear", "minimalist"],
+    era: "90s Archive",
+
+    // Condition & Flaws (3-Tier System)
+    condition: {
+      grade: "Tier 2",
+      label: "Good",
+      description: "Rich earth-brown corduroy fabric with natural, gentle knee wear/fading consistent with authentic vintage character. Waistband lining and hardware intact."
+    },
+    flaws: [
+      "Subtle knee fade/wear from natural use"
+    ],
+
+    // Inventory Control
+    stock: 1,
+    isSold: false,
+    isFeatured: true,
+
+    // Media
+    images: {
+      main: "/product/brown-corduroy-pants-front.webp",
+      flaws: [
+      ],
+      gallery: [
+        "/product/brown-corduroy-pants-front.webp",
+        "/product/brown-corduroy-pants-back.webp",
+      ]
+    },
+    alt: "Vintage earth brown ribbed corduroy straight-leg trousers"
+  },
 ];

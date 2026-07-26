@@ -2,37 +2,116 @@
 // src/components/ProductsGrid.astro
 import ProductCard from "./ProductCard.astro";
 
-const { products = [] } = Astro.props;
+interface Props {
+  products: any[];
+  initialLimit?: number; // Limits how many products are shown initially
+}
+
+const { products = [], initialLimit = 4 } = Astro.props;
 ---
 
 {
   products.length === 0 ? (
     <p class="text-center text-neutral-500">No products available.</p>
   ) : (
-    <div data-product-grid class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 gap-6">
-      {products.map((product: any, index: number) => (
-        <div
-          data-product-card
-          data-collection={product.collectionId || ""}
-          data-category={product.category || ""}
-          data-size={product.taggedSize || ""}
-          data-style={Array.isArray(product.style) ? product.style.join(",") : product.style || ""}
-          data-brand={product.brand || ""}
-          data-price={product.price || 0}
-        >
-          <ProductCard
-            id={product.id}
-            slug={product.slug}
-            title={product.title}
-            price={product.price}
-            image={product.images?.main}
-            alt={product.alt}
-            sizes={product.sizes}
-            collectionId={product.collectionId}
-            isFirst={index === 0}
-          />
+    <div class="w-full">
+      {/* GRID CONTAINER */}
+      <div
+        data-product-grid
+        class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 gap-6"
+      >
+        {products.map((product: any, index: number) => {
+          const isHiddenInitially = index >= initialLimit;
+          return (
+            <div
+              data-product-card
+              data-collection={product.collectionId || ""}
+              data-category={product.category || ""}
+              data-size={product.taggedSize || ""}
+              data-style={
+                Array.isArray(product.style)
+                  ? product.style.join(",")
+                  : product.style || ""
+              }
+              data-brand={product.brand || ""}
+              data-price={product.price || 0}
+              class={`product-card-wrapper transition-all duration-300 ${
+                isHiddenInitially ? "js-paginated-hidden" : ""
+              }`}
+              style={isHiddenInitially ? "display: none;" : ""}
+            >
+              <ProductCard
+                id={product.id}
+                slug={product.slug}
+                title={product.title}
+                price={product.price}
+                image={product.images?.main}
+                alt={product.alt}
+                sizes={product.sizes}
+                collectionId={product.collectionId}
+                isFirst={index === 0}
+              />
+            </div>
+          );
+        })}
+      </div>
+
+      {/* VIEW MORE BUTTON */}
+      {products.length > initialLimit && (
+        <div id="load-more-wrapper" class="mt-12 text-center">
+          <button
+            id="load-more-btn"
+            type="button"
+            data-batch-limit={initialLimit}
+            class="px-8 py-3.5 bg-black text-white text-sm font-semibold rounded-full hover:bg-neutral-800 transition active:scale-95 cursor-pointer inline-flex items-center gap-2"
+          >
+            <span>View More Products</span>
+          </button>
         </div>
-      ))}
+      )}
     </div>
   )
 }
+
+<script>
+  function setupPagination() {
+    const loadMoreBtn = document.getElementById("load-more-btn");
+    const loadMoreWrapper = document.getElementById("load-more-wrapper");
+
+    if (!loadMoreBtn || !loadMoreWrapper) return;
+
+    const limit = parseInt(
+      loadMoreBtn.getAttribute("data-batch-limit") || "4",
+      10
+    );
+
+    loadMoreBtn.onclick = () => {
+      // Find items currently hidden by pagination
+      const hiddenCards = Array.from(
+        document.querySelectorAll<HTMLElement>(".product-card-wrapper.js-paginated-hidden")
+      );
+
+      let count = 0;
+      for (const card of hiddenCards) {
+        // Show item
+        card.style.display = "";
+        card.classList.remove("js-paginated-hidden");
+        count++;
+        if (count >= limit) break;
+      }
+
+      // Check if any items are still hidden
+      const remainingHidden = document.querySelectorAll(
+        ".product-card-wrapper.js-paginated-hidden"
+      );
+
+      if (remainingHidden.length === 0) {
+        loadMoreWrapper.style.display = "none";
+      }
+    };
+  }
+
+  // Support both normal load and Astro View Transitions
+  document.addEventListener("DOMContentLoaded", setupPagination);
+  document.addEventListener("astro:page-load", setupPagination);
+</script>
