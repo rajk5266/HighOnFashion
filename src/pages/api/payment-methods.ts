@@ -1,21 +1,38 @@
 /**
  * src/pages/api/payment-methods.ts
  *
- * Astro server endpoint — works with `npm run dev` AND Vercel production.
- *
  * Snipcart calls this (POST) to discover available custom payment methods.
  * We validate the publicToken then return Razorpay as the payment option.
  *
  * Snipcart Dashboard → Payment Gateway → Custom Gateway
- * → Payment Methods URL: https://your-domain.com/api/payment-methods
+ * → Payment Methods URL: https://your-public-host/api/payment-methods
  */
 
-export const prerender = false; // Server-rendered (not static)
+export const prerender = false;
 
 import type { APIRoute } from 'astro';
 
+function publicOrigin(request: Request, astroUrl: URL): string {
+  const envSite = (import.meta.env.SITE_URL || import.meta.env.PUBLIC_SITE_URL || '').replace(/\/$/, '');
+  if (envSite) return envSite;
+
+  const headers = request.headers;
+  const forwardedProto =
+    headers.get('x-forwarded-proto')?.split(',')[0]?.trim() ||
+    (astroUrl.protocol === 'https:' ? 'https' : 'http');
+  const forwardedHost =
+    headers.get('x-forwarded-host')?.split(',')[0]?.trim() ||
+    headers.get('host') ||
+    astroUrl.host;
+
+  let origin = `${forwardedProto}://${forwardedHost}`;
+  if (origin.startsWith('http://') && !origin.includes('localhost')) {
+    origin = origin.replace(/^http:\/\//, 'https://');
+  }
+  return origin;
+}
+
 export const POST: APIRoute = async ({ request, url: astroUrl }) => {
-  // ── CORS headers ─────────────────────────────────────────────────────────
   const corsHeaders = {
     'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Methods': 'POST, OPTIONS',
@@ -23,51 +40,50 @@ export const POST: APIRoute = async ({ request, url: astroUrl }) => {
     'Content-Type': 'application/json',
   };
 
-  // ── Parse body ────────────────────────────────────────────────────────────
-  let body: { publicToken?: string } = {};
+  let body: { publicToken?: string; PublicToken?: string } = {};
   try {
     body = await request.json();
   } catch {
+    console.error('[payment-methods] invalid JSON body');
     return new Response(JSON.stringify({ error: 'Invalid JSON body' }), {
       status: 400,
       headers: corsHeaders,
     });
   }
 
-  const { publicToken } = body;
+  const publicToken = body.publicToken || body.PublicToken;
 
   if (!publicToken) {
+    console.error('[payment-methods] missing publicToken', Object.keys(body));
     return new Response(JSON.stringify({ error: 'Missing publicToken' }), {
       status: 400,
       headers: corsHeaders,
     });
   }
 
-  // ── Validate token with Snipcart ──────────────────────────────────────────
   try {
     const validationRes = await fetch(
       `https://payment.snipcart.com/api/public/custom-payment-gateway/validate?publicToken=${encodeURIComponent(publicToken)}`
     );
 
     if (!validationRes.ok) {
+      const text = await validationRes.text().catch(() => '');
+      console.error('[payment-methods] Snipcart validate failed', validationRes.status, text.slice(0, 200));
       return new Response(JSON.stringify({ error: 'Invalid or expired publicToken' }), {
         status: 401,
         headers: corsHeaders,
       });
     }
   } catch (err) {
+    console.error('[payment-methods] validate network error', err);
     return new Response(JSON.stringify({ error: 'Failed to validate with Snipcart' }), {
       status: 500,
       headers: corsHeaders,
     });
   }
 
-  // ── Build checkout URL ────────────────────────────────────────────────────
-  // Use request headers to automatically adapt to ngrok, localhost, Vercel, or custom domains.
-  const headers = request.headers;
-  const forwardedProto = headers.get('x-forwarded-proto') || (astroUrl.protocol === 'https:' ? 'https' : 'http');
-  const forwardedHost = headers.get('x-forwarded-host') || headers.get('host') || astroUrl.host;
-  const siteUrl = `${forwardedProto}://${forwardedHost}`;
+  const siteUrl = publicOrigin(request, astroUrl);
+  console.log('[payment-methods] ok, checkout via', siteUrl);
 
   return new Response(
     JSON.stringify([
@@ -82,7 +98,6 @@ export const POST: APIRoute = async ({ request, url: astroUrl }) => {
   );
 };
 
-// Handle OPTIONS preflight
 export const OPTIONS: APIRoute = async () => {
   return new Response(null, {
     status: 200,

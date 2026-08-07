@@ -1,6 +1,7 @@
 ---
 // src/components/ProductCard.astro
 import { imageUrl } from "../utils/image";
+import { publicUrl } from "../utils/publicUrl";
 
 const {
   id,
@@ -20,10 +21,8 @@ const finalImage = imageUrl(image);
 // Generate 350px WebP thumbnail on the fly via wsrv.nl (~20-30KB)
 const thumbnailUrl = `https://wsrv.nl/?url=${encodeURIComponent(finalImage)}&w=350&q=75&output=webp`;
 
-// Snipcart stable product URL
-const itemUrl = collectionId
-  ? new URL(`/collection/${collectionId}`, Astro.url).href
-  : Astro.url.href;
+// Snipcart crawler must hit the HTTPS product page for this id/price.
+const itemUrl = publicUrl(`/product/${slug}`, Astro.url, Astro.request);
 ---
 
 <article

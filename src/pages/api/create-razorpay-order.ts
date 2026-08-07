@@ -96,9 +96,15 @@ export const POST: APIRoute = async ({ request }) => {
         customer_email: invoice.email || '',
       },
     });
-  } catch (err) {
+  } catch (err: any) {
+    const detail =
+      err?.error?.description ||
+      err?.error?.reason ||
+      err?.message ||
+      'Failed to create Razorpay order';
+    console.error('[create-razorpay-order]', detail, err?.error || err);
     return new Response(
-      JSON.stringify({ error: 'Failed to create Razorpay order' }),
+      JSON.stringify({ error: detail }),
       { status: 500, headers: corsHeaders }
     );
   }

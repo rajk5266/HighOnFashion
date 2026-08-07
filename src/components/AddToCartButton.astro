@@ -2,6 +2,7 @@
 // src/components/AddToCartButton.astro
 
 import type { Product } from "../types/product";
+import { publicUrl } from "../utils/publicUrl";
 
 
 interface Props {
@@ -10,10 +11,8 @@ interface Props {
 
 const { product } = Astro.props;
 
-// Snipcart's crawler runs server-side and needs a full absolute URL to validate products.
-// Using Astro.url ensures the correct domain is used in every environment
-// (ngrok, localhost, Vercel production, custom domain).
-const currentUrl = new URL(`/products/${product.slug}`, Astro.url).href;
+// Snipcart crawler needs an absolute HTTPS URL matching /product/[slug].
+const currentUrl = publicUrl(`/product/${product.slug}`, Astro.url, Astro.request);
 ---
 
 <button
