@@ -65,6 +65,7 @@ const {
         currency: "inr",
         loadStrategy: "on-user-interaction", // <-- Fixes initial render blocking!
         timeoutDuration: 3000,
+        templatesUrl: "/snipcart-templates.html",
       };
 
       (function () {
@@ -131,6 +132,8 @@ const {
             (n.dataset.apiKey = window.SnipcartSettings.publicApiKey),
             (n.dataset.configModalStyle = window.SnipcartSettings.modalStyle),
             (n.dataset.currency = window.SnipcartSettings.currency),
+            window.SnipcartSettings.templatesUrl &&
+              (n.dataset.templatesUrl = window.SnipcartSettings.templatesUrl),
             document.body.appendChild(n),
             i ||
               ((i = document.createElement("script")),

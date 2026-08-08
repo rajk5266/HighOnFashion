@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Snipcart templates</title>
+  </head>
+  <body>
+    <div id="snipcart-templates">
+      <!-- Require phone on billing address (Shiprocket needs it) -->
+      <address-fields section="top">
+        <div>
+          <snipcart-label class="snipcart__font--tiny" for="phone">
+            Phone
+          </snipcart-label>
+          <snipcart-input name="phone" type="tel" required></snipcart-input>
+          <snipcart-error-message name="phone"></snipcart-error-message>
+        </div>
+      </address-fields>
+    </div>
+  </body>
+</html>

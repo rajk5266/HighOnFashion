@@ -136,8 +136,17 @@ export type SnipcartOrder = {
   shippingFees?: number;
   billingAddress?: ShiprocketAddress | null;
   shippingAddress?: ShiprocketAddress | null;
+  billingAddressPhone?: string | null;
+  shippingAddressPhone?: string | null;
   shipToBillingAddress?: boolean;
   items?: SnipcartOrderItem[];
+  customFields?: Array<{ name?: string; value?: string; displayValue?: string }>;
+  user?: {
+    billingAddress?: ShiprocketAddress | null;
+    shippingAddress?: ShiprocketAddress | null;
+    billingAddressPhone?: string | null;
+    shippingAddressPhone?: string | null;
+  } | null;
 };
 
 export type ShiprocketAdhocPayload = ReturnType<typeof mapSnipcartToShiprocket>;
@@ -167,14 +176,42 @@ function digitsOnly(value?: string | null): string {
   return (value || '').replace(/\D/g, '');
 }
 
-function toPhone(value?: string | null): number {
+function toPhone(value?: string | null, label = 'phone'): number {
   const digits = digitsOnly(value);
   const phone = digits.length > 10 ? digits.slice(-10) : digits;
   const n = parseInt(phone || '0', 10);
   if (!n || phone.length < 10) {
-    throw new Error(`Invalid phone number for Shiprocket: "${value || ''}"`);
+    throw new Error(
+      `Invalid ${label} for Shiprocket: "${value || ''}". Snipcart order must include a 10-digit phone.`
+    );
   }
   return n;
+}
+
+/** Resolve phone from order addresses, flat fields, custom fields, or env fallback. */
+function resolvePhone(order: SnipcartOrder, billing: ShiprocketAddress, shipping: ShiprocketAddress): string {
+  const customPhone = (order.customFields || []).find((f) =>
+    /phone|mobile|contact/i.test(f.name || '')
+  );
+
+  const candidates = [
+    billing.phone,
+    shipping.phone,
+    order.billingAddressPhone,
+    order.shippingAddressPhone,
+    order.user?.billingAddress?.phone,
+    order.user?.shippingAddress?.phone,
+    order.user?.billingAddressPhone,
+    order.user?.shippingAddressPhone,
+    customPhone?.value,
+    customPhone?.displayValue,
+    env('SHIPROCKET_FALLBACK_PHONE', false),
+  ];
+
+  for (const c of candidates) {
+    if (c && digitsOnly(c).length >= 10) return String(c);
+  }
+  return '';
 }
 
 function toPincode(value?: string | null): number {
@@ -263,6 +300,10 @@ export function mapSnipcartToShiprocket(order: SnipcartOrder) {
   breadth = Math.max(0.5, breadth);
   height = Math.max(0.5, height);
 
+  const phone = resolvePhone(order, billing, shipping);
+  const billingPhone = toPhone(phone, 'billing phone');
+  const shippingPhone = billingPhone;
+
   const subTotal =
     typeof order.subtotal === 'number'
       ? order.subtotal
@@ -283,7 +324,7 @@ export function mapSnipcartToShiprocket(order: SnipcartOrder) {
     billing_state: billing.province || billing.city || '',
     billing_country: countryName(billing.country),
     billing_email: order.email || 'orders@highonfashion.in',
-    billing_phone: toPhone(billing.phone || shipping.phone),
+    billing_phone: billingPhone,
     shipping_is_billing: shipToBilling,
     shipping_customer_name: shippingFirst,
     shipping_last_name: shippingLast,
@@ -294,7 +335,7 @@ export function mapSnipcartToShiprocket(order: SnipcartOrder) {
     shipping_state: shipping.province || shipping.city || '',
     shipping_country: countryName(shipping.country || billing.country),
     shipping_email: order.email || 'orders@highonfashion.in',
-    shipping_phone: toPhone(shipping.phone || billing.phone),
+    shipping_phone: shippingPhone,
     order_items: orderItems,
     payment_method: isCod(order) ? 'COD' : 'Prepaid',
     shipping_charges: Number(order.shippingFees || 0),

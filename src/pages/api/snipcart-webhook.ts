@@ -104,21 +104,23 @@ export const POST: APIRoute = async ({ request }) => {
 
     console.log('[snipcart-webhook] done', JSON.stringify(result));
 
+    const hardFail = result.steps.create !== 'ok';
     return new Response(
       JSON.stringify({
         ok: result.errors.length === 0,
         ...result,
       }),
-      { status: 200, headers: corsHeaders }
+      { status: hardFail ? 500 : 200, headers: corsHeaders }
     );
   } catch (err: any) {
     console.error('[snipcart-webhook] failed', err?.message || err);
+    // Non-200 so Snipcart history shows the failure clearly
     return new Response(
       JSON.stringify({
         ok: false,
         error: err?.message || 'Shiprocket fulfillment failed',
       }),
-      { status: 200, headers: corsHeaders }
+      { status: 500, headers: corsHeaders }
     );
   }
 };

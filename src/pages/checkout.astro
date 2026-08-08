@@ -1,17 +1,9 @@
 ---
-// src/pages/checkout.astro
-// ──────────────────────────────────────────────────────────────────────────
-// This page is the "external checkout" URL that Snipcart redirects to when a
-// customer selects Razorpay as their payment method.
-//
-// Flow:
-//  1. Snipcart sends the customer here with ?publicToken=xxx in the URL.
-//  2. We call /api/create-razorpay-order to fetch the order total and get
-//     a Razorpay order ID.
-//  3. We open the Razorpay modal (checkout.js SDK loaded from their CDN).
-//  4. On success, we call /api/verify-payment which verifies the signature
-//     server-side and notifies Snipcart.
-//  5. We redirect the customer to Snipcart's confirmation page.
+// External Razorpay checkout for Snipcart custom payment gateway.
+import { Image as AstroImage } from "astro:assets";
+import logo from "../assets/HOF_Color.png";
+
+const logoSrc = logo.src;
 ---
 
 <!doctype html>
@@ -19,217 +11,222 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Complete Your Payment — HOFA</title>
-    <meta name="description" content="Secure payment via Razorpay for your HOFA order." />
+    <title>Complete Your Payment — High On Fashion</title>
+    <meta name="description" content="Secure payment via Razorpay for your High On Fashion order." />
     <meta name="robots" content="noindex, nofollow" />
 
-    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap"
       rel="stylesheet"
     />
-
-    <!-- Razorpay Checkout SDK -->
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
     <style>
       *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
       :root {
-        --gold: #c9a96e;
-        --gold-light: #e8d5b0;
-        --forest: #1a2e1a;
-        --charcoal: #0f0f0f;
-        --surface: #161616;
-        --surface-2: #1f1f1f;
-        --surface-3: #282828;
-        --border: #2e2e2e;
-        --text-primary: #f0ece4;
-        --text-secondary: #9a9488;
-        --text-muted: #5a5650;
-        --success: #4caf7d;
-        --error: #e05252;
-        --radius: 6px;
-        --radius-lg: 12px;
-        --transition: 0.2s ease;
+        --cream: #f5f1e8;
+        --cream-deep: #ebe4d6;
+        --forest: #1a2f23;
+        --forest-soft: #283a2c;
+        --gold: #d4af37;
+        --gold-deep: #c49a2a;
+        --charcoal: #2d2d2d;
+        --muted: #6b6560;
+        --line: rgba(26, 47, 35, 0.12);
+        --white: #ffffff;
+        --success: #2f6b4f;
+        --error: #b42318;
+        --radius: 2px;
+        --shadow: 0 18px 50px rgba(26, 47, 35, 0.08);
       }
 
       html, body {
-        height: 100%;
-        font-family: 'Inter', system-ui, sans-serif;
-        background: var(--charcoal);
-        color: var(--text-primary);
+        min-height: 100%;
+        font-family: "Inter", system-ui, sans-serif;
+        background: var(--cream);
+        color: var(--charcoal);
         -webkit-font-smoothing: antialiased;
       }
 
-      /* ── Layout ─────────────────────────────────────────────────────────── */
       .page {
         min-height: 100vh;
         display: grid;
         grid-template-rows: auto 1fr auto;
         background:
-          radial-gradient(ellipse 80% 50% at 50% -10%, rgba(201,169,110,0.07) 0%, transparent 70%),
-          var(--charcoal);
+          radial-gradient(ellipse 70% 45% at 50% -5%, rgba(212, 175, 55, 0.14), transparent 60%),
+          linear-gradient(180deg, #faf7f0 0%, var(--cream) 45%, var(--cream-deep) 100%);
       }
 
-      /* ── Header ─────────────────────────────────────────────────────────── */
       .header {
         display: flex;
-        align-items: center;
         justify-content: center;
-        padding: 2rem 1.5rem 1.5rem;
-        border-bottom: 1px solid var(--border);
+        padding: 1.75rem 1.25rem 1.25rem;
       }
 
-      .logo {
-        font-family: 'Playfair Display', serif;
-        font-size: 1.5rem;
-        font-weight: 600;
-        letter-spacing: 0.08em;
-        color: var(--text-primary);
-        text-decoration: none;
+      .logo-link {
+        display: block;
+        width: min(180px, 52vw);
+        transition: opacity 0.2s ease;
       }
 
-      .logo span { color: var(--gold); }
+      .logo-link:hover { opacity: 0.85; }
 
-      /* ── Main content ────────────────────────────────────────────────────── */
+      .logo-link img {
+        width: 100%;
+        height: auto;
+        display: block;
+      }
+
       .main {
         display: flex;
         align-items: center;
         justify-content: center;
-        padding: 2rem 1rem;
+        padding: 0.5rem 1rem 2rem;
       }
 
-      .card {
+      .panel {
         width: 100%;
-        max-width: 460px;
-        background: var(--surface);
-        border: 1px solid var(--border);
-        border-radius: var(--radius-lg);
+        max-width: 440px;
+        background: var(--white);
+        border: 1px solid var(--line);
+        box-shadow: var(--shadow);
         overflow: hidden;
-        box-shadow: 0 24px 64px rgba(0,0,0,0.6), 0 0 0 1px rgba(201,169,110,0.04);
       }
 
-      /* ── Card header ─────────────────────────────────────────────────────── */
-      .card-header {
-        padding: 2rem 2rem 1.5rem;
-        border-bottom: 1px solid var(--border);
-        background: linear-gradient(135deg, var(--surface-2) 0%, var(--surface) 100%);
+      .panel-top {
+        padding: 1.75rem 1.75rem 1.35rem;
+        border-bottom: 1px solid var(--line);
+        background:
+          linear-gradient(180deg, rgba(26, 47, 35, 0.03), transparent),
+          var(--white);
+        text-align: center;
       }
 
-      .card-header h1 {
-        font-family: 'Playfair Display', serif;
-        font-size: 1.4rem;
+      .eyebrow {
+        font-size: 0.68rem;
+        letter-spacing: 0.22em;
+        text-transform: uppercase;
+        color: var(--gold-deep);
         font-weight: 600;
-        color: var(--text-primary);
-        margin-bottom: 0.35rem;
-        letter-spacing: 0.01em;
+        margin-bottom: 0.65rem;
       }
 
-      .card-header p {
-        font-size: 0.8rem;
-        color: var(--text-secondary);
-        letter-spacing: 0.03em;
+      .panel-top h1 {
+        font-family: "Playfair Display", serif;
+        font-size: clamp(1.55rem, 4vw, 1.85rem);
+        font-weight: 600;
+        color: var(--forest);
+        line-height: 1.2;
+        margin-bottom: 0.45rem;
       }
 
-      /* ── Card body ───────────────────────────────────────────────────────── */
-      .card-body { padding: 1.75rem 2rem; }
+      .panel-top p {
+        font-size: 0.88rem;
+        color: var(--muted);
+        line-height: 1.5;
+      }
 
-      /* ── Order summary row ───────────────────────────────────────────────── */
+      .panel-body {
+        padding: 1.5rem 1.75rem 1.75rem;
+      }
+
+      .summary {
+        border: 1px solid var(--line);
+        background: rgba(245, 241, 232, 0.55);
+      }
+
       .order-row {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding: 0.65rem 0;
-        font-size: 0.82rem;
-        color: var(--text-secondary);
-        border-bottom: 1px solid var(--border);
+        gap: 1rem;
+        padding: 0.85rem 1rem;
+        font-size: 0.86rem;
+        color: var(--muted);
+        border-bottom: 1px solid var(--line);
       }
 
       .order-row:last-child { border-bottom: none; }
 
       .order-row.total {
-        font-size: 1rem;
+        background: var(--forest);
+        color: var(--white);
+        font-size: 0.95rem;
         font-weight: 600;
-        color: var(--text-primary);
-        padding-top: 1rem;
+        letter-spacing: 0.02em;
       }
 
-      .order-row .amount { font-variant-numeric: tabular-nums; }
+      .order-row .amount {
+        font-variant-numeric: tabular-nums;
+        color: var(--charcoal);
+        font-weight: 600;
+      }
 
-      .order-row.total .amount { color: var(--gold); font-size: 1.1rem; }
+      .order-row.total .amount {
+        color: var(--gold);
+        font-size: 1.15rem;
+        font-family: "Playfair Display", serif;
+        font-weight: 600;
+      }
 
-      /* ── Security badge ──────────────────────────────────────────────────── */
-      .security-badge {
+      .trust {
         display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        margin: 1.25rem 0;
-        padding: 0.7rem 0.9rem;
-        background: rgba(201,169,110,0.06);
-        border: 1px solid rgba(201,169,110,0.15);
-        border-radius: var(--radius);
-        font-size: 0.75rem;
-        color: var(--text-secondary);
+        align-items: flex-start;
+        gap: 0.65rem;
+        margin: 1.15rem 0 1.35rem;
+        padding: 0.85rem 0.95rem;
+        border: 1px solid rgba(212, 175, 55, 0.35);
+        background: rgba(212, 175, 55, 0.08);
+        font-size: 0.78rem;
+        line-height: 1.45;
+        color: var(--forest-soft);
       }
 
-      .security-badge svg { flex-shrink: 0; color: var(--gold); }
+      .trust svg {
+        flex-shrink: 0;
+        margin-top: 1px;
+        color: var(--gold-deep);
+      }
 
-      /* ── Pay button ──────────────────────────────────────────────────────── */
       .btn-pay {
-        display: flex;
+        width: 100%;
+        display: inline-flex;
         align-items: center;
         justify-content: center;
-        gap: 0.6rem;
-        width: 100%;
-        padding: 0.95rem 1.5rem;
-        margin-top: 1.5rem;
-        background: var(--gold);
-        color: var(--forest);
-        font-family: 'Inter', sans-serif;
-        font-size: 0.85rem;
-        font-weight: 600;
-        letter-spacing: 0.1em;
-        text-transform: uppercase;
+        gap: 0.65rem;
+        min-height: 3.15rem;
+        padding: 0.9rem 1.25rem;
         border: none;
-        border-radius: var(--radius);
+        background: var(--forest);
+        color: var(--white);
+        font-size: 0.78rem;
+        font-weight: 600;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
         cursor: pointer;
-        transition: background var(--transition), transform var(--transition), box-shadow var(--transition);
-        position: relative;
-        overflow: hidden;
-      }
-
-      .btn-pay::before {
-        content: '';
-        position: absolute;
-        inset: 0;
-        background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, transparent 60%);
-        pointer-events: none;
+        transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
       }
 
       .btn-pay:hover:not(:disabled) {
-        background: var(--gold-light);
-        box-shadow: 0 4px 20px rgba(201,169,110,0.35);
+        background: var(--forest-soft);
+        box-shadow: 0 10px 28px rgba(26, 47, 35, 0.22);
         transform: translateY(-1px);
       }
-
-      .btn-pay:active:not(:disabled) { transform: translateY(0); }
 
       .btn-pay:disabled {
         opacity: 0.55;
         cursor: not-allowed;
         transform: none;
+        box-shadow: none;
       }
 
-      /* ── States ──────────────────────────────────────────────────────────── */
-      #state-loading, #state-error, #state-success { display: none; }
-
       .spinner {
-        width: 18px;
-        height: 18px;
-        border: 2px solid rgba(201,169,110,0.3);
+        width: 16px;
+        height: 16px;
+        border: 2px solid rgba(255, 255, 255, 0.25);
         border-top-color: var(--gold);
         border-radius: 50%;
         animation: spin 0.7s linear infinite;
@@ -238,7 +235,41 @@
 
       @keyframes spin { to { transform: rotate(360deg); } }
 
-      /* Full-screen overlay states */
+      .rzp-brand {
+        margin-top: 1rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.35rem;
+        font-size: 0.7rem;
+        letter-spacing: 0.06em;
+        color: var(--muted);
+      }
+
+      .rzp-brand img {
+        height: 14px;
+        opacity: 0.7;
+      }
+
+      .footer {
+        text-align: center;
+        padding: 1.25rem 1rem 1.75rem;
+        font-size: 0.68rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--muted);
+      }
+
+      .skeleton {
+        height: 0.7rem;
+        border-radius: 2px;
+        background: linear-gradient(90deg, #ebe4d6 25%, #f7f3ea 50%, #ebe4d6 75%);
+        background-size: 200% 100%;
+        animation: shimmer 1.3s ease infinite;
+      }
+
+      @keyframes shimmer { to { background-position: -200% 0; } }
+
       .overlay-state {
         position: fixed;
         inset: 0;
@@ -246,18 +277,32 @@
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        gap: 1.25rem;
-        background: var(--charcoal);
-        z-index: 100;
+        gap: 1rem;
+        padding: 2rem 1.25rem;
         text-align: center;
-        padding: 2rem;
+        background:
+          radial-gradient(ellipse 60% 40% at 50% 30%, rgba(212, 175, 55, 0.12), transparent 55%),
+          var(--cream);
+        z-index: 100;
       }
 
       .overlay-state.visible { display: flex; }
 
+      .overlay-logo {
+        width: min(140px, 42vw);
+        margin-bottom: 0.5rem;
+        opacity: 0.95;
+      }
+
+      .overlay-logo img {
+        width: 100%;
+        height: auto;
+        display: block;
+      }
+
       .overlay-icon {
-        width: 64px;
-        height: 64px;
+        width: 58px;
+        height: 58px;
         border-radius: 50%;
         display: flex;
         align-items: center;
@@ -265,136 +310,106 @@
       }
 
       .overlay-icon.loading {
-        border: 3px solid rgba(201,169,110,0.2);
+        border: 2px solid rgba(26, 47, 35, 0.12);
         border-top-color: var(--gold);
         animation: spin 0.8s linear infinite;
       }
 
-      .overlay-icon.success { background: rgba(76,175,125,0.12); color: var(--success); }
-      .overlay-icon.error   { background: rgba(224,82,82,0.12);  color: var(--error);   }
+      .overlay-icon.success {
+        background: rgba(47, 107, 79, 0.1);
+        color: var(--success);
+      }
+
+      .overlay-icon.error {
+        background: rgba(180, 35, 24, 0.08);
+        color: var(--error);
+      }
 
       .overlay-title {
-        font-family: 'Playfair Display', serif;
-        font-size: 1.5rem;
+        font-family: "Playfair Display", serif;
+        font-size: 1.55rem;
+        color: var(--forest);
         font-weight: 600;
-        color: var(--text-primary);
       }
 
       .overlay-desc {
-        font-size: 0.85rem;
-        color: var(--text-secondary);
         max-width: 320px;
-        line-height: 1.6;
+        font-size: 0.9rem;
+        line-height: 1.55;
+        color: var(--muted);
       }
 
       .btn-retry {
-        padding: 0.7rem 2rem;
+        margin-top: 0.35rem;
+        padding: 0.75rem 1.5rem;
+        border: 1px solid var(--forest);
         background: transparent;
-        border: 1px solid var(--gold);
-        color: var(--gold);
-        font-size: 0.8rem;
-        letter-spacing: 0.08em;
+        color: var(--forest);
+        font-size: 0.72rem;
+        letter-spacing: 0.14em;
         text-transform: uppercase;
-        border-radius: var(--radius);
+        font-weight: 600;
         cursor: pointer;
-        transition: background var(--transition), color var(--transition);
-        margin-top: 0.5rem;
+        transition: background 0.2s ease, color 0.2s ease;
       }
 
-      .btn-retry:hover { background: var(--gold); color: var(--forest); }
-
-      /* ── Razorpay branding row ───────────────────────────────────────────── */
-      .rzp-brand {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 0.4rem;
-        margin-top: 1rem;
-        font-size: 0.7rem;
-        color: var(--text-muted);
-        letter-spacing: 0.04em;
+      .btn-retry:hover {
+        background: var(--forest);
+        color: var(--white);
       }
 
-      .rzp-brand img { height: 16px; opacity: 0.6; }
-
-      /* ── Skeleton loading for order rows ─────────────────────────────────── */
-      .skeleton {
-        height: 0.75rem;
-        border-radius: 4px;
-        background: linear-gradient(90deg, var(--surface-2) 25%, var(--surface-3) 50%, var(--surface-2) 75%);
-        background-size: 200% 100%;
-        animation: shimmer 1.3s ease infinite;
-      }
-
-      @keyframes shimmer { to { background-position: -200% 0; } }
-
-      /* ── Footer ──────────────────────────────────────────────────────────── */
-      .footer {
-        text-align: center;
-        padding: 1.5rem;
-        font-size: 0.7rem;
-        color: var(--text-muted);
-        letter-spacing: 0.04em;
-        border-top: 1px solid var(--border);
-      }
-
-      /* ── Responsive ──────────────────────────────────────────────────────── */
       @media (max-width: 520px) {
-        .card { border-radius: 0; border-left: none; border-right: none; }
-        .card-header, .card-body { padding: 1.5rem 1.25rem; }
+        .panel { border-left: none; border-right: none; }
+        .panel-top, .panel-body { padding-left: 1.25rem; padding-right: 1.25rem; }
       }
     </style>
   </head>
 
   <body>
     <div class="page">
-      <!-- Header -->
       <header class="header">
-        <a href="/" class="logo">HIGH<span>ON</span>FASHION</a>
+        <a href="/" class="logo-link" aria-label="High On Fashion home">
+          <AstroImage src={logo} alt="High On Fashion" widths={[360]} sizes="180px" />
+        </a>
       </header>
 
-      <!-- Main -->
       <main class="main">
-        <div class="card">
-          <div class="card-header">
-            <h1>Complete Your Order</h1>
-            <p>SECURE PAYMENT VIA RAZORPAY</p>
+        <div class="panel">
+          <div class="panel-top">
+            <p class="eyebrow">Secure checkout</p>
+            <h1>Complete your order</h1>
+            <p>Pay securely with Razorpay to confirm your High On Fashion pieces.</p>
           </div>
 
-          <div class="card-body">
-            <!-- Order summary (populated by JS) -->
-            <div id="order-summary">
-              <!-- Skeleton rows while loading -->
+          <div class="panel-body">
+            <div class="summary" id="order-summary">
               <div class="order-row">
-                <span class="skeleton" style="width:100px"></span>
-                <span class="skeleton" style="width:60px"></span>
+                <span class="skeleton" style="width:110px"></span>
+                <span class="skeleton" style="width:64px"></span>
               </div>
               <div class="order-row total">
-                <span class="skeleton" style="width:60px"></span>
-                <span class="skeleton" style="width:80px"></span>
+                <span class="skeleton" style="width:90px; background:#3a4f40"></span>
+                <span class="skeleton" style="width:72px; background:#3a4f40"></span>
               </div>
             </div>
 
-            <!-- Security badge -->
-            <div class="security-badge">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            <div class="trust">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
               </svg>
-              <span>256-bit SSL encrypted · Payment powered by Razorpay</span>
+              <span>Encrypted payment · Cards, UPI & wallets via Razorpay</span>
             </div>
 
-            <!-- Pay button -->
             <button class="btn-pay" id="btn-pay" disabled>
               <span id="btn-spinner" class="spinner" style="display:none"></span>
               <span id="btn-text">Loading order…</span>
             </button>
 
-            <!-- Razorpay branding -->
             <div class="rzp-brand">
               Powered by
               <img
                 src="https://razorpay.com/assets/razorpay-glyph.svg"
-                alt="Razorpay"
+                alt=""
                 onerror="this.style.display='none'"
               />
               Razorpay
@@ -403,166 +418,166 @@
         </div>
       </main>
 
-      <footer class="footer">
-        © HighOnFashion · All transactions are encrypted and secure
-      </footer>
+      <footer class="footer">© High On Fashion · Secure transaction</footer>
     </div>
 
-    <!-- Overlay: Initialising -->
     <div class="overlay-state" id="overlay-init">
+      <div class="overlay-logo">
+        <AstroImage src={logo} alt="High On Fashion" widths={[280]} sizes="140px" />
+      </div>
       <div class="overlay-icon loading"></div>
-      <p class="overlay-title" style="font-size:1rem; font-family:'Inter',sans-serif; font-weight:500; color:var(--text-secondary)">Preparing your checkout…</p>
+      <p class="overlay-desc">Preparing your checkout…</p>
     </div>
 
-    <!-- Overlay: Processing -->
     <div class="overlay-state" id="overlay-processing">
+      <div class="overlay-logo">
+        <AstroImage src={logo} alt="High On Fashion" widths={[280]} sizes="140px" />
+      </div>
       <div class="overlay-icon loading"></div>
-      <p class="overlay-title">Confirming Payment</p>
+      <p class="overlay-title">Confirming payment</p>
       <p class="overlay-desc">Please wait while we verify your payment and update your order.</p>
     </div>
 
-    <!-- Overlay: Success -->
     <div class="overlay-state" id="overlay-success">
+      <div class="overlay-logo">
+        <AstroImage src={logo} alt="High On Fashion" widths={[280]} sizes="140px" />
+      </div>
       <div class="overlay-icon success">
-        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-          <polyline points="20 6 9 17 4 12"/>
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="20 6 9 17 4 12"></polyline>
         </svg>
       </div>
-      <p class="overlay-title">Payment Successful!</p>
-      <p class="overlay-desc">Your order has been confirmed. Redirecting you to your order summary…</p>
+      <p class="overlay-title">Payment successful</p>
+      <p class="overlay-desc">Your order is confirmed. Redirecting you to your order summary…</p>
     </div>
 
-    <!-- Overlay: Error -->
     <div class="overlay-state" id="overlay-error">
+      <div class="overlay-logo">
+        <AstroImage src={logo} alt="High On Fashion" widths={[280]} sizes="140px" />
+      </div>
       <div class="overlay-icon error">
-        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="12" cy="12" r="10"/>
-          <line x1="12" y1="8" x2="12" y2="12"/>
-          <line x1="12" y1="16" x2="12.01" y2="16"/>
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"></circle>
+          <line x1="12" y1="8" x2="12" y2="12"></line>
+          <line x1="12" y1="16" x2="12.01" y2="16"></line>
         </svg>
       </div>
-      <p class="overlay-title">Payment Failed</p>
+      <p class="overlay-title">Payment failed</p>
       <p class="overlay-desc" id="error-msg">Something went wrong. Please try again.</p>
-      <button class="btn-retry" onclick="window.location.reload()">Try Again</button>
+      <button class="btn-retry" type="button" onclick="window.location.reload()">Try again</button>
     </div>
 
-    <script is:inline>
+    <script is:inline define:vars={{ logoSrc }}>
       (async () => {
-        // ── Helpers ───────────────────────────────────────────────────────
         const $ = (id) => document.getElementById(id);
-        const show = (id) => $(id).classList.add('visible');
-        const hide = (id) => $(id).classList.remove('visible');
+        const show = (id) => $(id).classList.add("visible");
+        const hide = (id) => $(id).classList.remove("visible");
 
         function showError(msg) {
-          hide('overlay-init');
-          hide('overlay-processing');
-          $('error-msg').textContent = msg || 'Something went wrong. Please try again.';
-          show('overlay-error');
+          hide("overlay-init");
+          hide("overlay-processing");
+          $("error-msg").textContent = msg || "Something went wrong. Please try again.";
+          show("overlay-error");
         }
 
         function formatINR(amount) {
-          return new Intl.NumberFormat('en-IN', {
-            style: 'currency',
-            currency: 'INR',
+          return new Intl.NumberFormat("en-IN", {
+            style: "currency",
+            currency: "INR",
             minimumFractionDigits: 0,
           }).format(amount);
         }
 
-        // ── Get publicToken from URL ───────────────────────────────────────
         const params = new URLSearchParams(window.location.search);
-        const publicToken = params.get('publicToken');
+        const publicToken = params.get("publicToken");
 
         if (!publicToken) {
-          showError('No payment session found. Please return to the store and try again.');
+          showError("No payment session found. Please return to the store and try again.");
           return;
         }
 
-        // Show init overlay while fetching order details
-        show('overlay-init');
+        show("overlay-init");
 
-        // ── Create Razorpay order via our serverless function ─────────────
         let orderData;
         try {
-          const res = await fetch('/api/create-razorpay-order', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+          const res = await fetch("/api/create-razorpay-order", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ publicToken }),
           });
 
           orderData = await res.json();
 
           if (!res.ok || !orderData.razorpay_order_id) {
-            throw new Error(orderData.error || 'Could not create order');
+            throw new Error(orderData.error || "Could not create order");
           }
         } catch (err) {
-          showError(err.message || 'Failed to load order details. Please try again.');
+          showError(err.message || "Failed to load order details. Please try again.");
           return;
         }
 
-        // ── Populate order summary ─────────────────────────────────────────
-        hide('overlay-init');
+        hide("overlay-init");
 
-        const summary = $('order-summary');
+        const summary = $("order-summary");
         summary.innerHTML = `
           <div class="order-row">
-            <span>Order Total</span>
+            <span>Order total</span>
             <span class="amount">${formatINR(orderData.amount_display)}</span>
           </div>
           <div class="order-row total">
-            <span>Amount to Pay</span>
+            <span>Amount to pay</span>
             <span class="amount">${formatINR(orderData.amount_display)}</span>
           </div>
         `;
 
-        // ── Enable pay button ─────────────────────────────────────────────
-        const btnPay = $('btn-pay');
-        const btnText = $('btn-text');
-        const btnSpinner = $('btn-spinner');
+        const btnPay = $("btn-pay");
+        const btnText = $("btn-text");
+        const btnSpinner = $("btn-spinner");
 
         btnPay.disabled = false;
         btnText.textContent = `Pay ${formatINR(orderData.amount_display)}`;
 
-        // ── Razorpay modal options ─────────────────────────────────────────
+        const razorpayLogo = logoSrc.startsWith("http")
+          ? logoSrc
+          : `${window.location.origin}${logoSrc}`;
+
         const razorpayOptions = {
           key: orderData.razorpay_key_id,
-          amount: orderData.amount,           // in paise
+          amount: orderData.amount,
           currency: orderData.currency,
           order_id: orderData.razorpay_order_id,
-          name: 'HighOnFashion',
-          description: 'Your HOFA Order',
-          image: window.location.origin + '/favicon.svg',
+          name: "High On Fashion",
+          description: "Your High On Fashion order",
+          image: razorpayLogo,
           prefill: {
-            name: orderData.customer.name || '',
-            email: orderData.customer.email || '',
-            contact: orderData.customer.phone || '',
+            name: orderData.customer.name || "",
+            email: orderData.customer.email || "",
+            contact: orderData.customer.phone || "",
           },
           theme: {
-            color: '#c9a96e',
-            backdrop_color: 'rgba(10,10,10,0.85)',
+            color: "#1A2F23",
+            backdrop_color: "rgba(245, 241, 232, 0.92)",
           },
           modal: {
             confirm_close: true,
             ondismiss: () => {
-              // Re-enable button if user dismisses modal without paying
               btnPay.disabled = false;
-              btnSpinner.style.display = 'none';
+              btnSpinner.style.display = "none";
               btnText.textContent = `Pay ${formatINR(orderData.amount_display)}`;
             },
           },
-
-          // ── Success handler ────────────────────────────────────────────
           handler: async (response) => {
-            show('overlay-processing');
+            show("overlay-processing");
             btnPay.disabled = true;
 
             try {
-              const verifyRes = await fetch('/api/verify-payment', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+              const verifyRes = await fetch("/api/verify-payment", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
                   razorpay_payment_id: response.razorpay_payment_id,
-                  razorpay_order_id:   response.razorpay_order_id,
-                  razorpay_signature:  response.razorpay_signature,
+                  razorpay_order_id: response.razorpay_order_id,
+                  razorpay_signature: response.razorpay_signature,
                   publicToken,
                 }),
               });
@@ -570,60 +585,49 @@
               const verifyData = await verifyRes.json();
 
               if (!verifyRes.ok || !verifyData.success) {
-                // Build a detailed error message for display
-                let errMsg = verifyData.error || 'Payment verification failed';
+                let errMsg = verifyData.error || "Payment verification failed";
                 if (verifyData.snipcart_status) {
-                  errMsg += ` (Snipcart ${verifyData.snipcart_status}: ${verifyData.snipcart_error || ''})`;
+                  errMsg += ` (Snipcart ${verifyData.snipcart_status}: ${verifyData.snipcart_error || ""})`;
                 }
                 throw new Error(errMsg);
               }
 
-              // ── Redirect to Snipcart confirmation ──────────────────────
-              hide('overlay-processing');
-              show('overlay-success');
+              hide("overlay-processing");
+              show("overlay-success");
 
               setTimeout(() => {
-                if (verifyData.returnUrl) {
-                  window.location.href = verifyData.returnUrl;
-                } else {
-                  window.location.href = '/';
-                }
+                window.location.href = verifyData.returnUrl || "/";
               }, 2200);
-
             } catch (err) {
-              hide('overlay-processing');
+              hide("overlay-processing");
               showError(
                 err.message ||
-                'Your payment was received but we could not confirm your order. Payment ID: ' +
-                (response.razorpay_payment_id || 'N/A')
+                  "Your payment was received but we could not confirm your order. Payment ID: " +
+                    (response.razorpay_payment_id || "N/A")
               );
             }
           },
-
         };
 
-        // ── Open Razorpay on button click ─────────────────────────────────
-        btnPay.addEventListener('click', () => {
+        btnPay.addEventListener("click", () => {
           if (btnPay.disabled) return;
 
           btnPay.disabled = true;
-          btnSpinner.style.display = 'block';
-          btnText.textContent = 'Opening payment…';
+          btnSpinner.style.display = "block";
+          btnText.textContent = "Opening payment…";
 
-          // Small delay so UI updates before Razorpay overlay blocks the thread
           requestAnimationFrame(() => {
             try {
               const rzp = new Razorpay(razorpayOptions);
               rzp.open();
             } catch (err) {
               btnPay.disabled = false;
-              btnSpinner.style.display = 'none';
+              btnSpinner.style.display = "none";
               btnText.textContent = `Pay ${formatINR(orderData.amount_display)}`;
-              showError('Could not open payment modal. Please refresh and try again.');
+              showError("Could not open payment modal. Please refresh and try again.");
             }
           });
         });
-
       })();
     </script>
   </body>
