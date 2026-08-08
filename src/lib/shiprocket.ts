@@ -229,6 +229,45 @@ function countryName(codeOrName?: string | null): string {
   return v;
 }
 
+const STATE_MAP: Record<string, string> = {
+  MH: 'Maharashtra',
+  DL: 'Delhi',
+  KA: 'Karnataka',
+  TN: 'Tamil Nadu',
+  GJ: 'Gujarat',
+  RJ: 'Rajasthan',
+  UP: 'Uttar Pradesh',
+  WB: 'West Bengal',
+  TG: 'Telangana',
+  AP: 'Andhra Pradesh',
+  KL: 'Kerala',
+  PB: 'Punjab',
+  HR: 'Haryana',
+  MP: 'Madhya Pradesh',
+  BR: 'Bihar',
+  OR: 'Odisha',
+  OD: 'Odisha',
+  AS: 'Assam',
+  JH: 'Jharkhand',
+  CT: 'Chhattisgarh',
+  CG: 'Chhattisgarh',
+  UK: 'Uttarakhand',
+  UA: 'Uttarakhand',
+  HP: 'Himachal Pradesh',
+  GA: 'Goa',
+};
+
+function stateName(codeOrName?: string | null): string {
+  const v = (codeOrName || '').trim();
+  if (!v) return '';
+  return STATE_MAP[v.toUpperCase()] || v;
+}
+
+function cleanAddress(value?: string | null, fallback = 'Address not provided'): string {
+  const v = (value || '').trim();
+  return v || fallback;
+}
+
 function formatOrderDate(iso?: string): string {
   const d = iso ? new Date(iso) : new Date();
   if (Number.isNaN(d.getTime())) {
@@ -272,7 +311,7 @@ export function mapSnipcartToShiprocket(order: SnipcartOrder) {
 
   const orderItems = items.map((item) => {
     const units = item.quantity || 1;
-    const sellingPrice = Number(item.unitPrice ?? item.price ?? 0);
+    const sellingPrice = Math.round(Number(item.unitPrice ?? item.price ?? 0));
     return {
       name: item.name || item.id || 'Item',
       sku: String(item.id || item.name || 'SKU').slice(0, 50),
@@ -304,10 +343,11 @@ export function mapSnipcartToShiprocket(order: SnipcartOrder) {
   const billingPhone = toPhone(phone, 'billing phone');
   const shippingPhone = billingPhone;
 
-  const subTotal =
+  const subTotal = Math.round(
     typeof order.subtotal === 'number'
       ? order.subtotal
-      : orderItems.reduce((sum, i) => sum + i.selling_price * i.units, 0);
+      : orderItems.reduce((sum, i) => sum + i.selling_price * i.units, 0)
+  );
 
   const orderId = String(order.invoiceNumber || order.token || `HOFA-${Date.now()}`).slice(0, 50);
 
@@ -317,28 +357,30 @@ export function mapSnipcartToShiprocket(order: SnipcartOrder) {
     pickup_location: pickup,
     billing_customer_name: billingFirst,
     billing_last_name: billingLast,
-    billing_address: billing.address1 || 'Address not provided',
-    billing_address_2: billing.address2 || '',
-    billing_city: billing.city || '',
+    billing_address: cleanAddress(billing.address1),
+    billing_address_2: cleanAddress(billing.address2, ''),
+    billing_city: cleanAddress(billing.city, 'Unknown'),
     billing_pincode: toPincode(billing.postalCode),
-    billing_state: billing.province || billing.city || '',
+    billing_state: stateName(billing.province) || cleanAddress(billing.city, 'Maharashtra'),
     billing_country: countryName(billing.country),
     billing_email: order.email || 'orders@highonfashion.in',
     billing_phone: billingPhone,
     shipping_is_billing: shipToBilling,
     shipping_customer_name: shippingFirst,
     shipping_last_name: shippingLast,
-    shipping_address: shipping.address1 || billing.address1 || 'Address not provided',
-    shipping_address_2: shipping.address2 || '',
-    shipping_city: shipping.city || '',
+    shipping_address: cleanAddress(shipping.address1 || billing.address1),
+    shipping_address_2: cleanAddress(shipping.address2, ''),
+    shipping_city: cleanAddress(shipping.city || billing.city, 'Unknown'),
     shipping_pincode: toPincode(shipping.postalCode || billing.postalCode),
-    shipping_state: shipping.province || shipping.city || '',
+    shipping_state:
+      stateName(shipping.province || billing.province) ||
+      cleanAddress(shipping.city || billing.city, 'Maharashtra'),
     shipping_country: countryName(shipping.country || billing.country),
     shipping_email: order.email || 'orders@highonfashion.in',
     shipping_phone: shippingPhone,
     order_items: orderItems,
     payment_method: isCod(order) ? 'COD' : 'Prepaid',
-    shipping_charges: Number(order.shippingFees || 0),
+    shipping_charges: Math.round(Number(order.shippingFees || 0)),
     sub_total: subTotal,
     length,
     breadth,
@@ -348,10 +390,28 @@ export function mapSnipcartToShiprocket(order: SnipcartOrder) {
 }
 
 export async function createShiprocketOrder(payload: ShiprocketAdhocPayload) {
-  return shiprocketFetch('/orders/create/adhoc', {
+  const created = await shiprocketFetch('/orders/create/adhoc', {
     method: 'POST',
     body: JSON.stringify(payload),
   });
+
+  // Shiprocket often returns HTTP 200 with an error message and no ids
+  // e.g. wrong pickup location, duplicate order_id, validation issues.
+  const orderId = created?.order_id ?? created?.payload?.order_id;
+  const shipmentId = created?.shipment_id ?? created?.payload?.shipment_id;
+  if (!orderId && !shipmentId) {
+    const msg =
+      created?.message ||
+      created?.error ||
+      (typeof created === 'string' ? created : JSON.stringify(created).slice(0, 400));
+    throw new Error(`Shiprocket create order rejected: ${msg}`);
+  }
+
+  return {
+    ...created,
+    order_id: orderId,
+    shipment_id: shipmentId,
+  };
 }
 
 /** Assign courier + AWB. Uses default courier if SHIPROCKET_COURIER_ID is unset. */
