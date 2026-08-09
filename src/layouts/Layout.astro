@@ -2,6 +2,7 @@
 import "../styles/global.css";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
+import GoogleTagManager from "../components/GoogleTagManager.astro";
 
 interface Props {
   title: string;
@@ -24,18 +25,27 @@ const {
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
 
-    <!-- Preconnects for High-Priority Assets -->
+    <!-- Preconnects — keep ≤4; Snipcart loads deferred so skip early preconnect -->
     <link rel="preconnect" href="https://wsrv.nl" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="preconnect" href="https://app.snipcart.com" />
-    <link rel="preconnect" href="https://cdn.snipcart.com" />
+    <link rel="dns-prefetch" href="https://cdn.snipcart.com" />
+    <link rel="dns-prefetch" href="https://app.snipcart.com" />
+    <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
 
-    <!-- Google Fonts with display=swap -->
+    <!-- Google Fonts — non-blocking + display=swap -->
     <link
+      rel="preload"
+      as="style"
       href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:wght@400;600;700&display=swap"
-      rel="stylesheet"
+      onload="this.onload=null;this.rel='stylesheet'"
     />
+    <noscript>
+      <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:wght@400;600;700&display=swap"
+      />
+    </noscript>
 
     <link rel="sitemap" href="/sitemap-index.xml" />
 
@@ -63,8 +73,9 @@ const {
         version: "3.4.0",
         modalStyle: "side",
         currency: "inr",
-        loadStrategy: "on-user-interaction", // <-- Fixes initial render blocking!
-        timeoutDuration: 3000,
+        loadStrategy: "on-user-interaction",
+        // Don't auto-load cart JS during Lighthouse / first paint; wait for click/scroll
+        timeoutDuration: 15000,
         templatesUrl: "/snipcart-templates.html",
       };
 
@@ -164,40 +175,18 @@ const {
       })();
     </script>
 
-    <!-- Google Tag Manager (Partytown) -->
     <meta
       name="google-site-verification"
       content="3bcyg-NkwfnNRkaX8WaYyUQWjDrsEYb2kz6-wIyvHxQ"
     />
 
-    <!-- Google Tag Manager -->
-    <script is:inline>
-      (function (w, d, s, l, i) {
-        w[l] = w[l] || [];
-        w[l].push({ "gtm.start": new Date().getTime(), event: "gtm.js" });
-        var f = d.getElementsByTagName(s)[0],
-          j = d.createElement(s),
-          dl = l != "dataLayer" ? "&l=" + l : "";
-        j.async = true;
-        j.src = "https://www.googletagmanager.com/gtm.js?id=" + i + dl;
-        f.parentNode.insertBefore(j, f);
-      })(window, document, "script", "dataLayer", "GTM-K2M5G63N");
-    </script>
-    <!-- End Google Tag Manager -->
+    <GoogleTagManager />
   </head>
 
   <body
     class="antialiased selection:bg-gold selection:text-forest bg-stone-50 text-neutral-900"
   >
-    <!-- Google Tag Manager (noscript) -->
-    <noscript
-      ><iframe
-        src="https://www.googletagmanager.com/ns.html?id=GTM-K2M5G63N"
-        height="0"
-        width="0"
-        style="display:none;visibility:hidden"></iframe></noscript
-    >
-    <!-- End Google Tag Manager (noscript) -->
+    <GoogleTagManager placement="body" />
 
     <Header />
 

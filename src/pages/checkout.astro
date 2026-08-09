@@ -2,6 +2,7 @@
 // External Razorpay checkout for Snipcart custom payment gateway.
 import { Image as AstroImage } from "astro:assets";
 import logo from "../assets/HOF_Color.png";
+import GoogleTagManager from "../components/GoogleTagManager.astro";
 
 const logoSrc = logo.src;
 ---
@@ -22,6 +23,8 @@ const logoSrc = logo.src;
       rel="stylesheet"
     />
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+    <GoogleTagManager />
 
     <style>
       *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -366,6 +369,8 @@ const logoSrc = logo.src;
   </head>
 
   <body>
+    <GoogleTagManager placement="body" />
+
     <div class="page">
       <header class="header">
         <a href="/" class="logo-link" aria-label="High On Fashion home">

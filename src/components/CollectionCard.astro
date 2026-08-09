@@ -1,15 +1,22 @@
 ---
+import { optimizedImage } from "../utils/image";
+
 const { id, name, description, cardImage, alt, season } = Astro.props;
+const src = optimizedImage(cardImage, { w: 800, q: 72 });
 ---
 
 <article class="group overflow-hidden border border-neutral-200 hover:shadow-xl transition-shadow duration-300 flex flex-col">
   <!-- Image -->
   <div class="overflow-hidden aspect-[4/3] bg-neutral-100">
     <img
-      src={cardImage}
+      src={src}
       alt={alt}
+      width="800"
+      height="600"
       class="w-full h-full object-cover object-[center_30%] group-hover:scale-105 transition-transform duration-500"
       loading="lazy"
+      decoding="async"
+      sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
     />
   </div>
 
