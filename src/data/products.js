@@ -4,6 +4,55 @@ export const products = [
   /* ================= AFTERGLOW ORANGE (Oversized Edit) ================= */
 
   {
+    id: "top-009",
+    title: "Beige Textured Viscose V-Neck Camisole",
+    slug: "beige-textured-viscose-v-neck-camisole-top009",
+    price: 699,
+    originalPrice: 999,
+    collectionId: "afterglow-orange",
+    brand: "Unbranded / Thrifted",
+    
+    // Thrift Sizing System
+    taggedSize: "M",
+    fitsLike: "S/M (Relaxed Flowy Fit)",
+    measurements: {
+      pitToPitInches: 18.0,
+      lengthInches: 26.0,
+      strapLengthInches: 6.5
+    },
+
+    // Category & Style
+    category: "tops",
+    material: "Viscose",
+    gender: "women",
+    style: ["minimalist", "summerwear", "casual", "boho"],
+    era: "Modern Thrift",
+
+    // Condition & Flaws (3-Tier System)
+    condition: {
+      grade: "Tier 1",
+      label: "Superb",
+      description: "Clean textured woven viscose fabric with a breathable, flowy drape in a warm neutral beige tone. Thin straps and V-neckline intact with no stains, pulls, or loose seams."
+    },
+    flaws: [],
+
+    // Inventory Control
+    stock: 1,
+    isSold: false,
+    isFeatured: false,
+
+    // Media
+    images: {
+      main: "/product/beige-vneck-camisole-front.webp",
+      flaws: [],
+      gallery: [
+        "/product/beige-vneck-camisole-front.webp",
+        "/product/beige-vneck-camisole-texture-detail.webp"
+      ]
+    },
+    alt: "Minimalist beige textured woven viscose V-neck camisole tank top with thin spaghetti straps"
+  },
+  {
     id: "ts-005",
     title: "Abstract Art Print White Crewneck Tee",
     slug: "abstract-art-print-white-crewneck-tee-ts005",
@@ -52,6 +101,162 @@ export const products = [
   },
 
   /* ================= LUCID PURPLE (Statement Streetwear Edit) ================= */
+
+
+  {
+    id: "top-011",
+    title: "Vintage Gold Embroidered Beaded Corset Bustier Top",
+    slug: "vintage-gold-embroidered-beaded-corset-bustier-top-top011",
+    price: 1499,
+    originalPrice: 2199,
+    collectionId: "lucid-purple",
+    brand: "Unbranded / Thrifted",
+    
+    // Thrift Sizing System
+    taggedSize: "S",
+    fitsLike: "S (Fitted Structured Corset)",
+    measurements: {
+      pitToPitInches: 16.5,
+      waistInches: 28.0,
+      lengthInches: 21.0,
+      strapLengthInches: 6.5
+    },
+
+    // Category & Style
+    category: "tops",
+    gender: "women",
+    style: ["vintage", "y2k", "boho", "streetwear"],
+    era: "90s Archive",
+
+    // Condition & Flaws (3-Tier System)
+    condition: {
+      grade: "Tier 2",
+      label: "Good",
+      description: "Intricate metallic antique gold leaf embroidery over black base with bugle bead detailing on double shoulder straps and scalloped hem. Center back zipper works smoothly; minor loose thread ends along scalloped hem."
+    },
+    flaws: [
+      "Minor thread fringe along bottom scalloped hem edge"
+    ],
+
+    // Inventory Control
+    stock: 1,
+    isSold: false,
+    isFeatured: true,
+
+    // Media
+    images: {
+      main: "/product/gold-embroidered-corset-front.webp",
+      flaws: [
+      ],
+      gallery: [
+        "/product/gold-embroidered-corset-front.webp",
+        "/product/gold-corset-back.webp",
+        "/product/gold-corset-hem-strap-detail.webp",
+      ]
+    },
+    alt: "Black structured corset top featuring rich antique gold leaf embroidery, beaded shoulder straps, and scalloped lace trim"
+  },
+  {
+    id: "top-010",
+    title: "Crimson Abstract Wave Print Wrap Blouse",
+    slug: "crimson-abstract-wave-print-wrap-blouse-top010",
+    price: 899,
+    originalPrice: 1299,
+    collectionId: "lucid-purple",
+    brand: "Unbranded / Thrifted",
+    
+    // Thrift Sizing System
+    taggedSize: "M",
+    fitsLike: "M (Structured Wrap Fit)",
+    measurements: {
+      pitToPitInches: 19.0,
+      lengthInches: 23.5,
+      sleeveInches: 17.5,
+      shoulderInches: 16.0
+    },
+
+    // Category & Style
+    category: "tops",
+    gender: "women",
+    style: ["vintage", "retro", "streetwear", "y2k"],
+    era: "Y2K / Early 00s",
+
+    // Condition & Flaws (3-Tier System)
+    condition: {
+      grade: "Tier 1",
+      label: "Superb",
+      description: "Lustrous satiny chiffon finish featuring a vibrant crimson red and black wavy digital pattern. Side tie string detail, black inner lining, and V-neckline intact with no snags, stains, or loose seams."
+    },
+    flaws: [],
+
+    // Inventory Control
+    stock: 1,
+    isSold: false,
+    isFeatured: true,
+
+    // Media
+    images: {
+      main: "/product/crimson-wave-blouse-front.webp",
+      flaws: [],
+      gallery: [
+        "/product/crimson-wave-blouse-front.webp",
+        "/product/crimson-wave-blouse-front-detail.webp",
+        "/product/crimson-wave-blouse-pattern-detail.webp"
+      ]
+    },
+    alt: "Vibrant crimson red and black abstract wave print V-neck blouse with 3/4 sleeves and side tie hem"
+  },
+
+
+  {
+    id: "dr-001",
+    title: "Bohemian Paisley Mandala Print Tunic Dress",
+    slug: "bohemian-paisley-mandala-print-tunic-dress-dr001",
+    price: 999,
+    originalPrice: 1499,
+    collectionId: "lucid-purple",
+    brand: "Unbranded / Thrifted",
+    
+    // Thrift Sizing System
+    taggedSize: "M",
+    fitsLike: "M/L (Relaxed Shift Fit)",
+    measurements: {
+      pitToPitInches: 20.5,
+      lengthInches: 34.0,
+      sleeveInches: 13.5,
+      shoulderInches: 16.5
+    },
+
+    // Category & Style
+    category: "tops",
+    gender: "women",
+    style: ["boho", "vintage", "retro", "casual"],
+    era: "Modern Thrift",
+
+    // Condition & Flaws (3-Tier System)
+    condition: {
+      grade: "Tier 1",
+      label: "Superb",
+      description: "Lightweight rayon-cotton blend featuring vibrant paisley and geometric mandala prints with a teal ornamental border hem. Crisp colors with no stains, pulls, or fabric tears."
+    },
+    flaws: [],
+
+    // Inventory Control
+    stock: 1,
+    isSold: false,
+    isFeatured: true,
+
+    // Media
+    images: {
+      main: "/product/boho-tunic-dress-print-front.webp",
+      flaws: [],
+      gallery: [
+        "/product/boho-tunic-dress-print-front.webp",
+        "/product/boho-tunic-dress-print-detail.webp",
+      ]
+    },
+    alt: "Multicolor bohemian tunic mini dress with paisley and geometric mandala print and elbow-length sleeves"
+  },
   {
     id: "top-004",
     title: "Floral Printed Noodle Strap Camisole Top",
